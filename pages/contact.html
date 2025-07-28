@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - RUNSTR</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #000;
+            background: #fff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid #eee;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #000;
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        .back-link {
+            background: #000;
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .back-link:hover {
+            background: #333;
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 8rem 0 4rem;
+            min-height: 100vh;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 2rem;
+            letter-spacing: -0.02em;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            text-align: center;
+            margin-bottom: 4rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        .contact-form {
+            background: #f8f8f8;
+            padding: 3rem;
+            border-radius: 20px;
+        }
+
+        .contact-info {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #000;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #000;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .submit-btn {
+            background: #000;
+            color: #fff;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background: #333;
+            transform: translateY(-2px);
+        }
+
+        .contact-item {
+            margin-bottom: 3rem;
+        }
+
+        .contact-item h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .contact-item p {
+            color: #666;
+            line-height: 1.7;
+        }
+
+        .contact-item a {
+            color: #000;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .contact-item a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        /* Footer */
+        footer {
+            background: #111;
+            color: #fff;
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .footer-nav {
+            margin-bottom: 1rem;
+        }
+
+        .footer-nav a {
+            color: #ccc;
+            text-decoration: none;
+            margin: 0 1rem;
+            transition: color 0.3s;
+        }
+
+        .footer-nav a:hover {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="../index.html" class="logo">RUNSTR</a>
+            <a href="../index.html" class="back-link">← Back to Home</a>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <h1 class="page-title">Contact Us</h1>
+            <p class="page-subtitle">Have questions, feedback, or need support? We're here to help you succeed with RUNSTR.</p>
+
+            <div class="contact-grid">
+                <div class="contact-form">
+                    <h2 style="font-size: 1.5rem; margin-bottom: 2rem;">Send us a message</h2>
+                    <form>
+                        <div class="form-group">
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <select id="subject" name="subject" required>
+                                <option value="">Select a topic...</option>
+                                <option value="general">General Question</option>
+                                <option value="technical">Technical Support</option>
+                                <option value="billing">Billing & Payments</option>
+                                <option value="partnership">Partnership Inquiry</option>
+                                <option value="feedback">Feedback & Suggestions</option>
+                                <option value="bug">Bug Report</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" placeholder="Tell us how we can help..." required></textarea>
+                        </div>
+
+                        <button type="submit" class="submit-btn">Send Message</button>
+                    </form>
+                </div>
+
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <h3>📧 Email Support</h3>
+                        <p>For general inquiries and support</p>
+                        <a href="mailto:support@runstr.club">support@runstr.club</a>
+                    </div>
+
+                    <div class="contact-item">
+                        <h3>🏢 Business Inquiries</h3>
+                        <p>Partnerships, press, and business opportunities</p>
+                        <a href="mailto:business@runstr.club">business@runstr.club</a>
+                    </div>
+
+                    <div class="contact-item">
+                        <h3>🚨 Urgent Issues</h3>
+                        <p>For critical bugs or security concerns</p>
+                        <a href="mailto:urgent@runstr.club">urgent@runstr.club</a>
+                    </div>
+
+                    <div class="contact-item">
+                        <h3>⏰ Response Time</h3>
+                        <p>We typically respond within 24 hours during business days. For urgent issues, we aim to respond within 4 hours.</p>
+                    </div>
+
+                    <div class="contact-item">
+                        <h3>🌍 Business Hours</h3>
+                        <p>Monday - Friday: 9:00 AM - 6:00 PM EST<br>
+                        Weekend support available for urgent issues</p>
+                    </div>
+
+                    <div class="contact-item">
+                        <h3>💬 Community Support</h3>
+                        <p>Join our Discord server for community-driven support and faster responses from fellow users.</p>
+                        <a href="community.html">Join Community</a>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; background: #000; color: #fff; padding: 3rem; border-radius: 20px;">
+                <h2 style="font-size: 2rem; margin-bottom: 1rem;">Need Immediate Help?</h2>
+                <p style="color: #ccc; margin-bottom: 2rem;">Check out our comprehensive help center for instant answers to common questions.</p>
+                <a href="help.html" style="background: #fff; color: #000; padding: 0.75rem 1.5rem; border-radius: 50px; text-decoration: none; font-weight: 600; transition: all 0.3s;">Visit Help Center</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-nav">
+                <a href="../index.html">Home</a>
+                <a href="help.html">Help</a>
+                <a href="community.html">Community</a>
+                <a href="integrations.html">Integrations</a>
+            </div>
+            <p>&copy; 2025 RUNSTR. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

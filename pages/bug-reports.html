@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bug Reports - RUNSTR</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #000;
+            background: #fff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid #eee;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #000;
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        .back-link {
+            background: #000;
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .back-link:hover {
+            background: #333;
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 8rem 0 4rem;
+            min-height: 100vh;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 2rem;
+            letter-spacing: -0.02em;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            text-align: center;
+            margin-bottom: 4rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .bug-form {
+            background: #f8f8f8;
+            padding: 3rem;
+            border-radius: 20px;
+            margin-bottom: 3rem;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #000;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #000;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .submit-btn {
+            background: #000;
+            color: #fff;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background: #333;
+            transform: translateY(-2px);
+        }
+
+        .guidelines {
+            background: #000;
+            color: #fff;
+            padding: 3rem;
+            border-radius: 20px;
+        }
+
+        .guidelines h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .guidelines-list {
+            list-style: none;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .guidelines-list li {
+            margin-bottom: 1rem;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .guidelines-list li::before {
+            content: '🐛';
+            position: absolute;
+            left: 0;
+        }
+
+        /* Footer */
+        footer {
+            background: #111;
+            color: #fff;
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .footer-nav {
+            margin-bottom: 1rem;
+        }
+
+        .footer-nav a {
+            color: #ccc;
+            text-decoration: none;
+            margin: 0 1rem;
+            transition: color 0.3s;
+        }
+
+        .footer-nav a:hover {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="../index.html" class="logo">RUNSTR</a>
+            <a href="../index.html" class="back-link">← Back to Home</a>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <h1 class="page-title">Bug Reports</h1>
+            <p class="page-subtitle">Help us improve RUNSTR by reporting bugs and issues. Your feedback makes our platform better for everyone.</p>
+
+            <div class="bug-form">
+                <h2 style="font-size: 1.5rem; margin-bottom: 2rem;">Report a Bug</h2>
+                <form>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="device">Device/Platform</label>
+                            <select id="device" name="device" required>
+                                <option value="">Select your device...</option>
+                                <option value="ios">iOS (iPhone/iPad)</option>
+                                <option value="android">Android</option>
+                                <option value="web">Web Browser</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="priority">Priority Level</label>
+                            <select id="priority" name="priority" required>
+                                <option value="">Select priority...</option>
+                                <option value="low">Low - Minor issue</option>
+                                <option value="medium">Medium - Affects functionality</option>
+                                <option value="high">High - Major feature broken</option>
+                                <option value="critical">Critical - App unusable</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="title">Bug Title</label>
+                        <input type="text" id="title" name="title" placeholder="Brief description of the issue" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Detailed Description</label>
+                        <textarea id="description" name="description" placeholder="Please describe what happened, what you expected to happen, and any error messages you saw..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="steps">Steps to Reproduce</label>
+                        <textarea id="steps" name="steps" placeholder="1. Go to...
+2. Click on...
+3. See error..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="version">App Version (if applicable)</label>
+                        <input type="text" id="version" name="version" placeholder="e.g., 1.2.3">
+                    </div>
+
+                    <button type="submit" class="submit-btn">Submit Bug Report</button>
+                </form>
+            </div>
+
+            <div class="guidelines">
+                <h2>Bug Reporting Guidelines</h2>
+                <ul class="guidelines-list">
+                    <li><strong>Be Specific:</strong> Provide as much detail as possible about the issue, including what you were doing when it occurred.</li>
+                    <li><strong>Include Steps:</strong> List the exact steps needed to reproduce the bug so our team can investigate.</li>
+                    <li><strong>Screenshots Help:</strong> If possible, include screenshots or screen recordings to illustrate the problem.</li>
+                    <li><strong>Check First:</strong> Before reporting, check if the issue has already been reported in our community channels.</li>
+                    <li><strong>One Bug Per Report:</strong> Submit separate reports for different issues to help us track and resolve them efficiently.</li>
+                    <li><strong>Update Your App:</strong> Make sure you're using the latest version of RUNSTR before reporting bugs.</li>
+                    <li><strong>Security Issues:</strong> For security-related bugs, email urgent@runstr.club directly instead of using this form.</li>
+                    <li><strong>Be Patient:</strong> We review all reports carefully and will update you on the status of your submission.</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-nav">
+                <a href="../index.html">Home</a>
+                <a href="help.html">Help</a>
+                <a href="contact.html">Contact</a>
+                <a href="community.html">Community</a>
+            </div>
+            <p>&copy; 2025 RUNSTR. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

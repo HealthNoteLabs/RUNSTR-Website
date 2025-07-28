@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integrations - RUNSTR</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #000;
+            background: #fff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid #eee;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #000;
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        .back-link {
+            background: #000;
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .back-link:hover {
+            background: #333;
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 8rem 0 4rem;
+            min-height: 100vh;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 2rem;
+            letter-spacing: -0.02em;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            text-align: center;
+            margin-bottom: 4rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .integration-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .integration-card {
+            background: #f8f8f8;
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .integration-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-color: #000;
+        }
+
+        .integration-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .integration-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .integration-description {
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .integration-status {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .status-available {
+            background: #4ade80;
+            color: #000;
+        }
+
+        .status-coming-soon {
+            background: #fbbf24;
+            color: #000;
+        }
+
+        .status-planned {
+            background: #e5e7eb;
+            color: #666;
+        }
+
+        /* Footer */
+        footer {
+            background: #111;
+            color: #fff;
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .footer-nav {
+            margin-bottom: 1rem;
+        }
+
+        .footer-nav a {
+            color: #ccc;
+            text-decoration: none;
+            margin: 0 1rem;
+            transition: color 0.3s;
+        }
+
+        .footer-nav a:hover {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="../index.html" class="logo">RUNSTR</a>
+            <a href="../index.html" class="back-link">← Back to Home</a>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <h1 class="page-title">Integrations</h1>
+            <p class="page-subtitle">Connect RUNSTR with your favorite fitness devices and apps to enhance your cardio tracking experience.</p>
+
+            <div class="integration-grid">
+                <div class="integration-card">
+                    <div class="integration-icon">⌚</div>
+                    <h3 class="integration-title">Apple Watch</h3>
+                    <p class="integration-description">Seamlessly sync your workouts, heart rate data, and activity rings directly from your Apple Watch to RUNSTR.</p>
+                    <span class="integration-status status-coming-soon">Coming Soon</span>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-icon">🏃</div>
+                    <h3 class="integration-title">Garmin Connect</h3>
+                    <p class="integration-description">Import your runs, cycling sessions, and detailed performance metrics from your Garmin devices.</p>
+                    <span class="integration-status status-coming-soon">Coming Soon</span>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-icon">📱</div>
+                    <h3 class="integration-title">Built-in Tracker</h3>
+                    <p class="integration-description">Use RUNSTR's native GPS tracking for running, walking, and cycling activities with real-time performance data.</p>
+                    <span class="integration-status status-available">Available Now</span>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-icon">🏥</div>
+                    <h3 class="integration-title">Apple Health</h3>
+                    <p class="integration-description">Sync your RUNSTR activities with Apple Health to maintain a comprehensive fitness record.</p>
+                    <span class="integration-status status-planned">Planned</span>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-icon">🚴</div>
+                    <h3 class="integration-title">Strava</h3>
+                    <p class="integration-description">Connect with the world's largest fitness community and share your RUNSTR achievements.</p>
+                    <span class="integration-status status-planned">Planned</span>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-icon">🏋️</div>
+                    <h3 class="integration-title">Fitbit</h3>
+                    <p class="integration-description">Import your cardio activities and daily step counts from your Fitbit device.</p>
+                    <span class="integration-status status-planned">Planned</span>
+                </div>
+            </div>
+
+            <div style="text-align: center;">
+                <h2 style="font-size: 2rem; margin-bottom: 1rem;">Need Another Integration?</h2>
+                <p style="color: #666; margin-bottom: 2rem;">We're always looking to expand our integration ecosystem. Let us know what fitness apps or devices you'd like to see connected to RUNSTR.</p>
+                <a href="contact.html" class="back-link">Request Integration</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-nav">
+                <a href="../index.html">Home</a>
+                <a href="help.html">Help</a>
+                <a href="contact.html">Contact</a>
+                <a href="community.html">Community</a>
+            </div>
+            <p>&copy; 2025 RUNSTR. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
