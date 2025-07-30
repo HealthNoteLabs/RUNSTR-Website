@@ -191,6 +191,7 @@
             animation: gradientShift 8s ease infinite;
             position: relative;
             overflow: hidden;
+            padding-top: 80px;
         }
 
         .hero::before {
@@ -310,6 +311,33 @@
             font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 0.1em;
+        }
+
+        /* App Screenshots */
+        .app-screenshots {
+            display: flex;
+            gap: 2rem;
+            margin-top: 3rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .screenshot-container {
+            position: relative;
+            transform: perspective(1000px) rotateY(-15deg);
+            transition: transform 0.5s ease;
+        }
+
+        .screenshot-container:hover {
+            transform: perspective(1000px) rotateY(0deg) scale(1.05);
+        }
+
+        .screenshot {
+            width: 250px;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            border: 8px solid #000;
         }
 
         /* Features Section */
@@ -662,6 +690,18 @@
                 flex-direction: column;
                 align-items: flex-start;
             }
+
+            .app-screenshots {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scroll-snap-type: x mandatory;
+                gap: 1rem;
+            }
+
+            .screenshot-container {
+                scroll-snap-align: center;
+                transform: perspective(1000px) rotateY(0deg);
+            }
         }
     </style>
 </head>
@@ -671,12 +711,11 @@
         <nav class="container">
             <a href="#" class="logo">RUNSTR</a>
             <ul class="nav-links">
-                <li><a href="#features">Features</a></li>
                 <li><a href="#clubs">Virtual Clubs</a></li>
                 <li><a href="#pricing">Pricing</a></li>
                 <li><a href="#how">How It Works</a></li>
             </ul>
-            <a href="#download" class="cta-button">Download App</a>
+            <a href="#pricing" class="cta-button">Get Started</a>
         </nav>
     </header>
 
@@ -689,58 +728,97 @@
         <div class="particle"></div>
         <div class="container">
             <div class="hero-content">
-                <h1>Create or Compete in Virtual Cardio clubs for cash rewards.</h1>
-                <p class="hero-subtitle">Build your fitness empire with RUNSTR. Track your run, Create virtual competitions, grow your community, and generate recurring revenue.</p>
+                <h1>Join or create virtual cardio clubs and earn real rewards.</h1>
+                <p class="hero-subtitle">Build your fitness empire with RUNSTR. Track your run, create virtual competitions, grow your community, and generate recurring revenue.</p>
                 
-                <div class="download-buttons" id="download">
-                    <a href="#" class="download-btn">
-                        📱 Download for iOS
-                    </a>
-                    <a href="#" class="download-btn">
-                        🤖 Download for Android
-                    </a>
-                </div>
-
-                <div class="stats">
-                    <div class="stat">
-                        <div class="stat-number">$50K+</div>
-                        <div class="stat-label">Prizes Distributed</div>
+                <div class="app-screenshots">
+                    <div class="screenshot-container">
+                        <div style="width: 250px; height: 500px; background: #1a1a1a; border-radius: 20px; border: 8px solid #000; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); overflow: hidden; position: relative;">
+                            <!-- Dashboard Screen -->
+                            <div style="padding: 20px; color: white;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                    <div style="display: flex; gap: 10px;">
+                                        <div style="background: white; color: black; padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 12px;">RUNSTR</div>
+                                        <div style="background: #333; padding: 8px 16px; border-radius: 20px; font-size: 12px;">WALKSTR</div>
+                                        <div style="background: #333; padding: 8px 16px; border-radius: 20px; font-size: 12px;">CYCLESTR</div>
+                                    </div>
+                                </div>
+                                <div style="text-align: center; margin: 30px 0;">
+                                    <div style="font-size: 14px; opacity: 0.7;">Distance</div>
+                                    <div style="font-size: 36px; font-weight: 700;">0.00</div>
+                                    <div style="font-size: 12px; opacity: 0.5;">mi</div>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 30px 0;">
+                                    <div style="background: #2a2a2a; padding: 15px; border-radius: 12px; text-align: center;">
+                                        <div style="font-size: 12px; opacity: 0.7;">Time</div>
+                                        <div style="font-size: 20px; font-weight: 600;">00:00</div>
+                                    </div>
+                                    <div style="background: #2a2a2a; padding: 15px; border-radius: 12px; text-align: center;">
+                                        <div style="font-size: 12px; opacity: 0.7;">Pace</div>
+                                        <div style="font-size: 20px; font-weight: 600;">--</div>
+                                    </div>
+                                </div>
+                                <button style="width: 100%; background: white; color: black; padding: 15px; border: none; border-radius: 30px; font-weight: 600; font-size: 16px; cursor: pointer;">Start Run</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="stat">
-                        <div class="stat-number">5</div>
-                        <div class="stat-label">Active Clubs</div>
+                    <div class="screenshot-container">
+                        <div style="width: 250px; height: 500px; background: #1a1a1a; border-radius: 20px; border: 8px solid #000; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); overflow: hidden; position: relative;">
+                            <!-- League Screen -->
+                            <div style="padding: 20px; color: white;">
+                                <div style="text-align: center; margin-bottom: 20px;">
+                                    <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 5px;">RUNSTR SEASON 1</h3>
+                                    <div style="font-size: 12px; opacity: 0.7;">10 Season Pass Holders</div>
+                                </div>
+                                <div style="background: linear-gradient(135deg, #8B6914 0%, #FFD700 50%, #8B6914 100%); padding: 20px; border-radius: 15px; margin-bottom: 20px; text-align: center;">
+                                    <div style="font-size: 16px; margin-bottom: 5px;">Total Prize Pool</div>
+                                    <div style="font-size: 32px; font-weight: 900;">200,000</div>
+                                    <div style="font-size: 14px;">SATS</div>
+                                </div>
+                                <div style="background: #2a2a2a; padding: 15px; border-radius: 12px;">
+                                    <h4 style="font-size: 14px; margin-bottom: 15px; display: flex; align-items: center; gap: 5px;">🏆 League Standings</h4>
+                                    <div style="display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #333;">
+                                        <div style="width: 30px; height: 30px; background: #FFD700; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: black; font-size: 14px;">1</div>
+                                        <div style="flex: 1; font-size: 14px;">johnny9</div>
+                                        <div style="font-size: 14px; font-weight: 600;">41.9 mi</div>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 10px; padding: 10px 0;">
+                                        <div style="width: 30px; height: 30px; background: #C0C0C0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: black; font-size: 14px;">2</div>
+                                        <div style="flex: 1; font-size: 14px;">gnilma</div>
+                                        <div style="font-size: 14px; font-weight: 600;">22.5 mi</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="screenshot-container">
+                        <div style="width: 250px; height: 500px; background: #1a1a1a; border-radius: 20px; border: 8px solid #000; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); overflow: hidden; position: relative;">
+                            <!-- Teams Screen -->
+                            <div style="padding: 20px; color: white;">
+                                <button style="width: 100%; background: white; color: black; padding: 12px; border: none; border-radius: 25px; font-weight: 600; font-size: 14px; margin-bottom: 20px; cursor: pointer;">Create New Team</button>
+                                <div style="background: #2a2a2a; padding: 20px; border-radius: 15px; margin-bottom: 15px;">
+                                    <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 5px;">Ruckstr</h3>
+                                    <p style="font-size: 14px; opacity: 0.7; margin-bottom: 10px;">We ruck!</p>
+                                    <div style="font-size: 12px; opacity: 0.5;">Captain: spiffaroo</div>
+                                </div>
+                                <div style="background: #2a2a2a; padding: 20px; border-radius: 15px; margin-bottom: 15px;">
+                                    <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 5px;">Spain scape</h3>
+                                    <p style="font-size: 14px; opacity: 0.7; margin-bottom: 10px;">Españoles intentando escapar de la agenda 2030</p>
+                                    <div style="font-size: 12px; opacity: 0.5;">Captain: Kilombino[str]</div>
+                                </div>
+                                <div style="background: #2a2a2a; padding: 20px; border-radius: 15px;">
+                                    <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 5px;">Ohio Ruckers</h3>
+                                    <p style="font-size: 14px; opacity: 0.7; margin-bottom: 10px;">We're a troop of mostly dad-bods trying to maintain our waistlines</p>
+                                    <div style="font-size: 12px; opacity: 0.5;">Captain: DeAllen Young</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section class="features" id="features">
-        <div class="container">
-            <h2 class="section-title">Three Ways to Win</h2>
-            
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">📱</div>
-                    <h3 class="feature-title">Track Your Activities</h3>
-                    <p class="feature-description">Monitor running, walking, and cycling with our built in cardio tracker and earn streak rewards. Apple Watch and Garmin integrations coming soon.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">🏆</div>
-                    <h3 class="feature-title">Compete for Cash</h3>
-                    <p class="feature-description">Join challenges and events with real money prizes. From weekend 5Ks to month-long distance goals, competition can offer cash rewards for winners.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">👥</div>
-                    <h3 class="feature-title">Create Virtual Clubs</h3>
-                    <p class="feature-description">Build your own running community, design custom challenges and events, and earn revenue through virtual event ticket sales and member count.</p>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- Virtual Clubs Section -->
     <section class="virtual-clubs" id="clubs">
@@ -751,11 +829,10 @@
                     <p>Transform your running expertise into a thriving business. Create virtual clubs, design engaging challenges, and earn money from every participant who joins your events.</p>
                     
                     <ul class="monetization-highlights">
-                        <li>Earn 90% commission on virtual ticket sales</li>
+                        <li>Earn 100% commission on virtual ticket sales</li>
                         <li>Set your own prize pools and participation costs</li>
                         <li>Earn 1k in rewards for each member</li>
                         <li>Get promoted across the RUNSTR network</li>
-                        <li>Access detailed analytics and member insights</li>
                     </ul>
                     
                     <p>Whether you're a running coach, fitness influencer, or just passionate about building community, RUNSTR gives you the tools to monetize your influence and grow your audience.</p>
@@ -824,10 +901,9 @@
                     <h3 class="plan-name">Member</h3>
                     <div class="plan-price">$5<span>/month</span></div>
                     <ul class="plan-features">
-                        <li>Activity tracking</li>
-                        <li>Join teams</li>
-                        <li>Participate in events and challenges</li>
-                        <li>Compete for cash prizes</li>
+                        <li>Access to Teams</li>
+                        <li>Access to Events</li>
+                        <li>Streak Rewards</li>
                     </ul>
                     <a href="#" class="cta-button">Start Competing</a>
                 </div>
@@ -837,10 +913,8 @@
                     <div class="plan-price">$10<span>/month</span></div>
                     <ul class="plan-features">
                         <li>Everything in Member</li>
-                        <li>Create teams</li>
-                        <li>Host p2p challenges</li>
-                        <li>Set your own prize pools</li>
-                        <li>Earn revenue from challenges and member count</li>
+                        <li>Create Teams</li>
+                        <li>Create Challenges</li>
                     </ul>
                     <a href="#" class="cta-button">Become a Captain</a>
                 </div>
@@ -849,9 +923,9 @@
                     <h3 class="plan-name">Organization</h3>
                     <div class="plan-price">$25<span>/month</span></div>
                     <ul class="plan-features">
+                        <li>Everything in Member</li>
                         <li>Everything in Captain</li>
-                        <li>Create custom events</li>
-                        <li>Earn revenue from virtual ticket sales</li>
+                        <li>Create Events</li>
                     </ul>
                     <a href="#" class="cta-button">Scale Your Business</a>
                 </div>
@@ -871,9 +945,8 @@
                 <div class="footer-section">
                     <h3>Product</h3>
                     <ul>
-                        <li><a href="#">Features</a></li>
-                        <li><a href="#">Pricing</a></li>
-                        <li><a href="#">Virtual Clubs</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#clubs">Virtual Clubs</a></li>
                         <li><a href="pages/integrations.html">Integrations</a></li>
                     </ul>
                 </div>
