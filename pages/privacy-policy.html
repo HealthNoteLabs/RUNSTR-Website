@@ -14,13 +14,12 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             line-height: 1.6;
-            color: #000;
+            color: #333;
             background: #fff;
-            overflow-x: hidden;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 800px;
             margin: 0 auto;
             padding: 0 20px;
         }
@@ -51,93 +50,151 @@
             letter-spacing: -0.02em;
         }
 
-        .back-link {
-            background: #000;
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #000;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+
+        .nav-links a:hover {
+            background: rgba(0, 0, 0, 0.05);
+            transform: translateY(-1px);
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #000 0%, #333 50%, #000 100%);
             color: #fff;
             padding: 0.75rem 1.5rem;
             border: none;
             border-radius: 50px;
             font-weight: 600;
             text-decoration: none;
-            transition: all 0.3s;
-            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .back-link:hover {
-            background: #333;
-            transform: translateY(-2px);
+        .cta-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         /* Main Content */
-        .main-content {
-            padding: 8rem 0 4rem;
-            min-height: 100vh;
+        main {
+            padding-top: 120px;
+            padding-bottom: 4rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
         }
 
         .page-title {
             font-size: 3rem;
             font-weight: 900;
-            text-align: center;
-            margin-bottom: 2rem;
-            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+            color: #000;
         }
 
         .page-subtitle {
             font-size: 1.2rem;
             color: #666;
-            text-align: center;
-            margin-bottom: 4rem;
             max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
+            margin: 0 auto;
         }
 
-        .content-section {
-            max-width: 800px;
-            margin: 0 auto 3rem;
+        .last-updated {
+            background: #f8f8f8;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
         }
 
-        .section-title {
+        .privacy-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .privacy-section {
+            margin-bottom: 3rem;
+        }
+
+        .privacy-section h2 {
             font-size: 1.8rem;
             font-weight: 700;
             margin-bottom: 1rem;
             color: #000;
+            border-bottom: 2px solid #000;
+            padding-bottom: 0.5rem;
         }
 
-        .section-content {
-            font-size: 1rem;
+        .privacy-section h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
             color: #333;
-            margin-bottom: 2rem;
         }
 
-        .highlight-box {
-            background: #f8f8f8;
-            border-left: 4px solid #000;
-            padding: 1.5rem;
-            margin: 2rem 0;
-            border-radius: 8px;
+        .privacy-section p {
+            margin-bottom: 1rem;
+            color: #555;
+            line-height: 1.7;
         }
 
-        .highlight-box h3 {
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        ul {
-            margin: 1rem 0;
+        .privacy-section ul {
+            margin-bottom: 1rem;
             padding-left: 1.5rem;
         }
 
-        li {
+        .privacy-section li {
             margin-bottom: 0.5rem;
+            color: #555;
+            line-height: 1.6;
         }
 
-        .last-updated {
-            font-size: 0.9rem;
-            color: #666;
+        .highlight-box {
+            background: #f0f9ff;
+            border-left: 4px solid #000;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .highlight-box h3 {
+            color: #000;
+            margin-top: 0;
+        }
+
+        .contact-info {
+            background: #000;
+            color: #fff;
+            padding: 2rem;
+            border-radius: 15px;
             text-align: center;
             margin-top: 3rem;
-            font-style: italic;
+        }
+
+        .contact-info h3 {
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+
+        .contact-info a {
+            color: #fff;
+            text-decoration: underline;
         }
 
         /* Footer */
@@ -162,7 +219,6 @@
 
         .footer-section ul {
             list-style: none;
-            padding: 0;
         }
 
         .footer-section ul li {
@@ -180,255 +236,246 @@
         }
 
         .footer-bottom {
-            border-top: 1px solid #333;
-            padding-top: 2rem;
             text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #333;
             color: #666;
         }
 
-        /* Mobile Responsiveness */
+        /* Responsive */
         @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
             .page-title {
                 font-size: 2rem;
             }
             
-            .main-content {
-                padding: 6rem 0 4rem;
-            }
-            
-            .container {
-                padding: 0 15px;
+            .privacy-section h2 {
+                font-size: 1.5rem;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Header -->
     <header>
         <nav class="container">
             <a href="../index.html" class="logo">RUNSTR</a>
-            <a href="../index.html" class="back-link">← Back to Home</a>
+            <ul class="nav-links">
+                <li><a href="../index.html#clubs">Virtual Clubs</a></li>
+                <li><a href="../index.html#pricing">Pricing</a></li>
+                <li><a href="../index.html#how">How It Works</a></li>
+            </ul>
+            <a href="../index.html#pricing" class="cta-button">Get Started</a>
         </nav>
     </header>
 
-    <main class="main-content">
+    <!-- Main Content -->
+    <main>
         <div class="container">
-            <h1 class="page-title">Privacy Policy</h1>
-            <p class="page-subtitle">Your privacy matters. Learn how RUNSTR protects your data and respects your choices.</p>
-            
-            <div class="highlight-box">
-                <h3>🔒 Privacy First Approach</h3>
-                <p>RUNSTR is designed with privacy at its core. We collect minimal data, give you full control, and never store sensitive personal information.</p>
-            </div>
-
-            <div class="content-section">
-                <h2 class="section-title">Data We Don't Collect</h2>
-                <div class="section-content">
-                    <p>RUNSTR operates on a privacy-first principle. We specifically <strong>do not collect</strong>:</p>
-                    <ul>
-                        <li>Personal identifying information (name, address, phone number)</li>
-                        <li>Financial information or payment details</li>
-                        <li>Health records or medical data</li>
-                        <li>Location tracking beyond activity sessions</li>
-                        <li>Device contacts or personal communications</li>
-                        <li>Biometric data or detailed health metrics</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="content-section">
-                <h2 class="section-title">No User Accounts Required</h2>
-                <div class="section-content">
-                    <p>RUNSTR operates without traditional user accounts, which means:</p>
-                    <ul>
-                        <li>No passwords or login credentials to manage</li>
-                        <li>No persistent user profiles linked to personal information</li>
-                        <li>Reduced risk of data breaches affecting personal accounts</li>
-                        <li>Complete anonymity in your fitness tracking</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="content-section">
-                <h2 class="section-title">Activity Data We Process</h2>
-                <div class="section-content">
-                    <p>To provide our competitive fitness platform, we process only essential activity metrics:</p>
-                    <ul>
-                        <li><strong>Distance:</strong> Miles or kilometers covered during activities</li>
-                        <li><strong>Speed & Pace:</strong> Performance metrics for challenges</li>
-                        <li><strong>Steps:</strong> Step count for walking and running activities</li>
-                        <li><strong>Duration:</strong> Time spent on activities</li>
-                        <li><strong>Activity Type:</strong> Running, walking, or cycling classification</li>
-                    </ul>
-                    <p>This data is used solely for challenge participation, leaderboards, and competition features.</p>
-                    
-                    <div class="highlight-box">
-                        <h3>📅 Data Retention</h3>
-                        <p><strong>Activity data is automatically deleted upon challenge completion or after 30 days of inactivity</strong>, whichever comes first. You can manually delete your data at any time through the app interface.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="content-section">
-                <h2 class="section-title">Your Rights</h2>
-                <div class="section-content">
-                    <p>You have comprehensive rights regarding your data under applicable privacy laws:</p>
-                    <ul>
-                        <li><strong>Right to Access:</strong> View all data we have about you</li>
-                        <li><strong>Right to Delete:</strong> Remove your activity data instantly through the app at any time</li>
-                        <li><strong>Right to Export:</strong> Download your data in standard formats (JSON, CSV)</li>
-                        <li><strong>Right to Rectification:</strong> Correct any inaccurate data</li>
-                        <li><strong>Right to Withdraw Consent:</strong> Stop data processing for any optional features</li>
-                        <li><strong>Right to Data Portability:</strong> Transfer your data to other services</li>
-                        <li><strong>Right to Object:</strong> Opt out of data processing for specific purposes</li>
-                        <li><strong>Right to Restrict Processing:</strong> Limit how we use your data</li>
-                    </ul>
-                    
-                    <div class="highlight-box">
-                        <h3>📧 Contact for Privacy Rights</h3>
-                        <p>To exercise any of these rights or for privacy-related questions, contact us at <strong>privacy@runstr.club</strong> or through our <a href="contact.html" style="color: #000; font-weight: 600;">Contact Page</a>.</p>
-                    </div>
-
-                    <p><strong>Additional Data Control Features:</strong></p>
-                    <ul>
-                        <li><strong>No Local Storage Recommendation:</strong> We recommend against storing data locally on your device for enhanced privacy</li>
-                        <li><strong>Temporary Processing:</strong> Activity data is processed only for active challenges and competitions</li>
-                        <li><strong>Instant Deletion:</strong> All data removal requests are processed immediately</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="content-section">
-                <h2 class="section-title">Social Media Sharing</h2>
-                <div class="section-content">
-                    <p>When you choose to share achievements on social media, we only share:</p>
-                    <ul>
-                        <li>Public activity metrics (distance, speed, pace, steps)</li>
-                        <li>Challenge completion status</li>
-                        <li>Achievement badges and milestones</li>
-                    </ul>
-                    <p><strong>Important:</strong> Social media sharing is entirely optional and controlled by you. No data is shared without your explicit consent for each post.</p>
-                </div>
-            </div>
-
-            <div class="content-section">
-                <h2 class="section-title">Regulatory Compliance</h2>
-                <div class="section-content">
-                    <p>This Privacy Policy complies with applicable data protection laws including:</p>
-                    <ul>
-                        <li><strong>General Data Protection Regulation (GDPR)</strong> for EU users</li>
-                        <li><strong>California Consumer Privacy Act (CCPA)</strong> for California residents</li>
-                        <li><strong>Personal Information Protection and Electronic Documents Act (PIPEDA)</strong> for Canadian users</li>
-                        <li><strong>Australian Privacy Principles (APP)</strong> for Australian users</li>
-                        <li>Other applicable regional data protection laws based on your location</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="content-section">
-                <h2 class="section-title">Data Security</h2>
-                <div class="section-content">
-                    <p>Even with minimal data collection, we protect what we process using industry-leading security measures:</p>
-                    <ul>
-                        <li><strong>AES-256 encryption</strong> for all data transmission and storage</li>
-                        <li><strong>TLS 1.3 protocol</strong> for secure communication</li>
-                        <li><strong>Nostr protocol integration</strong> with cryptographic key management for decentralized data sharing</li>
-                        <li><strong>Local private key handling</strong> - your cryptographic keys never leave your device</li>
-                        <li>No persistent storage of sensitive information on our servers</li>
-                        <li>Regular security audits and penetration testing</li>
-                        <li>Zero-knowledge architecture where technically possible</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="content-section">
-                <h2 class="section-title">Third-Party Services & Integrations</h2>
-                <div class="section-content">
-                    <p>RUNSTR integrates with various services only when you explicitly connect them. Each integration has specific privacy implications:</p>
-                    
-                    <h3 style="margin-top: 2rem; margin-bottom: 1rem;">🏃‍♂️ Fitness Tracking Integrations</h3>
-                    <ul>
-                        <li><strong>Apple Watch:</strong> Activity data sync (coming soon) - follows Apple's HealthKit privacy policy</li>
-                        <li><strong>Garmin:</strong> Fitness tracking integration (coming soon) - governed by Garmin's privacy policy</li>
-                        <li><strong>Strava:</strong> Activity import capabilities (planned) - subject to Strava's data sharing terms</li>
-                    </ul>
-                    
-                    <h3 style="margin-top: 2rem; margin-bottom: 1rem;">📱 Social Media Platforms</h3>
-                    <ul>
-                        <li><strong>Twitter/X:</strong> Achievement sharing - governed by X's privacy policy</li>
-                        <li><strong>Instagram:</strong> Progress posts - subject to Meta's data policy</li>
-                        <li><strong>Facebook:</strong> Community features - follows Meta's privacy terms</li>
-                    </ul>
-                    
-                    <h3 style="margin-top: 2rem; margin-bottom: 1rem;">🔗 Nostr Protocol Integration</h3>
-                    <ul>
-                        <li><strong>Decentralized Sharing:</strong> Your achievements can be shared to Nostr relays</li>
-                        <li><strong>Cryptographic Keys:</strong> Your Nostr private keys are generated and stored locally on your device only</li>
-                        <li><strong>Relay Privacy:</strong> Data shared to Nostr relays follows the privacy policies of individual relay operators</li>
-                        <li><strong>Content Control:</strong> You control what activity data is published to the Nostr network</li>
-                    </ul>
-                    
-                    <h3 style="margin-top: 2rem; margin-bottom: 1rem;">💰 Future Wallet Integrations</h3>
-                    <ul>
-                        <li><strong>Lightning Network:</strong> For instant prize payments - no personal financial data stored by RUNSTR</li>
-                        <li><strong>Bitcoin Wallets:</strong> Direct integration for earnings - your wallet addresses remain private</li>
-                        <li><strong>Cryptocurrency Exchanges:</strong> Optional integrations for prize conversion - subject to exchange privacy policies</li>
-                    </ul>
-                    
-                    <p><strong>Important:</strong> All third-party integrations require your explicit consent and can be disconnected at any time. We do not share your data with these services beyond what is necessary for the specific feature you've chosen to use.</p>
-                </div>
-            </div>
-
-            <div class="content-section">
-                <h2 class="section-title">Children's Privacy</h2>
-                <div class="section-content">
-                    <p>RUNSTR is designed for users 13 years and older. We do not knowingly collect data from children under 13. If you're a parent and believe your child has used RUNSTR, please contact us immediately.</p>
-                </div>
-            </div>
-
-            <div class="content-section">
-                <h2 class="section-title">Security Incident Notification</h2>
-                <div class="section-content">
-                    <p>In the unlikely event of a security incident affecting your data:</p>
-                    <ul>
-                        <li><strong>Immediate Response:</strong> We will assess and contain any security incidents within 24 hours</li>
-                        <li><strong>User Notification:</strong> Affected users will be notified through the RUNSTR app within 72 hours</li>
-                        <li><strong>Transparency Report:</strong> We will publish a public incident report detailing what happened and our response</li>
-                        <li><strong>Regulatory Compliance:</strong> All relevant authorities will be notified as required by law</li>
-                        <li><strong>Remediation:</strong> We will provide clear steps for users to protect themselves and their data</li>
-                    </ul>
-                    
-                    <div class="highlight-box">
-                        <h3>🚨 How You'll Be Notified</h3>
-                        <p>Security incident notifications will be sent through <strong>in-app notifications</strong> and posted on our website. We recommend keeping app notifications enabled for security updates.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="content-section">
-                <h2 class="section-title">Changes to This Policy</h2>
-                <div class="section-content">
-                    <p>We may update this privacy policy to reflect changes in our practices or legal requirements. Any changes will be posted on this page with an updated "Last Modified" date. For significant changes, we will notify users through the app. Continued use of RUNSTR after changes indicates acceptance of the updated policy.</p>
-                </div>
-            </div>
-
-            <div class="content-section">
-                <h2 class="section-title">Contact Us</h2>
-                <div class="section-content">
-                    <p>Questions about privacy or data practices? We're here to help:</p>
-                    <ul>
-                        <li>Visit our <a href="contact.html" style="color: #000; font-weight: 600;">Contact Page</a></li>
-                        <li>Submit a <a href="bug-reports.html" style="color: #000; font-weight: 600;">Privacy Concern Report</a></li>
-                        <li>Join our <a href="community.html" style="color: #000; font-weight: 600;">Community Discussions</a></li>
-                    </ul>
-                </div>
+            <div class="page-header">
+                <h1 class="page-title">Privacy Policy</h1>
+                <p class="page-subtitle">Your privacy is important to us. Learn how we collect, use, and protect your data.</p>
             </div>
 
             <div class="last-updated">
-                <p>Last updated: January 2025</p>
+                Last updated: August 19, 2025
+            </div>
+
+            <div class="privacy-content">
+                <div class="privacy-section">
+                    <h2>Information We Collect</h2>
+                    <p>At RUNSTR, we believe in minimal data collection and local-first storage. We only collect information that is essential for providing our fitness platform services:</p>
+                    
+                    <h3>Account Information</h3>
+                    <ul>
+                        <li>Username and display name</li>
+                        <li>Email address for account verification</li>
+                        <li>Profile picture (optional)</li>
+                        <li>Nostr public key (for decentralized identity)</li>
+                    </ul>
+
+                    <h3>Fitness Data</h3>
+                    <ul>
+                        <li>Running distance, time, and pace</li>
+                        <li>Challenge participation and results</li>
+                        <li>Team memberships and created events</li>
+                        <li>Achievement and streak data</li>
+                    </ul>
+
+                    <h3>Technical Information</h3>
+                    <ul>
+                        <li>Device type and operating system (for app compatibility)</li>
+                        <li>App usage statistics (anonymous)</li>
+                        <li>Bitcoin Lightning wallet connection status</li>
+                    </ul>
+
+                    <div class="highlight-box">
+                        <h3>🔒 Local-First Approach</h3>
+                        <p>Most of your data is stored locally on your device. We only sync essential information needed for competitions and team features to our servers.</p>
+                    </div>
+                </div>
+
+                <div class="privacy-section">
+                    <h2>How We Use Information</h2>
+                    <p>We use your information solely to provide and improve our fitness platform services:</p>
+                    
+                    <ul>
+                        <li><strong>Platform Operation:</strong> Enable core features like run tracking, teams, and competitions</li>
+                        <li><strong>Competition Management:</strong> Verify results and distribute prizes fairly</li>
+                        <li><strong>Community Features:</strong> Connect you with teams and enable social interactions</li>
+                        <li><strong>Payment Processing:</strong> Facilitate Bitcoin/Lightning transactions for prizes and memberships</li>
+                        <li><strong>Service Improvement:</strong> Anonymous analytics to enhance app performance and features</li>
+                        <li><strong>Security:</strong> Prevent fraud and maintain platform integrity</li>
+                    </ul>
+
+                    <p><strong>We do NOT:</strong></p>
+                    <ul>
+                        <li>Sell your personal data to third parties</li>
+                        <li>Use your data for advertising</li>
+                        <li>Share sensitive information with external companies</li>
+                        <li>Track your location beyond what's necessary for run verification</li>
+                    </ul>
+                </div>
+
+                <div class="privacy-section">
+                    <h2>Payment Processing (Bitcoin/Lightning)</h2>
+                    <p>RUNSTR uses Bitcoin and the Lightning Network for all monetary transactions, providing enhanced privacy and security:</p>
+                    
+                    <h3>Bitcoin/Lightning Benefits</h3>
+                    <ul>
+                        <li>No traditional financial institution involvement</li>
+                        <li>Pseudonymous transactions (no personal banking details required)</li>
+                        <li>Fast, low-fee payments via Lightning Network</li>
+                        <li>Self-custodial wallet support</li>
+                    </ul>
+
+                    <h3>Transaction Data</h3>
+                    <ul>
+                        <li>We do not store Bitcoin private keys or seed phrases</li>
+                        <li>Lightning invoice creation and payment status only</li>
+                        <li>Prize distribution records for competition verification</li>
+                        <li>Subscription payment confirmations</li>
+                    </ul>
+
+                    <div class="highlight-box">
+                        <h3>⚡ Lightning Privacy</h3>
+                        <p>Lightning transactions are private by design. We cannot see the full payment path or your wallet balance - only the invoices you choose to pay.</p>
+                    </div>
+                </div>
+
+                <div class="privacy-section">
+                    <h2>Third-Party Services</h2>
+                    <p>We work with minimal third-party services, all chosen for their privacy-focused approach:</p>
+                    
+                    <h3>Nostr Network</h3>
+                    <ul>
+                        <li>Decentralized protocol for social features and identity</li>
+                        <li>Your Nostr identity is pseudonymous and controlled by you</li>
+                        <li>We relay messages but do not control or own your Nostr data</li>
+                    </ul>
+
+                    <h3>Lightning Service Providers</h3>
+                    <ul>
+                        <li>Used for Lightning Network payment processing only</li>
+                        <li>We do not share personal data with these providers</li>
+                        <li>Transactions are processed using Lightning invoices only</li>
+                    </ul>
+
+                    <h3>Analytics (Anonymous Only)</h3>
+                    <ul>
+                        <li>Crash reporting and performance monitoring</li>
+                        <li>All data is anonymized before collection</li>
+                        <li>No personal identifiers are included</li>
+                    </ul>
+                </div>
+
+                <div class="privacy-section">
+                    <h2>Data Security</h2>
+                    <p>We implement robust security measures to protect your information:</p>
+                    
+                    <h3>Technical Safeguards</h3>
+                    <ul>
+                        <li>End-to-end encryption for sensitive communications</li>
+                        <li>Secure data transmission using TLS/SSL</li>
+                        <li>Regular security audits and updates</li>
+                        <li>Minimal data retention policies</li>
+                    </ul>
+
+                    <h3>Access Controls</h3>
+                    <ul>
+                        <li>Limited employee access to user data</li>
+                        <li>Two-factor authentication for admin accounts</li>
+                        <li>Regular access reviews and audits</li>
+                    </ul>
+
+                    <h3>Data Retention</h3>
+                    <ul>
+                        <li>Account data retained while your account is active</li>
+                        <li>Competition results kept for historical records and verification</li>
+                        <li>Technical logs deleted after 90 days</li>
+                        <li>Account deletion permanently removes personal data</li>
+                    </ul>
+                </div>
+
+                <div class="privacy-section">
+                    <h2>Your Rights</h2>
+                    <p>You have full control over your data and privacy on RUNSTR:</p>
+                    
+                    <h3>Access and Portability</h3>
+                    <ul>
+                        <li>View all data we have collected about you</li>
+                        <li>Export your fitness data in standard formats</li>
+                        <li>Download your competition history and achievements</li>
+                    </ul>
+
+                    <h3>Control and Deletion</h3>
+                    <ul>
+                        <li>Update or correct your profile information at any time</li>
+                        <li>Delete your account and all associated data</li>
+                        <li>Withdraw from specific competitions or teams</li>
+                        <li>Opt out of non-essential communications</li>
+                    </ul>
+
+                    <h3>Privacy Settings</h3>
+                    <ul>
+                        <li>Control what fitness data is shared with teams</li>
+                        <li>Set profile visibility preferences</li>
+                        <li>Manage competition participation settings</li>
+                        <li>Configure notification preferences</li>
+                    </ul>
+
+                    <div class="highlight-box">
+                        <h3>🏃‍♂️ Your Data, Your Choice</h3>
+                        <p>With our local-first approach and Nostr integration, you maintain control over your identity and data. You can migrate to other compatible platforms at any time.</p>
+                    </div>
+                </div>
+
+                <div class="privacy-section">
+                    <h2>Contact Information</h2>
+                    <p>Questions about this privacy policy or how we handle your data? We're here to help:</p>
+                    <ul>
+                        <li><strong>Email:</strong> privacy@runstr.club</li>
+                        <li><strong>Support:</strong> <a href="contact.html" style="color: #000; font-weight: 600;">Contact Us</a></li>
+                        <li><strong>Community:</strong> <a href="community.html" style="color: #000; font-weight: 600;">Join our Community</a></li>
+                    </ul>
+                    <p>We aim to respond to all privacy inquiries within 48 hours.</p>
+                </div>
+
+                <div class="contact-info">
+                    <h3>Questions or Concerns?</h3>
+                    <p>We're committed to transparency and protecting your privacy. If you have any questions about this policy or our data practices, please don't hesitate to reach out.</p>
+                    <p style="margin-top: 1rem;">
+                        <strong>Email:</strong> <a href="mailto:privacy@runstr.club">privacy@runstr.club</a>
+                    </p>
+                </div>
             </div>
         </div>
     </main>
 
+    <!-- Footer -->
     <footer>
         <div class="container">
             <div class="footer-content">
@@ -440,7 +487,6 @@
                 <div class="footer-section">
                     <h3>Product</h3>
                     <ul>
-                        <li><a href="../index.html#features">Features</a></li>
                         <li><a href="../index.html#pricing">Pricing</a></li>
                         <li><a href="../index.html#clubs">Virtual Clubs</a></li>
                         <li><a href="integrations.html">Integrations</a></li>
