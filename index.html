@@ -3,12 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RUNSTR - Create. Compete. Earn.</title>
+    <title>RUNSTR - Track. Compete. Earn.</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        :root {
+            --black: #0a0a0a;
+            --dark-gray: #1a1a1a;
+            --medium-gray: #2a2a2a;
+            --light-gray: #888;
+            --white: #ffffff;
+            --accent: #f0f0f0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--black);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
         }
 
         @keyframes fadeInUp {
@@ -22,163 +39,60 @@
             }
         }
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            33% { transform: translateY(-10px) rotate(1deg); }
-            66% { transform: translateY(5px) rotate(-1deg); }
-        }
-
-        .particle {
-            position: absolute;
-            background: rgba(0, 0, 0, 0.05);
-            border-radius: 50%;
-            pointer-events: none;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .particle:nth-child(1) { 
-            width: 8px; height: 8px; 
-            top: 20%; left: 10%; 
-            animation-delay: 0s; 
-        }
-        .particle:nth-child(2) { 
-            width: 12px; height: 12px; 
-            top: 40%; left: 80%; 
-            animation-delay: 2s; 
-        }
-        .particle:nth-child(3) { 
-            width: 6px; height: 6px; 
-            top: 70%; left: 20%; 
-            animation-delay: 4s; 
-        }
-        .particle:nth-child(4) { 
-            width: 10px; height: 10px; 
-            top: 30%; left: 60%; 
-            animation-delay: 1s; 
-        }
-        .particle:nth-child(5) { 
-            width: 14px; height: 14px; 
-            top: 80%; left: 70%; 
-            animation-delay: 3s; 
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: #000;
-            background: #fff;
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header */
-        header {
+        /* Navigation */
+        nav {
             position: fixed;
             top: 0;
             width: 100%;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(10, 10, 10, 0.95);
             backdrop-filter: blur(10px);
             z-index: 1000;
-            border-bottom: 1px solid #eee;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--medium-gray);
         }
 
-        nav {
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 0;
         }
 
         .logo {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 900;
-            color: #000;
+            letter-spacing: -1px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--white);
             text-decoration: none;
-            letter-spacing: -0.02em;
+        }
+
+        .ostrich-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--white);
+            mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M70 20 Q75 15 80 20 L75 25 Q70 22 65 25 L60 30 L55 35 Q50 40 45 45 L40 55 L35 65 Q30 70 25 75 L20 80 L25 85 L30 80 Q35 75 40 70 L45 65 Q50 60 55 55 L60 50 Q65 45 70 40 L75 35 Q80 30 85 25 L90 20 Q85 15 80 20' fill='white'/%3E%3C/svg%3E") center/contain no-repeat;
+            -webkit-mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M70 20 Q75 15 80 20 L75 25 Q70 22 65 25 L60 30 L55 35 Q50 40 45 45 L40 55 L35 65 Q30 70 25 75 L20 80 L25 85 L30 80 Q35 75 40 70 L45 65 Q50 60 55 55 L60 50 Q65 45 70 40 L75 35 Q80 30 85 25 L90 20 Q85 15 80 20' fill='white'/%3E%3C/svg%3E") center/contain no-repeat;
         }
 
         .nav-links {
             display: flex;
-            list-style: none;
             gap: 2rem;
+            list-style: none;
         }
 
         .nav-links a {
+            color: var(--light-gray);
             text-decoration: none;
-            color: #000;
+            transition: color 0.3s;
             font-weight: 500;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-        }
-
-        .nav-links a::before {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            width: 0;
-            height: 2px;
-            background: #000;
-            transition: all 0.3s ease;
-            transform: translateX(-50%);
         }
 
         .nav-links a:hover {
-            background: rgba(0, 0, 0, 0.05);
-            transform: translateY(-1px);
-        }
-
-        .nav-links a:hover::before {
-            width: 80%;
-        }
-
-        .cta-button {
-            background: linear-gradient(135deg, #000 0%, #333 50%, #000 100%);
-            background-size: 200% 200%;
-            color: #fff;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 50px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .cta-button:hover {
-            background-position: 100% 0%;
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .cta-button:hover::before {
-            left: 100%;
+            color: var(--white);
         }
 
         /* Hero Section */
@@ -186,131 +100,59 @@
             min-height: 100vh;
             display: flex;
             align-items: center;
-            background: linear-gradient(135deg, #f8f8f8 0%, #fff 50%, #f0f0f0 100%);
-            background-size: 400% 400%;
-            animation: gradientShift 8s ease infinite;
+            justify-content: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--black) 0%, var(--dark-gray) 100%);
             position: relative;
-            overflow: hidden;
-            padding-top: 80px;
         }
 
         .hero::before {
             content: '';
             position: absolute;
             top: 0;
-            right: -50%;
-            width: 100%;
-            height: 100%;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background: repeating-linear-gradient(
-                45deg,
+                0deg,
                 transparent,
-                transparent 50px,
-                rgba(0,0,0,0.02) 50px,
-                rgba(0,0,0,0.02) 100px
+                transparent 2px,
+                rgba(255,255,255,0.03) 2px,
+                rgba(255,255,255,0.03) 4px
             );
-            animation: drift 20s linear infinite;
-        }
-
-        @keyframes drift {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-100px); }
+            pointer-events: none;
         }
 
         .hero-content {
-            position: relative;
-            z-index: 2;
+            text-align: center;
+            max-width: 1000px;
+            z-index: 1;
+            animation: fadeInUp 1s ease-out;
         }
 
-        .hero h1 {
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
+        h1 {
+            font-size: clamp(3rem, 8vw, 5rem);
             font-weight: 900;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-            letter-spacing: -0.02em;
+            letter-spacing: -2px;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--white) 0%, var(--light-gray) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tagline {
+            font-size: 1.25rem;
+            color: var(--light-gray);
+            margin-bottom: 1rem;
+            font-weight: 300;
+            letter-spacing: 2px;
         }
 
         .hero-subtitle {
-            font-size: 1.3rem;
-            color: #666;
-            margin-bottom: 2rem;
-            max-width: 600px;
-        }
-
-        .download-buttons {
-            display: flex;
-            gap: 1rem;
+            color: var(--light-gray);
             margin-bottom: 3rem;
-        }
-
-        .download-btn {
-            background: linear-gradient(135deg, #000 0%, #333 50%, #000 100%);
-            background-size: 200% 200%;
-            color: #fff;
-            padding: 1rem 2rem;
-            border-radius: 15px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .download-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transition: left 0.6s;
-        }
-
-        .download-btn:hover {
-            background-position: 100% 0%;
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        .download-btn:hover::before {
-            left: 100%;
-        }
-
-        .stats {
-            display: flex;
-            gap: 3rem;
-            margin-top: 2rem;
-        }
-
-        .stat {
-            text-align: center;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s ease-out;
-        }
-
-        .stat.animate {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .stat:nth-child(1) { transition-delay: 0.1s; }
-        .stat:nth-child(2) { transition-delay: 0.2s; }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 900;
-            color: #000;
-        }
-
-        .stat-label {
-            color: #666;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
+            font-size: 1.1rem;
         }
 
         /* App Screenshots */
@@ -324,7 +166,7 @@
 
         .screenshot-container {
             position: relative;
-            transform: perspective(1000px) rotateY(-15deg);
+            transform: perspective(1000px) rotateY(-5deg);
             transition: transform 0.5s ease;
         }
 
@@ -334,340 +176,225 @@
 
         .screenshot {
             width: 250px;
-            height: auto;
+            height: 500px;
+            background: var(--dark-gray);
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-            border: 8px solid #000;
+            border: 8px solid var(--medium-gray);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Products Section */
+        .products {
+            padding: 6rem 2rem;
+            background: var(--black);
+        }
+
+        .products-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+        }
+
+        .product-card {
+            background: var(--dark-gray);
+            border: 1px solid var(--medium-gray);
+            padding: 3rem 2rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--white);
+            transform: translateX(-100%);
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover::before {
+            transform: translateX(0);
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--white);
+        }
+
+        .product-title {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+        }
+
+        .product-subtitle {
+            color: var(--light-gray);
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .product-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .product-features li {
+            padding: 0.5rem 0;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .product-features li::before {
+            content: '→';
+            color: var(--light-gray);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--white);
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+            border: 2px solid var(--white);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        .btn:hover {
+            background: transparent;
+            color: var(--white);
+            transform: translateX(5px);
         }
 
         /* Features Section */
         .features {
-            padding: 6rem 0;
-            background: #000;
-            color: #fff;
-        }
-
-        .section-title {
-            font-size: 3rem;
-            font-weight: 900;
-            text-align: center;
-            margin-bottom: 3rem;
-            letter-spacing: -0.02em;
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.8s ease-out;
-        }
-
-        .section-title.animate {
-            opacity: 1;
-            transform: translateY(0);
+            padding: 6rem 2rem;
+            background: var(--dark-gray);
         }
 
         .features-grid {
+            max-width: 1200px;
+            margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 3rem;
-            margin-top: 4rem;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
         }
 
-        .feature-card {
-            background: rgba(17, 17, 17, 0.7);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            padding: 2.5rem;
-            border-radius: 20px;
+        .feature {
             text-align: center;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            padding: 2rem;
             opacity: 0;
-            transform: translateY(30px);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-15px) scale(1.02);
-            border-color: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-            background: rgba(30, 30, 30, 0.8);
+            transform: translateY(20px);
+            transition: opacity 0.6s, transform 0.6s;
         }
 
         .feature-icon {
-            font-size: 3rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .feature-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .feature-description {
-            color: #ccc;
-            line-height: 1.7;
-        }
-
-        /* Virtual Clubs Section */
-        .virtual-clubs {
-            padding: 6rem 0;
-            background: #f8f8f8;
-        }
-
-        .clubs-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .clubs-text h2 {
-            font-size: 3rem;
-            font-weight: 900;
-            margin-bottom: 1.5rem;
-            letter-spacing: -0.02em;
-        }
-
-        .clubs-text p {
-            font-size: 1.1rem;
-            color: #666;
-            margin-bottom: 1.5rem;
-            line-height: 1.7;
-        }
-
-        .monetization-highlights {
-            list-style: none;
-            margin: 2rem 0;
-        }
-
-        .monetization-highlights li {
-            padding: 0.75rem 0;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .monetization-highlights li::before {
-            content: '💰';
-            font-size: 1.2rem;
-        }
-
-        .clubs-visual {
-            background: #000;
-            border-radius: 20px;
-            padding: 3rem;
-            text-align: center;
-            color: #fff;
-        }
-
-        .mock-dashboard {
-            background: #111;
-            border-radius: 15px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .dashboard-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 0;
-            border-bottom: 1px solid #333;
-        }
-
-        .dashboard-item:last-child {
-            border-bottom: none;
-        }
-
-        .earning-amount {
-            font-weight: 900;
-            color: #4ade80;
-        }
-
-        /* Pricing Section */
-        .pricing {
-            padding: 6rem 0;
-            background: #fff;
-        }
-
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .pricing-card {
-            background: rgba(248, 248, 248, 0.7);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border-radius: 20px;
-            padding: 2.5rem;
-            text-align: center;
-            position: relative;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        .pricing-card:hover {
-            transform: translateY(-15px) scale(1.02);
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
-            border-color: rgba(0, 0, 0, 0.2);
-        }
-
-        .pricing-card.featured {
-            background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transform: scale(1.05) translateY(0);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-
-        .pricing-card.featured:hover {
-            transform: scale(1.07) translateY(-10px);
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
-        }
-
-        .pricing-card.featured .cta-button {
-            background: #fff;
-            color: #000;
-        }
-
-        .pricing-card.featured .cta-button:hover {
-            background: #f0f0f0;
-        }
-
-        .plan-name {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .plan-price {
-            font-size: 3rem;
-            font-weight: 900;
-            margin-bottom: 0.5rem;
-        }
-
-        .plan-price span {
-            font-size: 1rem;
-            color: #666;
-        }
-
-        .featured .plan-price span {
-            color: #ccc;
-        }
-
-        .plan-features {
-            list-style: none;
-            margin: 2rem 0;
-            text-align: left;
-        }
-
-        .plan-features li {
-            padding: 0.5rem 0;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .plan-features li::before {
-            content: '✓';
-            color: #4ade80;
-            font-weight: bold;
-        }
-
-        /* How It Works */
-        .how-it-works {
-            padding: 6rem 0;
-            background: #000;
-            color: #fff;
-        }
-
-        .steps {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 3rem;
-            margin-top: 4rem;
-        }
-
-        .step {
-            text-align: center;
-            position: relative;
-        }
-
-        .step-number {
             width: 60px;
             height: 60px;
-            background: #fff;
-            color: #000;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: 900;
-            margin: 0 auto 1.5rem;
+            margin: 0 auto 1rem;
+            background: var(--white);
+            mask-size: contain;
+            -webkit-mask-size: contain;
         }
 
-        .step-title {
-            font-size: 1.3rem;
+        .feature h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
             font-weight: 700;
-            margin-bottom: 1rem;
         }
 
-        .step-description {
-            color: #ccc;
+        .feature p {
+            color: var(--light-gray);
+            font-size: 0.95rem;
         }
 
         /* Footer */
         footer {
-            background: #111;
-            color: #fff;
-            padding: 4rem 0 2rem;
+            padding: 3rem 2rem;
+            border-top: 1px solid var(--medium-gray);
+            text-align: center;
+            background: var(--black);
         }
 
         .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
             margin-bottom: 2rem;
         }
 
-        .footer-section h3 {
-            font-size: 1.2rem;
+        .footer-logo .ostrich-icon {
+            width: 30px;
+            height: 30px;
+        }
+
+        .footer-logo .logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+
+        .subscription-info {
+            margin: 2rem 0;
+            padding: 2rem 0;
+            border-top: 1px solid var(--medium-gray);
+            border-bottom: 1px solid var(--medium-gray);
+            color: var(--light-gray);
+        }
+
+        .price-tag {
+            display: inline-block;
+            background: var(--medium-gray);
+            padding: 0.25rem 0.75rem;
+            margin: 0 0.25rem;
             font-weight: 700;
-            margin-bottom: 1rem;
+            color: var(--white);
         }
 
-        .footer-section ul {
-            list-style: none;
+        .footer-links {
+            margin: 2rem 0;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
         }
 
-        .footer-section ul li {
-            margin-bottom: 0.5rem;
-        }
-
-        .footer-section ul li a {
-            color: #ccc;
+        .footer-links a {
+            color: var(--light-gray);
             text-decoration: none;
             transition: color 0.3s;
         }
 
-        .footer-section ul li a:hover {
-            color: #fff;
+        .footer-links a:hover {
+            color: var(--white);
         }
 
         .footer-bottom {
-            text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid #333;
-            color: #666;
+            color: var(--light-gray);
+            font-size: 0.9rem;
         }
 
         /* Responsive */
@@ -676,19 +403,12 @@
                 display: none;
             }
             
-            .clubs-content {
+            .products-container {
                 grid-template-columns: 1fr;
             }
             
-            .stats {
-                justify-content: center;
-                flex-wrap: wrap;
-                gap: 2rem;
-            }
-            
-            .download-buttons {
-                flex-direction: column;
-                align-items: flex-start;
+            h1 {
+                font-size: 3rem;
             }
 
             .app-screenshots {
@@ -696,284 +416,234 @@
                 -webkit-overflow-scrolling: touch;
                 scroll-snap-type: x mandatory;
                 gap: 1rem;
+                padding: 0 1rem;
             }
 
             .screenshot-container {
                 scroll-snap-align: center;
                 transform: perspective(1000px) rotateY(0deg);
+                flex-shrink: 0;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <nav class="container">
-            <a href="#" class="logo">RUNSTR</a>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="ostrich-icon"></div>
+                RUNSTR
+            </a>
             <ul class="nav-links">
-                <li><a href="#clubs">Virtual Clubs</a></li>
-                <li><a href="#pricing">Pricing</a></li>
-                <li><a href="#how">How It Works</a></li>
+                <li><a href="#runstr">RUNSTR</a></li>
+                <li><a href="#rewards">REWARDS</a></li>
+                <li><a href="#features">Features</a></li>
             </ul>
-            <a href="#pricing" class="cta-button">Get Started</a>
-        </nav>
-    </header>
+        </div>
+    </nav>
 
     <!-- Hero Section -->
     <section class="hero">
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="container">
-            <div class="hero-content">
-                <h1>Join or create virtual cardio clubs and earn real rewards.</h1>
-                <p class="hero-subtitle">Build your fitness empire with RUNSTR. Track your run, create virtual competitions, grow your community, and generate recurring revenue.</p>
-                
-                <div class="app-screenshots">
-                    <div class="screenshot-container">
-                        <div style="width: 250px; height: 500px; background: #1a1a1a; border-radius: 20px; border: 8px solid #000; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); overflow: hidden; position: relative;">
-                            <!-- Dashboard Screen -->
-                            <div style="padding: 20px; color: white;">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                                    <div style="display: flex; gap: 10px;">
-                                        <div style="background: white; color: black; padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 12px;">RUNSTR</div>
-                                        <div style="background: #333; padding: 8px 16px; border-radius: 20px; font-size: 12px;">WALKSTR</div>
-                                        <div style="background: #333; padding: 8px 16px; border-radius: 20px; font-size: 12px;">CYCLESTR</div>
-                                    </div>
-                                </div>
-                                <div style="text-align: center; margin: 30px 0;">
-                                    <div style="font-size: 14px; opacity: 0.7;">Distance</div>
-                                    <div style="font-size: 36px; font-weight: 700;">0.00</div>
-                                    <div style="font-size: 12px; opacity: 0.5;">mi</div>
-                                </div>
-                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 30px 0;">
-                                    <div style="background: #2a2a2a; padding: 15px; border-radius: 12px; text-align: center;">
-                                        <div style="font-size: 12px; opacity: 0.7;">Time</div>
-                                        <div style="font-size: 20px; font-weight: 600;">00:00</div>
-                                    </div>
-                                    <div style="background: #2a2a2a; padding: 15px; border-radius: 12px; text-align: center;">
-                                        <div style="font-size: 12px; opacity: 0.7;">Pace</div>
-                                        <div style="font-size: 20px; font-weight: 600;">--</div>
-                                    </div>
-                                </div>
-                                <button style="width: 100%; background: white; color: black; padding: 15px; border: none; border-radius: 30px; font-weight: 600; font-size: 16px; cursor: pointer;">Start Run</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="screenshot-container">
-                        <div style="width: 250px; height: 500px; background: #1a1a1a; border-radius: 20px; border: 8px solid #000; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); overflow: hidden; position: relative;">
-                            <!-- League Screen -->
-                            <div style="padding: 20px; color: white;">
-                                <div style="text-align: center; margin-bottom: 20px;">
-                                    <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 5px;">RUNSTR SEASON 1</h3>
-                                    <div style="font-size: 12px; opacity: 0.7;">10 Season Pass Holders</div>
-                                </div>
-                                <div style="background: linear-gradient(135deg, #8B6914 0%, #FFD700 50%, #8B6914 100%); padding: 20px; border-radius: 15px; margin-bottom: 20px; text-align: center;">
-                                    <div style="font-size: 16px; margin-bottom: 5px;">Total Prize Pool</div>
-                                    <div style="font-size: 32px; font-weight: 900;">200,000</div>
-                                    <div style="font-size: 14px;">SATS</div>
-                                </div>
-                                <div style="background: #2a2a2a; padding: 15px; border-radius: 12px;">
-                                    <h4 style="font-size: 14px; margin-bottom: 15px; display: flex; align-items: center; gap: 5px;">🏆 League Standings</h4>
-                                    <div style="display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #333;">
-                                        <div style="width: 30px; height: 30px; background: #FFD700; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: black; font-size: 14px;">1</div>
-                                        <div style="flex: 1; font-size: 14px;">johnny9</div>
-                                        <div style="font-size: 14px; font-weight: 600;">41.9 mi</div>
-                                    </div>
-                                    <div style="display: flex; align-items: center; gap: 10px; padding: 10px 0;">
-                                        <div style="width: 30px; height: 30px; background: #C0C0C0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: black; font-size: 14px;">2</div>
-                                        <div style="flex: 1; font-size: 14px;">gnilma</div>
-                                        <div style="font-size: 14px; font-weight: 600;">22.5 mi</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="screenshot-container">
-                        <div style="width: 250px; height: 500px; background: #1a1a1a; border-radius: 20px; border: 8px solid #000; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); overflow: hidden; position: relative;">
-                            <!-- Teams Screen -->
-                            <div style="padding: 20px; color: white;">
-                                <button style="width: 100%; background: white; color: black; padding: 12px; border: none; border-radius: 25px; font-weight: 600; font-size: 14px; margin-bottom: 20px; cursor: pointer;">Create New Team</button>
-                                <div style="background: #2a2a2a; padding: 20px; border-radius: 15px; margin-bottom: 15px;">
-                                    <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 5px;">Ruckstr</h3>
-                                    <p style="font-size: 14px; opacity: 0.7; margin-bottom: 10px;">We ruck!</p>
-                                    <div style="font-size: 12px; opacity: 0.5;">Captain: spiffaroo</div>
-                                </div>
-                                <div style="background: #2a2a2a; padding: 20px; border-radius: 15px; margin-bottom: 15px;">
-                                    <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 5px;">Spain scape</h3>
-                                    <p style="font-size: 14px; opacity: 0.7; margin-bottom: 10px;">Españoles intentando escapar de la agenda 2030</p>
-                                    <div style="font-size: 12px; opacity: 0.5;">Captain: Kilombino[str]</div>
-                                </div>
-                                <div style="background: #2a2a2a; padding: 20px; border-radius: 15px;">
-                                    <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 5px;">Ohio Ruckers</h3>
-                                    <p style="font-size: 14px; opacity: 0.7; margin-bottom: 10px;">We're a troop of mostly dad-bods trying to maintain our waistlines</p>
-                                    <div style="font-size: 12px; opacity: 0.5;">Captain: DeAllen Young</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-    <!-- Virtual Clubs Section -->
-    <section class="virtual-clubs" id="clubs">
-        <div class="container">
-            <div class="clubs-content">
-                <div class="clubs-text">
-                    <h2>Your Fitness Community, Your Revenue Stream</h2>
-                    <p>Transform your running expertise into a thriving business. Create virtual clubs, design engaging challenges, and earn money from every participant who joins your events.</p>
-                    
-                    <ul class="monetization-highlights">
-                        <li>Earn 100% commission on virtual ticket sales</li>
-                        <li>Set your own prize pools and participation costs</li>
-                        <li>Earn 1k in rewards for each member</li>
-                        <li>Get promoted across the RUNSTR network</li>
-                    </ul>
-                    
-                    <p>Whether you're a running coach, fitness influencer, or just passionate about building community, RUNSTR gives you the tools to monetize your influence and grow your audience.</p>
-                </div>
-                
-                <div class="clubs-visual">
-                    <h3 style="margin-bottom: 2rem; font-size: 1.5rem;">Club Dashboard Preview</h3>
-                    <div class="mock-dashboard">
-                        <div class="dashboard-item">
-                            <span>Monthly 5K Challenge</span>
-                            <span class="earning-amount">+$847</span>
-                        </div>
-                        <div class="dashboard-item">
-                            <span>Weekend Warriors Series</span>
-                            <span class="earning-amount">+$523</span>
-                        </div>
-                        <div class="dashboard-item">
-                            <span>Beginner's 10K Program</span>
-                            <span class="earning-amount">+$291</span>
-                        </div>
-                        <div class="dashboard-item">
-                            <span>Corporate Team Challenge</span>
-                            <span class="earning-amount">+$1,205</span>
-                        </div>
-                    </div>
-                    <p style="color: #4ade80; font-weight: 600; font-size: 1.2rem;">Total Monthly Earnings: $2,866</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- How It Works -->
-    <section class="how-it-works" id="how">
-        <div class="container">
-            <h2 class="section-title">How it works</h2>
+        <div class="hero-content">
+            <h1>RUN WITH NOSTR</h1>
+            <p class="tagline">TRACK. COMPETE. EARN.</p>
+            <p class="hero-subtitle">Your workouts. Your data. Your rewards.</p>
             
-            <div class="steps">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <h3 class="step-title">Record Your Run</h3>
-                    <p class="step-description">Record your run with the in app tracker (Apple Watch and Garmin Integration coming soon).</p>
+            <div class="app-screenshots">
+                <div class="screenshot-container">
+                    <div class="screenshot">
+                        <!-- Dashboard Screen -->
+                        <div style="padding: 20px; color: white; height: 100%;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                <div style="display: flex; gap: 10px;">
+                                    <div style="background: white; color: black; padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 12px;">RUNSTR</div>
+                                    <div style="background: #333; padding: 8px 16px; border-radius: 20px; font-size: 12px;">WALKSTR</div>
+                                    <div style="background: #333; padding: 8px 16px; border-radius: 20px; font-size: 12px;">CYCLESTR</div>
+                                </div>
+                            </div>
+                            <div style="text-align: center; margin: 30px 0;">
+                                <div style="font-size: 14px; opacity: 0.7;">Distance</div>
+                                <div style="font-size: 36px; font-weight: 700;">0.00</div>
+                                <div style="font-size: 12px; opacity: 0.5;">mi</div>
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 30px 0;">
+                                <div style="background: #2a2a2a; padding: 15px; border-radius: 12px; text-align: center;">
+                                    <div style="font-size: 12px; opacity: 0.7;">Time</div>
+                                    <div style="font-size: 20px; font-weight: 600;">00:00</div>
+                                </div>
+                                <div style="background: #2a2a2a; padding: 15px; border-radius: 12px; text-align: center;">
+                                    <div style="font-size: 12px; opacity: 0.7;">Pace</div>
+                                    <div style="font-size: 20px; font-weight: 600;">--</div>
+                                </div>
+                            </div>
+                            <button style="width: 100%; background: white; color: black; padding: 15px; border: none; border-radius: 30px; font-weight: 600; font-size: 16px; cursor: pointer;">Start Run</button>
+                        </div>
+                    </div>
                 </div>
-                
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <h3 class="step-title">Join or Create Challenges</h3>
-                    <p class="step-description">Participate in existing competitions or create your own virtual events with custom rules and prize pools.</p>
+                <div class="screenshot-container">
+                    <div class="screenshot">
+                        <!-- League Screen -->
+                        <div style="padding: 20px; color: white; height: 100%;">
+                            <div style="text-align: center; margin-bottom: 20px;">
+                                <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 5px;">RUNSTR SEASON 1</h3>
+                                <div style="font-size: 12px; opacity: 0.7;">10 Season Pass Holders</div>
+                            </div>
+                            <div style="background: linear-gradient(135deg, #8B6914 0%, #FFD700 50%, #8B6914 100%); padding: 20px; border-radius: 15px; margin-bottom: 20px; text-align: center;">
+                                <div style="font-size: 16px; margin-bottom: 5px;">Total Prize Pool</div>
+                                <div style="font-size: 32px; font-weight: 900;">200,000</div>
+                                <div style="font-size: 14px;">SATS</div>
+                            </div>
+                            <div style="background: #2a2a2a; padding: 15px; border-radius: 12px;">
+                                <h4 style="font-size: 14px; margin-bottom: 15px; display: flex; align-items: center; gap: 5px;">🏆 League Standings</h4>
+                                <div style="display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #333;">
+                                    <div style="width: 30px; height: 30px; background: #FFD700; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: black; font-size: 14px;">1</div>
+                                    <div style="flex: 1; font-size: 14px;">johnny9</div>
+                                    <div style="font-size: 14px; font-weight: 600;">41.9 mi</div>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 10px; padding: 10px 0;">
+                                    <div style="width: 30px; height: 30px; background: #C0C0C0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: black; font-size: 14px;">2</div>
+                                    <div style="flex: 1; font-size: 14px;">gnilma</div>
+                                    <div style="font-size: 14px; font-weight: 600;">22.5 mi</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <h3 class="step-title">Earn Real Money</h3>
-                    <p class="step-description">Win cash prizes from competitions or earn ongoing revenue from the virtual clubs and challenges you create.</p>
+                <div class="screenshot-container">
+                    <div class="screenshot">
+                        <!-- Teams Screen -->
+                        <div style="padding: 20px; color: white; height: 100%;">
+                            <button style="width: 100%; background: white; color: black; padding: 12px; border: none; border-radius: 25px; font-weight: 600; font-size: 14px; margin-bottom: 20px; cursor: pointer;">Create New Team</button>
+                            <div style="background: #2a2a2a; padding: 20px; border-radius: 15px; margin-bottom: 15px;">
+                                <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 5px;">Ruckstr</h3>
+                                <p style="font-size: 14px; opacity: 0.7; margin-bottom: 10px;">We ruck!</p>
+                                <div style="font-size: 12px; opacity: 0.5;">Captain: spiffaroo</div>
+                            </div>
+                            <div style="background: #2a2a2a; padding: 20px; border-radius: 15px; margin-bottom: 15px;">
+                                <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 5px;">Spain scape</h3>
+                                <p style="font-size: 14px; opacity: 0.7; margin-bottom: 10px;">Españoles intentando escapar de la agenda 2030</p>
+                                <div style="font-size: 12px; opacity: 0.5;">Captain: Kilombino[str]</div>
+                            </div>
+                            <div style="background: #2a2a2a; padding: 20px; border-radius: 15px;">
+                                <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 5px;">Ohio Ruckers</h3>
+                                <p style="font-size: 14px; opacity: 0.7; margin-bottom: 10px;">We're a troop of mostly dad-bods trying to maintain our waistlines</p>
+                                <div style="font-size: 12px; opacity: 0.5;">Captain: DeAllen Young</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Pricing Section -->
-    <section class="pricing" id="pricing">
-        <div class="container">
-            <h2 class="section-title">Choose Your Level</h2>
-            
-            <div class="pricing-grid">
-                <div class="pricing-card">
-                    <h3 class="plan-name">Member</h3>
-                    <div class="plan-price">$5<span>/month</span></div>
-                    <ul class="plan-features">
-                        <li>Access to Teams</li>
-                        <li>Access to Events</li>
-                        <li>Streak Rewards</li>
-                    </ul>
-                    <a href="#" class="cta-button">Start Competing</a>
-                </div>
-                
-                <div class="pricing-card featured">
-                    <h3 class="plan-name">Captain</h3>
-                    <div class="plan-price">$10<span>/month</span></div>
-                    <ul class="plan-features">
-                        <li>Everything in Member</li>
-                        <li>Create Teams</li>
-                        <li>Create Challenges</li>
-                        <li>Create Private Events</li>
-                    </ul>
-                    <a href="#" class="cta-button">Become a Captain</a>
-                </div>
-                
-                <div class="pricing-card">
-                    <h3 class="plan-name">Organization</h3>
-                    <div class="plan-price">$25<span>/month</span></div>
-                    <ul class="plan-features">
-                        <li>Everything in Member</li>
-                        <li>Everything in Captain</li>
-                        <li>Create Public Events</li>
-                    </ul>
-                    <a href="#" class="cta-button">Scale Your Business</a>
-                </div>
+    <!-- Products Section -->
+    <section class="products">
+        <div class="products-container">
+            <!-- RUNSTR Card -->
+            <div class="product-card" id="runstr">
+                <h2 class="product-title">RUNSTR</h2>
+                <p class="product-subtitle">Nostr-Native Cardio Tracker</p>
+                <ul class="product-features">
+                    <li>Track running, walking & cycling</li>
+                    <li>Publish workouts to Nostr protocol</li>
+                    <li>Own your fitness data forever</li>
+                    <li>Integrated music player</li>
+                    <li>Apple Watch & Garmin sync</li>
+                    <li>Advanced stats & voice coaching</li>
+                </ul>
+                <a href="#" class="btn">Download App</a>
+            </div>
+
+            <!-- RUNSTR REWARDS Card -->
+            <div class="product-card" id="rewards">
+                <h2 class="product-title">RUNSTR REWARDS</h2>
+                <p class="product-subtitle">Team Competitions & Bitcoin Rewards</p>
+                <ul class="product-features">
+                    <li>Join & create teams</li>
+                    <li>Compete for cash prizes</li>
+                    <li>Auto-sync from any fitness app</li>
+                    <li>Background leaderboard tracking</li>
+                    <li>Instant Bitcoin rewards</li>
+                    <li>Organization monetization</li>
+                </ul>
+                <a href="#" class="btn">Get Started</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="features-grid">
+            <div class="feature">
+                <div class="feature-icon" style="mask: url('data:image/svg+xml,%3Csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"%3E%3Cpath d=\"M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z\"%3E%3C/path%3E%3C/svg%3E'); -webkit-mask: url('data:image/svg+xml,%3Csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"%3E%3Cpath d=\"M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z\"%3E%3C/path%3E%3C/svg%3E');"></div>
+                <h3>Nostr Protocol</h3>
+                <p>Decentralized & censorship-resistant. Your workouts live forever on Nostr.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon" style="mask: url('data:image/svg+xml,%3Csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"%3E%3Ccircle cx=\"12\" cy=\"12\" r=\"10\"%3E%3C/circle%3E%3Cpath d=\"M12 6v6l4 2\"%3E%3C/path%3E%3C/svg%3E'); -webkit-mask: url('data:image/svg+xml,%3Csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"%3E%3Ccircle cx=\"12\" cy=\"12\" r=\"10\"%3E%3C/circle%3E%3Cpath d=\"M12 6v6l4 2\"%3E%3C/path%3E%3C/svg%3E');"></div>
+                <h3>Real-Time Sync</h3>
+                <p>Automatic workout syncing across all your devices and apps.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon" style="mask: url('data:image/svg+xml,%3Csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"%3E%3Cpath d=\"M20 12V8H6a2 2 0 01-2-2c0-1.11.89-2 2-2h12v4\"%3E%3C/path%3E%3Cpath d=\"M4 6v12c0 1.11.89 2 2 2h14v-4\"%3E%3C/path%3E%3Cpath d=\"M18 12a2 2 0 00-2 2c0 1.11.89 2 2 2h4v-4h-4z\"%3E%3C/path%3E%3C/svg%3E'); -webkit-mask: url('data:image/svg+xml,%3Csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"%3E%3Cpath d=\"M20 12V8H6a2 2 0 01-2-2c0-1.11.89-2 2-2h12v4\"%3E%3C/path%3E%3Cpath d=\"M4 6v12c0 1.11.89 2 2 2h14v-4\"%3E%3C/path%3E%3Cpath d=\"M18 12a2 2 0 00-2 2c0 1.11.89 2 2 2h4v-4h-4z\"%3E%3C/path%3E%3C/svg%3E');"></div>
+                <h3>Bitcoin Lightning</h3>
+                <p>Instant sats for your achievements. Auto-withdraw to any Lightning wallet.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon" style="mask: url('data:image/svg+xml,%3Csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"%3E%3Cpath d=\"M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2\"%3E%3C/path%3E%3Ccircle cx=\"9\" cy=\"7\" r=\"4\"%3E%3C/circle%3E%3Cpath d=\"M23 21v-2a4 4 0 00-3-3.87\"%3E%3C/path%3E%3Cpath d=\"M16 3.13a4 4 0 010 7.75\"%3E%3C/path%3E%3C/svg%3E'); -webkit-mask: url('data:image/svg+xml,%3Csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"%3E%3Cpath d=\"M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2\"%3E%3C/path%3E%3Ccircle cx=\"9\" cy=\"7\" r=\"4\"%3E%3C/circle%3E%3Cpath d=\"M23 21v-2a4 4 0 00-3-3.87\"%3E%3C/path%3E%3Cpath d=\"M16 3.13a4 4 0 010 7.75\"%3E%3C/path%3E%3C/svg%3E');"></div>
+                <h3>Team Based</h3>
+                <p>Create or join teams. Compete together. Win together.</p>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
     <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>RUNSTR</h3>
-                    <p style="color: #ccc; margin-top: 1rem;">The future of competitive cardio. Create, compete, and earn with every mile.</p>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>Product</h3>
-                    <ul>
-                        <li><a href="#pricing">Pricing</a></li>
-                        <li><a href="#clubs">Virtual Clubs</a></li>
-                        <li><a href="pages/integrations.html">Integrations</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>Support</h3>
-                    <ul>
-                        <li><a href="pages/help.html">Help Center</a></li>
-                        <li><a href="pages/community.html">Community</a></li>
-                        <li><a href="pages/contact.html">Contact Us</a></li>
-                        <li><a href="pages/bug-reports.html">Bug Reports</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>Legal</h3>
-                    <ul>
-                        <li><a href="pages/privacy-policy.html">Privacy Policy</a></li>
-                        <li><a href="pages/coming-soon.html">Terms of Service</a></li>
-                        <li><a href="pages/system-requirements.html">System Requirements</a></li>
-                    </ul>
-                </div>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <div class="ostrich-icon"></div>
+                <div class="logo">RUNSTR</div>
             </div>
             
+            <div class="subscription-info">
+                <p>
+                    <strong>Join Teams</strong> <span class="price-tag">$1.99/month</span> | 
+                    <strong>Create Teams</strong> <span class="price-tag">$19.99/month</span>
+                </p>
+            </div>
+
+            <div class="footer-links">
+                <a href="pages/privacy-policy.html">Privacy Policy</a>
+                <a href="pages/help.html">Help Center</a>
+                <a href="pages/community.html">Community</a>
+                <a href="pages/contact.html">Contact Us</a>
+                <a href="pages/bug-reports.html">Bug Reports</a>
+                <a href="pages/coming-soon.html">Terms of Service</a>
+            </div>
+
             <div class="footer-bottom">
-                <p>&copy; 2025 RUNSTR. All rights reserved. Turn your miles into money.</p>
+                <p>© 2025 RUNSTR. Run with Nostr. Stack Sats.</p>
             </div>
         </div>
     </footer>
@@ -993,56 +663,35 @@
             });
         });
 
-        // Add scroll effect to header
+        // Add parallax effect to hero
         window.addEventListener('scroll', () => {
-            const header = document.querySelector('header');
-            if (window.scrollY > 100) {
-                header.style.background = 'rgba(255, 255, 255, 0.98)';
-            } else {
-                header.style.background = 'rgba(255, 255, 255, 0.95)';
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                hero.style.transform = `translateY(${scrolled * 0.1}px)`;
             }
         });
 
-        // Enhanced scroll animations
+        // Intersection Observer for fade-in animations
         const observerOptions = {
-            threshold: 0.2,
+            threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
         };
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    // Animate statistics
-                    if (entry.target.classList.contains('stats')) {
-                        const stats = entry.target.querySelectorAll('.stat');
-                        stats.forEach(stat => {
-                            stat.classList.add('animate');
-                        });
-                    }
-                    
-                    // Animate section titles
-                    if (entry.target.classList.contains('section-title')) {
-                        entry.target.classList.add('animate');
-                    }
-                    
-                    // Animate feature cards and pricing cards (remove initial animation state)
-                    if (entry.target.classList.contains('features-grid') || entry.target.classList.contains('pricing-grid')) {
-                        const cards = entry.target.querySelectorAll('.feature-card, .pricing-card');
-                        cards.forEach((card, index) => {
-                            setTimeout(() => {
-                                card.style.opacity = '1';
-                                card.style.transform = 'translateY(0)';
-                            }, index * 100);
-                        });
-                    }
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
                 }
             });
         }, observerOptions);
 
-        // Observe elements for scroll animations
+        // Observe product cards and features
         document.addEventListener('DOMContentLoaded', () => {
-            const elementsToObserve = document.querySelectorAll('.stats, .section-title, .features-grid, .pricing-grid');
-            elementsToObserve.forEach(el => observer.observe(el));
+            document.querySelectorAll('.product-card, .feature').forEach(el => {
+                observer.observe(el);
+            });
         });
     </script>
 </body>
