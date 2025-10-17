@@ -11,11 +11,21 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --black: #0a0a0a;
+            --dark-gray: #1a1a1a;
+            --medium-gray: #2a2a2a;
+            --light-gray: #888;
+            --white: #ffffff;
+            --orange: #F5A356;
+            --bitcoin-orange: #F7931A;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             line-height: 1.6;
-            color: #000;
-            background: #fff;
+            color: var(--white);
+            background: var(--black);
             overflow-x: hidden;
         }
 
@@ -30,10 +40,10 @@
             position: fixed;
             top: 0;
             width: 100%;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(10, 10, 10, 0.95);
             backdrop-filter: blur(10px);
             z-index: 1000;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--medium-gray);
         }
 
         nav {
@@ -46,16 +56,16 @@
         .logo {
             font-size: 1.8rem;
             font-weight: 900;
-            color: #000;
+            color: var(--white);
             text-decoration: none;
             letter-spacing: -0.02em;
         }
 
         .back-link {
-            background: #000;
-            color: #fff;
+            background: var(--orange);
+            color: var(--black);
             padding: 0.75rem 1.5rem;
-            border: none;
+            border: 2px solid var(--orange);
             border-radius: 50px;
             font-weight: 600;
             text-decoration: none;
@@ -64,7 +74,8 @@
         }
 
         .back-link:hover {
-            background: #333;
+            background: transparent;
+            color: var(--orange);
             transform: translateY(-2px);
         }
 
@@ -80,11 +91,12 @@
             text-align: center;
             margin-bottom: 2rem;
             letter-spacing: -0.02em;
+            color: var(--white);
         }
 
         .page-subtitle {
             font-size: 1.2rem;
-            color: #666;
+            color: var(--light-gray);
             text-align: center;
             margin-bottom: 4rem;
             max-width: 600px;
@@ -93,10 +105,11 @@
         }
 
         .bug-form {
-            background: #f8f8f8;
+            background: var(--dark-gray);
             padding: 3rem;
             border-radius: 20px;
             margin-bottom: 3rem;
+            border: 1px solid var(--medium-gray);
         }
 
         .form-group {
@@ -107,7 +120,7 @@
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 600;
-            color: #000;
+            color: var(--white);
         }
 
         .form-group input,
@@ -115,17 +128,19 @@
         .form-group textarea {
             width: 100%;
             padding: 1rem;
-            border: 2px solid #e5e7eb;
+            border: 2px solid var(--medium-gray);
             border-radius: 10px;
             font-size: 1rem;
             outline: none;
             transition: border-color 0.3s;
+            background: var(--black);
+            color: var(--white);
         }
 
         .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus {
-            border-color: #000;
+            border-color: var(--orange);
         }
 
         .form-group textarea {
@@ -146,10 +161,10 @@
         }
 
         .submit-btn {
-            background: #000;
-            color: #fff;
+            background: var(--orange);
+            color: var(--black);
             padding: 1rem 2rem;
-            border: none;
+            border: 2px solid var(--orange);
             border-radius: 50px;
             font-weight: 600;
             font-size: 1rem;
@@ -159,21 +174,24 @@
         }
 
         .submit-btn:hover {
-            background: #333;
+            background: transparent;
+            color: var(--orange);
             transform: translateY(-2px);
         }
 
         .guidelines {
-            background: #000;
-            color: #fff;
+            background: var(--dark-gray);
+            color: var(--white);
             padding: 3rem;
             border-radius: 20px;
+            border: 2px solid var(--orange);
         }
 
         .guidelines h2 {
             font-size: 2rem;
             margin-bottom: 1.5rem;
             text-align: center;
+            color: var(--white);
         }
 
         .guidelines-list {
@@ -186,20 +204,24 @@
             margin-bottom: 1rem;
             padding-left: 2rem;
             position: relative;
+            color: var(--light-gray);
         }
 
         .guidelines-list li::before {
-            content: '🐛';
+            content: '•';
             position: absolute;
             left: 0;
+            color: var(--orange);
+            font-weight: bold;
         }
 
         /* Footer */
         footer {
-            background: #111;
-            color: #fff;
+            background: var(--black);
+            color: var(--white);
             padding: 2rem 0;
             text-align: center;
+            border-top: 1px solid var(--medium-gray);
         }
 
         .footer-nav {
@@ -207,14 +229,14 @@
         }
 
         .footer-nav a {
-            color: #ccc;
+            color: var(--light-gray);
             text-decoration: none;
             margin: 0 1rem;
             transition: color 0.3s;
         }
 
         .footer-nav a:hover {
-            color: #fff;
+            color: var(--orange);
         }
     </style>
 </head>
@@ -229,10 +251,10 @@
     <main class="main-content">
         <div class="container">
             <h1 class="page-title">Bug Reports</h1>
-            <p class="page-subtitle">Help us improve RUNSTR by reporting bugs and issues. Your feedback makes our platform better for everyone.</p>
+            <p class="page-subtitle">Help us improve RUNSTR by reporting bugs and issues. RUNSTR features GPS-based cardio activity tracking plus manual entry support for diet, yoga, meditation, and strength training.</p>
 
             <div class="bug-form">
-                <h2 style="font-size: 1.5rem; margin-bottom: 2rem;">Report a Bug</h2>
+                <h2 style="font-size: 1.5rem; margin-bottom: 2rem; color: var(--white);">Report a Bug</h2>
                 <form>
                     <div class="form-row">
                         <div class="form-group">
@@ -305,7 +327,7 @@
                     <li><strong>Check First:</strong> Before reporting, check if the issue has already been reported in our community channels.</li>
                     <li><strong>One Bug Per Report:</strong> Submit separate reports for different issues to help us track and resolve them efficiently.</li>
                     <li><strong>Update Your App:</strong> Make sure you're using the latest version of RUNSTR before reporting bugs.</li>
-                    <li><strong>Security Issues:</strong> For security-related bugs, email urgent@runstr.club directly instead of using this form.</li>
+                    <li><strong>Security Issues:</strong> For security-related bugs, email TheWildHustle@proton.me directly instead of using this form.</li>
                     <li><strong>Be Patient:</strong> We review all reports carefully and will update you on the status of your submission.</li>
                 </ul>
             </div>
@@ -316,9 +338,9 @@
         <div class="container">
             <div class="footer-nav">
                 <a href="../index.html">Home</a>
-                <a href="help.html">Help</a>
                 <a href="contact.html">Contact</a>
                 <a href="community.html">Community</a>
+                <a href="privacy-policy.html">Privacy Policy</a>
             </div>
             <p>&copy; 2025 RUNSTR. All rights reserved.</p>
         </div>

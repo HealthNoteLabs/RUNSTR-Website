@@ -11,11 +11,21 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --black: #0a0a0a;
+            --dark-gray: #1a1a1a;
+            --medium-gray: #2a2a2a;
+            --light-gray: #888;
+            --white: #ffffff;
+            --orange: #F5A356;
+            --bitcoin-orange: #F7931A;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             line-height: 1.6;
-            color: #333;
-            background: #fff;
+            color: var(--white);
+            background: var(--black);
         }
 
         .container {
@@ -29,10 +39,10 @@
             position: fixed;
             top: 0;
             width: 100%;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(10, 10, 10, 0.95);
             backdrop-filter: blur(10px);
             z-index: 1000;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--medium-gray);
         }
 
         nav {
@@ -45,7 +55,7 @@
         .logo {
             font-size: 1.8rem;
             font-weight: 900;
-            color: #000;
+            color: var(--white);
             text-decoration: none;
             letter-spacing: -0.02em;
         }
@@ -58,7 +68,7 @@
 
         .nav-links a {
             text-decoration: none;
-            color: #000;
+            color: var(--light-gray);
             font-weight: 500;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
@@ -67,15 +77,15 @@
         }
 
         .nav-links a:hover {
-            background: rgba(0, 0, 0, 0.05);
+            color: var(--orange);
             transform: translateY(-1px);
         }
 
         .cta-button {
-            background: linear-gradient(135deg, #000 0%, #333 50%, #000 100%);
-            color: #fff;
+            background: var(--orange);
+            color: var(--black);
             padding: 0.75rem 1.5rem;
-            border: none;
+            border: 2px solid var(--orange);
             border-radius: 50px;
             font-weight: 600;
             text-decoration: none;
@@ -83,8 +93,10 @@
         }
 
         .cta-button:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            background: transparent;
+            color: var(--orange);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(245, 163, 86, 0.3);
         }
 
         /* Main Content */
@@ -102,24 +114,25 @@
             font-size: 3rem;
             font-weight: 900;
             margin-bottom: 1rem;
-            color: #000;
+            color: var(--white);
         }
 
         .page-subtitle {
             font-size: 1.2rem;
-            color: #666;
+            color: var(--light-gray);
             max-width: 600px;
             margin: 0 auto;
         }
 
         .last-updated {
-            background: #f8f8f8;
+            background: var(--medium-gray);
             padding: 1rem;
             border-radius: 10px;
             margin-bottom: 2rem;
             text-align: center;
-            color: #666;
+            color: var(--light-gray);
             font-size: 0.9rem;
+            border: 1px solid var(--medium-gray);
         }
 
         .privacy-content {
@@ -135,8 +148,8 @@
             font-size: 1.8rem;
             font-weight: 700;
             margin-bottom: 1rem;
-            color: #000;
-            border-bottom: 2px solid #000;
+            color: var(--white);
+            border-bottom: 2px solid var(--orange);
             padding-bottom: 0.5rem;
         }
 
@@ -145,12 +158,12 @@
             font-weight: 600;
             margin-bottom: 0.75rem;
             margin-top: 1.5rem;
-            color: #333;
+            color: var(--white);
         }
 
         .privacy-section p {
             margin-bottom: 1rem;
-            color: #555;
+            color: var(--light-gray);
             line-height: 1.7;
         }
 
@@ -161,47 +174,58 @@
 
         .privacy-section li {
             margin-bottom: 0.5rem;
-            color: #555;
+            color: var(--light-gray);
             line-height: 1.6;
         }
 
         .highlight-box {
-            background: #f0f9ff;
-            border-left: 4px solid #000;
+            background: var(--dark-gray);
+            border-left: 4px solid var(--orange);
             padding: 1.5rem;
             margin: 2rem 0;
             border-radius: 0 8px 8px 0;
+            border: 1px solid var(--medium-gray);
         }
 
         .highlight-box h3 {
-            color: #000;
+            color: var(--orange);
             margin-top: 0;
         }
 
+        .highlight-box p {
+            color: var(--light-gray);
+        }
+
         .contact-info {
-            background: #000;
-            color: #fff;
+            background: var(--dark-gray);
+            color: var(--white);
             padding: 2rem;
             border-radius: 15px;
             text-align: center;
             margin-top: 3rem;
+            border: 2px solid var(--orange);
         }
 
         .contact-info h3 {
-            color: #fff;
+            color: var(--orange);
             margin-bottom: 1rem;
         }
 
         .contact-info a {
-            color: #fff;
+            color: var(--orange);
             text-decoration: underline;
+        }
+
+        .contact-info a:hover {
+            color: var(--bitcoin-orange);
         }
 
         /* Footer */
         footer {
-            background: #111;
-            color: #fff;
+            background: var(--black);
+            color: var(--white);
             padding: 4rem 0 2rem;
+            border-top: 1px solid var(--medium-gray);
         }
 
         .footer-content {
@@ -226,20 +250,20 @@
         }
 
         .footer-section ul li a {
-            color: #ccc;
+            color: var(--light-gray);
             text-decoration: none;
             transition: color 0.3s;
         }
 
         .footer-section ul li a:hover {
-            color: #fff;
+            color: var(--orange);
         }
 
         .footer-bottom {
             text-align: center;
             padding-top: 2rem;
-            border-top: 1px solid #333;
-            color: #666;
+            border-top: 1px solid var(--medium-gray);
+            color: var(--light-gray);
         }
 
         /* Responsive */
@@ -313,7 +337,7 @@
                     </ul>
 
                     <div class="highlight-box">
-                        <h3>🔒 Local-First Approach</h3>
+                        <h3>Local-First Approach</h3>
                         <p>Most of your data is stored locally on your device. We only sync essential information needed for competitions and team features to our servers.</p>
                     </div>
                 </div>
@@ -361,7 +385,7 @@
                     </ul>
 
                     <div class="highlight-box">
-                        <h3>⚡ Lightning Privacy</h3>
+                        <h3>Lightning Privacy</h3>
                         <p>Lightning transactions are private by design. We cannot see the full payment path or your wallet balance - only the invoices you choose to pay.</p>
                     </div>
                 </div>
@@ -448,7 +472,7 @@
                     </ul>
 
                     <div class="highlight-box">
-                        <h3>🏃‍♂️ Your Data, Your Choice</h3>
+                        <h3>Your Data, Your Choice</h3>
                         <p>With our local-first approach and Nostr integration, you maintain control over your identity and data. You can migrate to other compatible platforms at any time.</p>
                     </div>
                 </div>
@@ -458,8 +482,8 @@
                     <p>Questions about this privacy policy or how we handle your data? We're here to help:</p>
                     <ul>
                         <li><strong>Email:</strong> privacy@runstr.club</li>
-                        <li><strong>Support:</strong> <a href="contact.html" style="color: #000; font-weight: 600;">Contact Us</a></li>
-                        <li><strong>Community:</strong> <a href="community.html" style="color: #000; font-weight: 600;">Join our Community</a></li>
+                        <li><strong>Support:</strong> <a href="contact.html" style="color: var(--orange); font-weight: 600;">Contact Us</a></li>
+                        <li><strong>Community:</strong> <a href="community.html" style="color: var(--orange); font-weight: 600;">Join our Community</a></li>
                     </ul>
                     <p>We aim to respond to all privacy inquiries within 48 hours.</p>
                 </div>
@@ -489,26 +513,22 @@
                     <ul>
                         <li><a href="../index.html#pricing">Pricing</a></li>
                         <li><a href="../index.html#clubs">Virtual Clubs</a></li>
-                        <li><a href="integrations.html">Integrations</a></li>
                     </ul>
                 </div>
-                
+
                 <div class="footer-section">
                     <h3>Support</h3>
                     <ul>
-                        <li><a href="help.html">Help Center</a></li>
                         <li><a href="community.html">Community</a></li>
                         <li><a href="contact.html">Contact Us</a></li>
                         <li><a href="bug-reports.html">Bug Reports</a></li>
                     </ul>
                 </div>
-                
+
                 <div class="footer-section">
                     <h3>Legal</h3>
                     <ul>
                         <li><a href="privacy-policy.html">Privacy Policy</a></li>
-                        <li><a href="coming-soon.html">Terms of Service</a></li>
-                        <li><a href="system-requirements.html">System Requirements</a></li>
                     </ul>
                 </div>
             </div>
