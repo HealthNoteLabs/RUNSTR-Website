@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Event - RUNSTR</title>
+
+    <!-- Nostr Login -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nostr-login@latest/dist/unpkg.css">
+    <script type="module" src="https://cdn.jsdelivr.net/npm/nostr-login@latest/dist/unpkg.js"></script>
+
+    <!-- Nostr Tools for Nostr operations -->
+    <script src="https://unpkg.com/nostr-tools@2.7.2/lib/nostr.bundle.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #0a0a0a;
+            --dark-gray: #1a1a1a;
+            --medium-gray: #2a2a2a;
+            --light-gray: #888;
+            --white: #ffffff;
+            --accent: #f0f0f0;
+            --orange: #F5A356;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--black);
+            color: var(--white);
+            line-height: 1.6;
+        }
+
+        /* Navigation Header */
+        .nav-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--medium-gray);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--white);
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+
+        /* Wizard Container */
+        .wizard-container {
+            max-width: 800px;
+            margin: 6rem auto 2rem;
+            padding: 2rem;
+        }
+
+        .wizard-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .wizard-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .wizard-subtitle {
+            color: var(--light-gray);
+            font-size: 1.1rem;
+        }
+
+        /* Progress Steps */
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--medium-gray);
+            z-index: 0;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            height: 2px;
+            background: var(--orange);
+            z-index: 1;
+            transition: width 0.3s ease;
+        }
+
+        .step {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--medium-gray);
+            border: 2px solid var(--medium-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .step.active .step-number {
+            background: var(--orange);
+            border-color: var(--orange);
+            color: var(--black);
+        }
+
+        .step.completed .step-number {
+            background: var(--orange);
+            border-color: var(--orange);
+            color: var(--black);
+        }
+
+        .step.completed .step-number::before {
+            content: '✓';
+        }
+
+        .step-label {
+            font-size: 0.85rem;
+            color: var(--light-gray);
+            text-align: center;
+        }
+
+        .step.active .step-label {
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        /* Wizard Content */
+        .wizard-content {
+            background: var(--dark-gray);
+            border: 1px solid var(--medium-gray);
+            padding: 3rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .wizard-step {
+            display: none;
+        }
+
+        .wizard-step.active {
+            display: block;
+        }
+
+        .step-title {
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .step-description {
+            color: var(--light-gray);
+            margin-bottom: 2rem;
+        }
+
+        /* Activity Type Grid */
+        .activity-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .activity-card {
+            background: var(--medium-gray);
+            border: 2px solid var(--medium-gray);
+            padding: 2rem 1rem;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .activity-card:hover {
+            border-color: var(--orange);
+            transform: translateY(-2px);
+        }
+
+        .activity-card.selected {
+            border-color: var(--orange);
+            background: rgba(245, 163, 86, 0.1);
+        }
+
+        .activity-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .activity-name {
+            font-weight: 700;
+        }
+
+        /* Competition Type List */
+        .competition-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .competition-option {
+            background: var(--medium-gray);
+            border: 2px solid var(--medium-gray);
+            padding: 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .competition-option:hover {
+            border-color: var(--orange);
+        }
+
+        .competition-option.selected {
+            border-color: var(--orange);
+            background: rgba(245, 163, 86, 0.1);
+        }
+
+        .competition-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .competition-description {
+            color: var(--light-gray);
+            font-size: 0.9rem;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--medium-gray);
+            border: 1px solid var(--dark-gray);
+            color: var(--white);
+            font-size: 1rem;
+            border-radius: 4px;
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .toggle-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .toggle-option {
+            flex: 1;
+            background: var(--medium-gray);
+            border: 2px solid var(--medium-gray);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .toggle-option:hover {
+            border-color: var(--orange);
+        }
+
+        .toggle-option.selected {
+            border-color: var(--orange);
+            background: rgba(245, 163, 86, 0.1);
+        }
+
+        .toggle-label {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .toggle-description {
+            color: var(--light-gray);
+            font-size: 0.85rem;
+        }
+
+        /* Review Section */
+        .review-section {
+            margin-bottom: 2rem;
+        }
+
+        .review-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--orange);
+        }
+
+        .review-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .review-label {
+            color: var(--light-gray);
+        }
+
+        .review-value {
+            font-weight: 600;
+        }
+
+        /* Navigation Buttons */
+        .wizard-navigation {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            background: var(--orange);
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+            border: 2px solid var(--orange);
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: transparent;
+            color: var(--orange);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--light-gray);
+            border-color: var(--medium-gray);
+        }
+
+        .btn-secondary:hover {
+            color: var(--white);
+            border-color: var(--light-gray);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 768px) {
+            .activity-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .toggle-group {
+                flex-direction: column;
+            }
+
+            .progress-steps {
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="nav-header">
+        <a href="../index.html" class="nav-logo">RUNSTR</a>
+        <div class="nav-actions">
+            <nostr-login></nostr-login>
+        </div>
+    </header>
+
+    <!-- Wizard Container -->
+    <main class="wizard-container">
+        <!-- Wizard Header -->
+        <div class="wizard-header">
+            <h1 class="wizard-title">Create Event</h1>
+            <p class="wizard-subtitle">Set up your team's next fitness competition</p>
+        </div>
+
+        <!-- Progress Steps -->
+        <div class="progress-steps">
+            <div class="progress-line" id="progress-line"></div>
+            <div class="step active" data-step="1">
+                <div class="step-number">1</div>
+                <div class="step-label">Activity</div>
+            </div>
+            <div class="step" data-step="2">
+                <div class="step-number">2</div>
+                <div class="step-label">Competition</div>
+            </div>
+            <div class="step" data-step="3">
+                <div class="step-number">3</div>
+                <div class="step-label">Details</div>
+            </div>
+            <div class="step" data-step="4">
+                <div class="step-number">4</div>
+                <div class="step-label">Settings</div>
+            </div>
+            <div class="step" data-step="5">
+                <div class="step-number">5</div>
+                <div class="step-label">Review</div>
+            </div>
+        </div>
+
+        <!-- Wizard Content -->
+        <div class="wizard-content">
+            <!-- Step 1: Activity Type Selection -->
+            <div class="wizard-step active" data-step="1">
+                <h2 class="step-title">Select Activity Type</h2>
+                <p class="step-description">Choose the type of physical activity for this competition</p>
+
+                <div class="activity-grid">
+                    <div class="activity-card" data-activity="running">
+                        <div class="activity-icon">🏃</div>
+                        <div class="activity-name">Running</div>
+                    </div>
+                    <div class="activity-card" data-activity="walking">
+                        <div class="activity-icon">🚶</div>
+                        <div class="activity-name">Walking</div>
+                    </div>
+                    <div class="activity-card" data-activity="cycling">
+                        <div class="activity-icon">🚴</div>
+                        <div class="activity-name">Cycling</div>
+                    </div>
+                    <div class="activity-card" data-activity="hiking">
+                        <div class="activity-icon">🥾</div>
+                        <div class="activity-name">Hiking</div>
+                    </div>
+                    <div class="activity-card" data-activity="swimming">
+                        <div class="activity-icon">🏊</div>
+                        <div class="activity-name">Swimming</div>
+                    </div>
+                    <div class="activity-card" data-activity="rowing">
+                        <div class="activity-icon">🚣</div>
+                        <div class="activity-name">Rowing</div>
+                    </div>
+                    <div class="activity-card" data-activity="strength">
+                        <div class="activity-icon">💪</div>
+                        <div class="activity-name">Strength</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Competition Type Selection -->
+            <div class="wizard-step" data-step="2">
+                <h2 class="step-title">Select Competition Type</h2>
+                <p class="step-description">Choose how participants will compete</p>
+
+                <div class="competition-list" id="competition-list">
+                    <!-- Competition options will be populated dynamically based on activity type -->
+                </div>
+            </div>
+
+            <!-- Step 3: Event Details -->
+            <div class="wizard-step" data-step="3">
+                <h2 class="step-title">Event Details</h2>
+                <p class="step-description">Provide information about your event</p>
+
+                <!-- Event vs League Toggle -->
+                <div class="toggle-group">
+                    <div class="toggle-option selected" data-type="event">
+                        <div class="toggle-label">Event</div>
+                        <div class="toggle-description">Time-bounded competition with start and end dates</div>
+                    </div>
+                    <div class="toggle-option" data-type="league">
+                        <div class="toggle-label">League</div>
+                        <div class="toggle-description">Ongoing competition without an end date</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Event Name *</label>
+                    <input type="text" id="event-name" class="form-input" placeholder="e.g., Summer 5K Challenge" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea id="event-description" class="form-textarea" placeholder="Describe the event, rules, and any special instructions..."></textarea>
+                </div>
+
+                <div class="form-row" id="date-fields">
+                    <div class="form-group">
+                        <label class="form-label">Start Date *</label>
+                        <input type="date" id="event-start-date" class="form-input" required>
+                    </div>
+                    <div class="form-group" id="end-date-group">
+                        <label class="form-label">End Date *</label>
+                        <input type="date" id="event-end-date" class="form-input" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Settings -->
+            <div class="wizard-step" data-step="4">
+                <h2 class="step-title">Event Settings</h2>
+                <p class="step-description">Configure participation and payment settings</p>
+
+                <div class="form-group">
+                    <label class="form-label">Entry Fee (satoshis)</label>
+                    <input type="number" id="entry-fee" class="form-input" placeholder="0" min="0" value="0">
+                    <p style="color: var(--light-gray); font-size: 0.85rem; margin-top: 0.5rem;">Leave as 0 for free events. 1000 sats ≈ $0.50-$1</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Maximum Participants</label>
+                    <input type="number" id="max-participants" class="form-input" placeholder="Unlimited" min="1">
+                    <p style="color: var(--light-gray); font-size: 0.85rem; margin-top: 0.5rem;">Leave blank for unlimited participants</p>
+                </div>
+
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                        <input type="checkbox" id="require-approval" style="width: auto;">
+                        <span class="form-label" style="margin-bottom: 0;">Require captain approval for new participants</span>
+                    </label>
+                    <p style="color: var(--light-gray); font-size: 0.85rem; margin-top: 0.5rem;">When checked, you'll need to manually approve join requests</p>
+                </div>
+            </div>
+
+            <!-- Step 5: Review & Publish -->
+            <div class="wizard-step" data-step="5">
+                <h2 class="step-title">Review & Publish</h2>
+                <p class="step-description">Review your event details before publishing</p>
+
+                <div class="review-section">
+                    <h3 class="review-title">Activity & Competition</h3>
+                    <div class="review-item">
+                        <span class="review-label">Activity Type:</span>
+                        <span class="review-value" id="review-activity">-</span>
+                    </div>
+                    <div class="review-item">
+                        <span class="review-label">Competition Type:</span>
+                        <span class="review-value" id="review-competition">-</span>
+                    </div>
+                </div>
+
+                <div class="review-section">
+                    <h3 class="review-title">Event Information</h3>
+                    <div class="review-item">
+                        <span class="review-label">Type:</span>
+                        <span class="review-value" id="review-event-type">-</span>
+                    </div>
+                    <div class="review-item">
+                        <span class="review-label">Name:</span>
+                        <span class="review-value" id="review-name">-</span>
+                    </div>
+                    <div class="review-item">
+                        <span class="review-label">Description:</span>
+                        <span class="review-value" id="review-description">-</span>
+                    </div>
+                    <div class="review-item">
+                        <span class="review-label">Start Date:</span>
+                        <span class="review-value" id="review-start-date">-</span>
+                    </div>
+                    <div class="review-item" id="review-end-date-item">
+                        <span class="review-label">End Date:</span>
+                        <span class="review-value" id="review-end-date">-</span>
+                    </div>
+                </div>
+
+                <div class="review-section">
+                    <h3 class="review-title">Settings</h3>
+                    <div class="review-item">
+                        <span class="review-label">Entry Fee:</span>
+                        <span class="review-value" id="review-fee">-</span>
+                    </div>
+                    <div class="review-item">
+                        <span class="review-label">Max Participants:</span>
+                        <span class="review-value" id="review-max-participants">-</span>
+                    </div>
+                    <div class="review-item">
+                        <span class="review-label">Approval Required:</span>
+                        <span class="review-value" id="review-approval">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="wizard-navigation">
+            <button class="btn btn-secondary" id="back-btn" onclick="previousStep()" style="display: none;">← Back</button>
+            <div style="flex: 1;"></div>
+            <button class="btn" id="next-btn" onclick="nextStep()" disabled>Next →</button>
+            <button class="btn" id="publish-btn" onclick="publishEvent()" style="display: none;">Publish Event</button>
+        </div>
+    </main>
+
+    <script>
+        let pool;
+        let currentUser = null;
+        let currentStep = 1;
+        const totalSteps = 5;
+
+        // Event data
+        const eventData = {
+            activity: null,
+            competitionType: null,
+            eventType: 'event', // 'event' or 'league'
+            name: '',
+            description: '',
+            startDate: '',
+            endDate: '',
+            entryFee: 0,
+            maxParticipants: null,
+            requireApproval: false
+        };
+
+        // Competition types based on activity
+        const competitionTypes = {
+            running: [
+                { id: 'total_distance', name: 'Total Distance', description: 'Compete for the longest cumulative distance' },
+                { id: 'single_distance', name: 'Single Workout Distance', description: 'Compete for the longest single workout' },
+                { id: 'fastest_pace', name: 'Fastest Pace', description: 'Compete for the fastest average pace' },
+                { id: 'most_workouts', name: 'Most Workouts', description: 'Compete for the most completed workouts' },
+                { id: 'total_calories', name: 'Total Calories', description: 'Compete for the most calories burned' }
+            ],
+            walking: [
+                { id: 'total_distance', name: 'Total Distance', description: 'Compete for the longest cumulative distance' },
+                { id: 'most_workouts', name: 'Most Workouts', description: 'Compete for the most completed workouts' },
+                { id: 'total_calories', name: 'Total Calories', description: 'Compete for the most calories burned' }
+            ],
+            cycling: [
+                { id: 'total_distance', name: 'Total Distance', description: 'Compete for the longest cumulative distance' },
+                { id: 'single_distance', name: 'Single Ride Distance', description: 'Compete for the longest single ride' },
+                { id: 'elevation_gain', name: 'Elevation Gain', description: 'Compete for the most elevation climbed' },
+                { id: 'fastest_pace', name: 'Fastest Speed', description: 'Compete for the highest average speed' }
+            ],
+            hiking: [
+                { id: 'total_distance', name: 'Total Distance', description: 'Compete for the longest cumulative distance' },
+                { id: 'elevation_gain', name: 'Elevation Gain', description: 'Compete for the most elevation climbed' },
+                { id: 'most_workouts', name: 'Most Hikes', description: 'Compete for the most completed hikes' }
+            ],
+            swimming: [
+                { id: 'total_distance', name: 'Total Distance', description: 'Compete for the longest cumulative distance' },
+                { id: 'single_distance', name: 'Single Swim Distance', description: 'Compete for the longest single swim' },
+                { id: 'most_workouts', name: 'Most Swims', description: 'Compete for the most completed swims' }
+            ],
+            rowing: [
+                { id: 'total_distance', name: 'Total Distance', description: 'Compete for the longest cumulative distance' },
+                { id: 'total_calories', name: 'Total Calories', description: 'Compete for the most calories burned' },
+                { id: 'fastest_pace', name: 'Fastest Pace', description: 'Compete for the fastest average pace' }
+            ],
+            strength: [
+                { id: 'most_workouts', name: 'Most Workouts', description: 'Compete for the most completed strength sessions' },
+                { id: 'total_calories', name: 'Total Calories', description: 'Compete for the most calories burned' },
+                { id: 'longest_duration', name: 'Longest Duration', description: 'Compete for the longest total workout time' }
+            ]
+        };
+
+        const RELAYS = ['wss://relay.damus.io', 'wss://nos.lol', 'wss://relay.nostr.band'];
+
+        // Initialize nostr-tools SimplePool
+        function initializeNostr() {
+            try {
+                pool = new NostrTools.SimplePool();
+                console.log('✅ Nostr pool initialized');
+                return pool;
+            } catch (error) {
+                console.error('❌ Failed to initialize Nostr pool:', error);
+                throw error;
+            }
+        }
+
+        // Listen for nostr-login events
+        document.addEventListener('nlAuth', async (e) => {
+            console.log('🔐 User logged in:', e.detail);
+            currentUser = e.detail;
+
+            if (!pool) {
+                initializeNostr();
+            }
+        });
+
+        // Activity type selection
+        document.querySelectorAll('.activity-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.activity-card').forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+                eventData.activity = this.getAttribute('data-activity');
+                updateNextButton();
+            });
+        });
+
+        // Event type toggle
+        document.querySelectorAll('.toggle-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.toggle-option').forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+                eventData.eventType = this.getAttribute('data-type');
+
+                // Show/hide end date based on type
+                const endDateGroup = document.getElementById('end-date-group');
+                if (eventData.eventType === 'league') {
+                    endDateGroup.style.display = 'none';
+                    document.getElementById('event-end-date').removeAttribute('required');
+                } else {
+                    endDateGroup.style.display = 'block';
+                    document.getElementById('event-end-date').setAttribute('required', 'required');
+                }
+            });
+        });
+
+        // Update competition options when activity changes
+        function updateCompetitionOptions() {
+            const competitionList = document.getElementById('competition-list');
+            const activity = eventData.activity;
+
+            if (!activity || !competitionTypes[activity]) {
+                competitionList.innerHTML = '<p style="color: var(--light-gray);">Please select an activity type first</p>';
+                return;
+            }
+
+            const options = competitionTypes[activity];
+            competitionList.innerHTML = options.map(option => `
+                <div class="competition-option" data-competition="${option.id}">
+                    <div class="competition-title">${option.name}</div>
+                    <div class="competition-description">${option.description}</div>
+                </div>
+            `).join('');
+
+            // Add click handlers
+            document.querySelectorAll('.competition-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.competition-option').forEach(o => o.classList.remove('selected'));
+                    this.classList.add('selected');
+                    eventData.competitionType = this.getAttribute('data-competition');
+                    updateNextButton();
+                });
+            });
+        }
+
+        // Update next button state
+        function updateNextButton() {
+            const nextBtn = document.getElementById('next-btn');
+            let isValid = false;
+
+            switch(currentStep) {
+                case 1:
+                    isValid = eventData.activity !== null;
+                    break;
+                case 2:
+                    isValid = eventData.competitionType !== null;
+                    break;
+                case 3:
+                    const name = document.getElementById('event-name').value.trim();
+                    const startDate = document.getElementById('event-start-date').value;
+                    const endDate = document.getElementById('event-end-date').value;
+                    isValid = name !== '' && startDate !== '' && (eventData.eventType === 'league' || endDate !== '');
+                    break;
+                case 4:
+                    isValid = true; // Settings are optional
+                    break;
+                case 5:
+                    isValid = true;
+                    break;
+            }
+
+            nextBtn.disabled = !isValid;
+        }
+
+        // Next step
+        function nextStep() {
+            if (currentStep < totalSteps) {
+                // Save form data before moving to next step
+                if (currentStep === 3) {
+                    eventData.name = document.getElementById('event-name').value.trim();
+                    eventData.description = document.getElementById('event-description').value.trim();
+                    eventData.startDate = document.getElementById('event-start-date').value;
+                    eventData.endDate = document.getElementById('event-end-date').value;
+                }
+                if (currentStep === 4) {
+                    eventData.entryFee = parseInt(document.getElementById('entry-fee').value) || 0;
+                    eventData.maxParticipants = parseInt(document.getElementById('max-participants').value) || null;
+                    eventData.requireApproval = document.getElementById('require-approval').checked;
+                }
+
+                currentStep++;
+
+                if (currentStep === 2) {
+                    updateCompetitionOptions();
+                }
+
+                if (currentStep === 5) {
+                    updateReviewSection();
+                }
+
+                updateWizardDisplay();
+            }
+        }
+
+        // Previous step
+        function previousStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateWizardDisplay();
+            }
+        }
+
+        // Update wizard display
+        function updateWizardDisplay() {
+            // Update steps
+            document.querySelectorAll('.step').forEach((step, index) => {
+                step.classList.remove('active', 'completed');
+                if (index + 1 < currentStep) {
+                    step.classList.add('completed');
+                } else if (index + 1 === currentStep) {
+                    step.classList.add('active');
+                }
+            });
+
+            // Update progress line
+            const progressLine = document.getElementById('progress-line');
+            const progressPercent = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            progressLine.style.width = progressPercent + '%';
+
+            // Update wizard steps
+            document.querySelectorAll('.wizard-step').forEach((step, index) => {
+                step.classList.remove('active');
+                if (index + 1 === currentStep) {
+                    step.classList.add('active');
+                }
+            });
+
+            // Update buttons
+            const backBtn = document.getElementById('back-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const publishBtn = document.getElementById('publish-btn');
+
+            backBtn.style.display = currentStep > 1 ? 'block' : 'none';
+
+            if (currentStep === totalSteps) {
+                nextBtn.style.display = 'none';
+                publishBtn.style.display = 'block';
+            } else {
+                nextBtn.style.display = 'block';
+                publishBtn.style.display = 'none';
+            }
+
+            updateNextButton();
+        }
+
+        // Update review section
+        function updateReviewSection() {
+            document.getElementById('review-activity').textContent = eventData.activity ? eventData.activity.charAt(0).toUpperCase() + eventData.activity.slice(1) : '-';
+
+            const competition = competitionTypes[eventData.activity]?.find(c => c.id === eventData.competitionType);
+            document.getElementById('review-competition').textContent = competition ? competition.name : '-';
+
+            document.getElementById('review-event-type').textContent = eventData.eventType === 'event' ? 'Time-bounded Event' : 'Ongoing League';
+            document.getElementById('review-name').textContent = eventData.name || '-';
+            document.getElementById('review-description').textContent = eventData.description || 'No description';
+            document.getElementById('review-start-date').textContent = eventData.startDate || '-';
+
+            const endDateItem = document.getElementById('review-end-date-item');
+            if (eventData.eventType === 'league') {
+                endDateItem.style.display = 'none';
+            } else {
+                endDateItem.style.display = 'flex';
+                document.getElementById('review-end-date').textContent = eventData.endDate || '-';
+            }
+
+            document.getElementById('review-fee').textContent = eventData.entryFee > 0 ? `${eventData.entryFee} sats` : 'Free';
+            document.getElementById('review-max-participants').textContent = eventData.maxParticipants || 'Unlimited';
+            document.getElementById('review-approval').textContent = eventData.requireApproval ? 'Yes' : 'No';
+        }
+
+        // Publish event
+        async function publishEvent() {
+            if (!currentUser) {
+                alert('Please log in to publish events');
+                return;
+            }
+
+            try {
+                const publishBtn = document.getElementById('publish-btn');
+                publishBtn.disabled = true;
+                publishBtn.textContent = 'Publishing...';
+
+                // Get team ID from URL parameters
+                const urlParams = new URLSearchParams(window.location.search);
+                const teamId = urlParams.get('teamId');
+
+                if (!teamId) {
+                    alert('No team ID found. Please create the event from the team management page.');
+                    publishBtn.disabled = false;
+                    publishBtn.textContent = 'Publish Event';
+                    return;
+                }
+
+                // Generate unique event ID
+                const eventId = `${teamId}-${Date.now()}`;
+
+                // Determine event kind (30100 for league, 30101 for event)
+                const eventKind = eventData.eventType === 'league' ? 30100 : 30101;
+
+                // Build event tags
+                const eventTags = [
+                    ['d', eventId],
+                    ['name', eventData.name],
+                    ['team', teamId],
+                    ['activity_type', eventData.activity],
+                    ['competition_type', eventData.competitionType],
+                    ['status', 'upcoming'],
+                    ['start', eventData.startDate]
+                ];
+
+                // Add end date for time-bounded events
+                if (eventData.eventType === 'event' && eventData.endDate) {
+                    eventTags.push(['end', eventData.endDate]);
+                }
+
+                // Add optional settings
+                if (eventData.entryFee > 0) {
+                    eventTags.push(['entry_fee', eventData.entryFee.toString()]);
+                }
+                if (eventData.maxParticipants) {
+                    eventTags.push(['max_participants', eventData.maxParticipants.toString()]);
+                }
+                if (eventData.requireApproval) {
+                    eventTags.push(['require_approval', 'true']);
+                }
+
+                // Create the event
+                const competitionEvent = {
+                    kind: eventKind,
+                    created_at: Math.floor(Date.now() / 1000),
+                    tags: eventTags,
+                    content: eventData.description || ''
+                };
+
+                // Sign the event (requires private key from nostr-login)
+                const signedEvent = await window.nostr.signEvent(competitionEvent);
+
+                console.log('📝 Publishing competition event:', signedEvent);
+
+                // Publish to relays
+                await Promise.any(
+                    RELAYS.map(relay => pool.publish(relay, signedEvent))
+                );
+
+                console.log('✅ Competition event published');
+
+                // Create participant list (kind 30000)
+                await createParticipantList(eventId, eventData.name, teamId);
+
+                // Success!
+                alert('Event published successfully! Redirecting to team page...');
+
+                // Redirect back to team management page
+                const captainPubkey = urlParams.get('captain') || currentUser.pubkey;
+                window.location.href = `team-management.html?teamId=${encodeURIComponent(teamId)}&captain=${encodeURIComponent(captainPubkey)}`;
+
+            } catch (error) {
+                console.error('❌ Failed to publish event:', error);
+                alert('Failed to publish event: ' + error.message);
+
+                const publishBtn = document.getElementById('publish-btn');
+                publishBtn.disabled = false;
+                publishBtn.textContent = 'Publish Event';
+            }
+        }
+
+        // Create empty participant list (kind 30000)
+        async function createParticipantList(eventId, eventName, teamId) {
+            try {
+                console.log('📋 Creating participant list for event:', eventId);
+
+                // Create participant list event
+                const participantListEvent = {
+                    kind: 30000,
+                    created_at: Math.floor(Date.now() / 1000),
+                    tags: [
+                        ['d', eventId],
+                        ['name', `${eventName} - Participants`],
+                        ['team', teamId]
+                    ],
+                    content: `Participant list for ${eventName}`
+                };
+
+                // Sign the event
+                const signedListEvent = await window.nostr.signEvent(participantListEvent);
+
+                console.log('📝 Publishing participant list:', signedListEvent);
+
+                // Publish to relays
+                await Promise.any(
+                    RELAYS.map(relay => pool.publish(relay, signedListEvent))
+                );
+
+                console.log('✅ Participant list created');
+
+            } catch (error) {
+                console.error('❌ Failed to create participant list:', error);
+                throw error;
+            }
+        }
+
+        // Form input listeners
+        document.getElementById('event-name').addEventListener('input', updateNextButton);
+        document.getElementById('event-start-date').addEventListener('change', updateNextButton);
+        document.getElementById('event-end-date').addEventListener('change', updateNextButton);
+
+        // Initialize on load
+        window.addEventListener('load', () => {
+            initializeNostr();
+            updateWizardDisplay();
+        });
+    </script>
+</body>
+</html>

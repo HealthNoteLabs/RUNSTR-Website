@@ -150,6 +150,49 @@
             font-size: 1.5rem;
         }
 
+        /* Navigation Header */
+        .nav-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--medium-gray);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--white);
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+
+        .nav-dashboard-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--orange);
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+            border: 2px solid var(--orange);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-dashboard-btn:hover {
+            background: transparent;
+            color: var(--orange);
+            transform: translateY(-2px);
+        }
 
         /* Hero Section */
         .hero {
@@ -929,6 +972,12 @@
     </style>
 </head>
 <body>
+    <!-- Navigation Header -->
+    <header class="nav-header">
+        <a href="index.html" class="nav-logo">RUNSTR</a>
+        <a href="pages/dashboard.html" class="nav-dashboard-btn">Dashboard</a>
+    </header>
+
     <!-- Splash Section -->
     <section class="splash">
         <img src="images/New Logo RUNSTR.png" alt="RUNSTR Logo" class="splash-logo">

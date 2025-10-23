@@ -1,0 +1,2156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Management - RUNSTR</title>
+
+    <!-- Nostr Login -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nostr-login@latest/dist/unpkg.css">
+    <script type="module" src="https://cdn.jsdelivr.net/npm/nostr-login@latest/dist/unpkg.js"></script>
+
+    <!-- Nostr Tools for Nostr operations -->
+    <script src="https://unpkg.com/nostr-tools@2.7.2/lib/nostr.bundle.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #0a0a0a;
+            --dark-gray: #1a1a1a;
+            --medium-gray: #2a2a2a;
+            --light-gray: #888;
+            --white: #ffffff;
+            --accent: #f0f0f0;
+            --orange: #F5A356;
+            --red: #ff4444;
+            --green: #44ff44;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--black);
+            color: var(--white);
+            line-height: 1.6;
+        }
+
+        /* Navigation Header */
+        .nav-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--medium-gray);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--white);
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .back-btn {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            color: var(--light-gray);
+            text-decoration: none;
+            border: 1px solid var(--medium-gray);
+            font-size: 0.9rem;
+        }
+
+        .back-btn:hover {
+            color: var(--white);
+            border-color: var(--light-gray);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 6rem auto 2rem;
+            padding: 2rem;
+        }
+
+        .team-header {
+            background: var(--dark-gray);
+            border: 1px solid var(--medium-gray);
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .team-header-banner {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            background-size: cover;
+            background-position: center;
+        }
+
+        .team-header-content {
+            padding: 2rem;
+        }
+
+        .team-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .charity-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .charity-opensats {
+            background: rgba(245, 163, 86, 0.2);
+            color: var(--orange);
+        }
+
+        .charity-hrf {
+            background: rgba(100, 150, 255, 0.2);
+            color: #6496ff;
+        }
+
+        .team-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .team-meta {
+            color: var(--light-gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .team-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* Dashboard Tabs */
+        .dashboard-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .tab {
+            padding: 1rem 2rem;
+            background: transparent;
+            color: var(--light-gray);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: var(--orange);
+            border-bottom-color: var(--orange);
+        }
+
+        .tab:hover {
+            color: var(--white);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Section */
+        .section {
+            background: var(--dark-gray);
+            border: 1px solid var(--medium-gray);
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--orange);
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+            border: 2px solid var(--orange);
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: transparent;
+            color: var(--orange);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--light-gray);
+            border-color: var(--medium-gray);
+        }
+
+        .btn-secondary:hover {
+            color: var(--white);
+            border-color: var(--light-gray);
+        }
+
+        .btn-danger {
+            background: var(--red);
+            border-color: var(--red);
+        }
+
+        .btn-danger:hover {
+            background: transparent;
+            color: var(--red);
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--medium-gray);
+            border: 1px solid var(--dark-gray);
+            color: var(--white);
+            font-size: 1rem;
+            border-radius: 4px;
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* Event List */
+        .event-list, .member-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .event-card, .member-card {
+            background: var(--medium-gray);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--dark-gray);
+            transition: all 0.3s;
+        }
+
+        .event-card:hover {
+            border-color: var(--orange);
+        }
+
+        .event-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .event-name {
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .event-meta {
+            color: var(--light-gray);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .event-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .event-actions button {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        /* Member Item */
+        .member-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .member-card:hover {
+            border-color: var(--orange);
+        }
+
+        .member-info {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .member-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--medium-gray);
+            object-fit: cover;
+            border: 2px solid var(--medium-gray);
+        }
+
+        .member-details {
+            flex: 1;
+        }
+
+        .member-name {
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .member-pubkey {
+            color: var(--light-gray);
+            font-size: 0.85rem;
+            font-family: monospace;
+        }
+
+        .verification-badge {
+            color: var(--orange);
+            font-size: 0.9rem;
+        }
+
+        .member-role-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background: var(--medium-gray);
+            color: var(--orange);
+            font-size: 0.75rem;
+            font-weight: 700;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .member-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .member-actions button {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--light-gray);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--light-gray);
+        }
+
+        .spinner {
+            border: 3px solid var(--medium-gray);
+            border-top: 3px solid var(--orange);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--dark-gray);
+            border: 1px solid var(--medium-gray);
+            padding: 2rem;
+            border-radius: 8px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--light-gray);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-close:hover {
+            color: var(--white);
+        }
+
+        /* Member Profile Modal */
+        .profile-modal-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .profile-avatar-large {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--medium-gray);
+            object-fit: cover;
+            border: 3px solid var(--orange);
+        }
+
+        .profile-header-info h3 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-meta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            color: var(--light-gray);
+            font-size: 0.9rem;
+        }
+
+        .profile-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: var(--medium-gray);
+            border-radius: 8px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--orange);
+        }
+
+        .stat-label {
+            color: var(--light-gray);
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .profile-section {
+            margin-bottom: 2rem;
+        }
+
+        .profile-section h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .workout-item {
+            padding: 1rem;
+            background: var(--medium-gray);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .workout-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .workout-type {
+            font-weight: 700;
+        }
+
+        .workout-stats {
+            color: var(--light-gray);
+            font-size: 0.9rem;
+        }
+
+        /* Search and Filter */
+        .search-filter-bar {
+            background: var(--dark-gray);
+            border: 1px solid var(--medium-gray);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.75rem;
+            background: var(--medium-gray);
+            border: 1px solid var(--dark-gray);
+            color: var(--white);
+            font-size: 1rem;
+            border-radius: 4px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--orange);
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-label {
+            color: var(--light-gray);
+            font-size: 0.9rem;
+        }
+
+        .filter-select {
+            padding: 0.5rem;
+            background: var(--medium-gray);
+            border: 1px solid var(--dark-gray);
+            color: var(--white);
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .results-info {
+            color: var(--light-gray);
+            font-size: 0.9rem;
+        }
+
+        .clear-filters-btn {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            color: var(--light-gray);
+            border: 1px solid var(--medium-gray);
+            cursor: pointer;
+            font-size: 0.85rem;
+            border-radius: 4px;
+        }
+
+        .clear-filters-btn:hover {
+            color: var(--white);
+            border-color: var(--light-gray);
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-tabs {
+                overflow-x: auto;
+            }
+
+            .tab {
+                white-space: nowrap;
+            }
+
+            .event-header, .member-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .event-actions {
+                margin-top: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="nav-header">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <a href="dashboard.html" class="back-btn">← Back to Dashboard</a>
+            <a href="../index.html" class="nav-logo">RUNSTR</a>
+        </div>
+        <div class="nav-actions">
+            <nostr-login></nostr-login>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Team Header -->
+        <div id="team-header" class="team-header">
+            <div id="team-loading" class="loading" style="padding: 4rem 2rem;">
+                <div class="spinner"></div>
+                <p style="margin-top: 1rem;">Loading team...</p>
+            </div>
+
+            <div id="team-info" style="display: none;">
+                <div class="team-header-banner" id="team-banner"></div>
+                <div class="team-header-content">
+                    <div class="team-title-row">
+                        <h1 class="team-title" id="team-name">Team Name</h1>
+                        <div id="team-charity-badge"></div>
+                    </div>
+                    <p class="team-meta" id="team-description">Team description</p>
+                    <div class="team-actions">
+                        <button class="btn" onclick="openEditTeamModal()">Edit Team Details</button>
+                        <button class="btn btn-secondary" onclick="copyTeamLink()">Copy Team Link</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Tabs -->
+        <div class="dashboard-tabs">
+            <button class="tab active" onclick="switchTab('overview')">Overview</button>
+            <button class="tab" onclick="switchTab('events')">Events</button>
+            <button class="tab" onclick="switchTab('members')">Members</button>
+            <button class="tab" onclick="switchTab('requests')">Join Requests</button>
+            <button class="tab" onclick="switchTab('settings')">Settings</button>
+        </div>
+
+        <!-- Overview Tab -->
+        <div id="overview-tab" class="tab-content active">
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Quick Actions</h2>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                    <button class="btn" onclick="openCreateEventModal()">Create New Event</button>
+                    <button class="btn" onclick="openInviteMemberModal()">Invite Members</button>
+                    <button class="btn btn-secondary" onclick="switchTab('members')">Manage Members</button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Team Stats</h2>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 2.5rem; font-weight: 900; color: var(--orange);" id="member-count">0</div>
+                        <div style="color: var(--light-gray);">Members</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 2.5rem; font-weight: 900; color: var(--orange);" id="event-count">0</div>
+                        <div style="color: var(--light-gray);">Events</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 2.5rem; font-weight: 900; color: var(--orange);" id="active-event-count">0</div>
+                        <div style="color: var(--light-gray);">Active Events</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" id="pending-invites-section" style="display: none;">
+                <div class="section-header">
+                    <h2 class="section-title">Recent Invites</h2>
+                </div>
+                <div id="pending-invites-list">
+                    <p style="color: var(--light-gray); text-align: center; padding: 2rem;">
+                        Invites you send will appear here. Use the "Invite Members" button to send invites via npub or shareable link.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Events Tab -->
+        <div id="events-tab" class="tab-content">
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Team Events</h2>
+                    <button class="btn" onclick="openCreateEventModal()">Create Event</button>
+                </div>
+
+                <div id="event-loading" class="loading">
+                    <div class="spinner"></div>
+                    <p style="margin-top: 1rem;">Loading events...</p>
+                </div>
+
+                <div id="event-list" class="event-list" style="display: none;"></div>
+
+                <div id="event-empty" class="empty-state" style="display: none;">
+                    <div class="empty-state-icon">🏆</div>
+                    <p>No events yet</p>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Create your first event to start competing</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Members Tab -->
+        <div id="members-tab" class="tab-content">
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Team Members</h2>
+                    <button class="btn" onclick="openInviteMemberModal()">Invite Members</button>
+                </div>
+
+                <!-- Search and Filter Bar -->
+                <div class="search-filter-bar" id="search-filter-bar" style="display: none;">
+                    <div class="search-box">
+                        <input type="text" id="member-search" class="search-input" placeholder="Search by name or npub..." oninput="applyMemberFilters()">
+                    </div>
+                    <div class="filter-controls">
+                        <div class="filter-group">
+                            <span class="filter-label">Role:</span>
+                            <select id="role-filter" class="filter-select" onchange="applyMemberFilters()">
+                                <option value="all">All</option>
+                                <option value="captain">Captain</option>
+                                <option value="member">Members</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <span class="filter-label">Sort by:</span>
+                            <select id="sort-filter" class="filter-select" onchange="applyMemberFilters()">
+                                <option value="name">Name (A-Z)</option>
+                                <option value="name-desc">Name (Z-A)</option>
+                                <option value="joined">Newest First</option>
+                                <option value="joined-desc">Oldest First</option>
+                            </select>
+                        </div>
+                        <div class="results-info" id="results-info"></div>
+                        <button class="clear-filters-btn" onclick="clearMemberFilters()" id="clear-filters-btn" style="display: none;">Clear Filters</button>
+                    </div>
+                </div>
+
+                <div id="member-loading" class="loading">
+                    <div class="spinner"></div>
+                    <p style="margin-top: 1rem;">Loading members...</p>
+                </div>
+
+                <div id="member-list" class="member-list" style="display: none;"></div>
+
+                <div id="member-empty" class="empty-state" style="display: none;">
+                    <div class="empty-state-icon">👥</div>
+                    <p>No members yet</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Join Requests Tab -->
+        <div id="requests-tab" class="tab-content">
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Pending Join Requests</h2>
+                </div>
+
+                <div id="request-loading" class="loading">
+                    <div class="spinner"></div>
+                    <p style="margin-top: 1rem;">Loading join requests...</p>
+                </div>
+
+                <div id="request-list" class="event-list" style="display: none;"></div>
+
+                <div id="request-empty" class="empty-state" style="display: none;">
+                    <div class="empty-state-icon">✉️</div>
+                    <p>No pending join requests</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div id="settings-tab" class="tab-content">
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Team Settings</h2>
+                </div>
+                <p style="color: var(--light-gray); margin-bottom: 2rem;">Manage your team's configuration and preferences</p>
+
+                <button class="btn" onclick="openEditTeamModal()">Edit Team Details</button>
+                <button class="btn btn-danger" onclick="deleteTeam()" style="margin-left: 1rem;">Delete Team</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Edit Team Modal -->
+    <div id="edit-team-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Edit Team</h2>
+                <button class="modal-close" onclick="closeEditTeamModal()">×</button>
+            </div>
+            <form onsubmit="saveTeamChanges(event)">
+                <div class="form-group">
+                    <label class="form-label">Team Name</label>
+                    <input type="text" id="edit-team-name" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea id="edit-team-description" class="form-textarea"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Charity</label>
+                    <select id="edit-team-charity" class="form-select">
+                        <option value="">None</option>
+                        <option value="opensats">OpenSats</option>
+                        <option value="hrf">Human Rights Foundation</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" class="btn btn-secondary" onclick="closeEditTeamModal()">Cancel</button>
+                    <button type="submit" class="btn">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create Event Modal -->
+    <div id="create-event-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Create Event</h2>
+                <button class="modal-close" onclick="closeCreateEventModal()">×</button>
+            </div>
+            <p style="color: var(--light-gray); margin-bottom: 2rem;">Event creation wizard coming soon! This will allow you to create virtual fitness events with:</p>
+            <ul style="color: var(--light-gray); margin-left: 2rem; margin-bottom: 2rem;">
+                <li>Activity type selection (running, cycling, etc.)</li>
+                <li>Competition type and scoring rules</li>
+                <li>Entry fees and prize pools</li>
+                <li>Date range and participant limits</li>
+            </ul>
+            <button class="btn" onclick="closeCreateEventModal()">Got it</button>
+        </div>
+    </div>
+
+    <!-- Member Profile Modal -->
+    <div id="member-profile-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Member Profile</h2>
+                <button class="modal-close" onclick="closeMemberProfile()">×</button>
+            </div>
+
+            <div class="profile-modal-header">
+                <img id="profile-avatar" src="" alt="Avatar" class="profile-avatar-large" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%232a2a2a%22/%3E%3C/svg%3E'">
+                <div class="profile-header-info">
+                    <h3 id="profile-name">Loading...</h3>
+                    <div class="profile-meta">
+                        <span id="profile-role" class="member-role-badge"></span>
+                        <span id="profile-nip05"></span>
+                        <span id="profile-joined"></span>
+                    </div>
+                    <p id="profile-bio" style="color: var(--light-gray); margin-top: 0.5rem;"></p>
+                </div>
+            </div>
+
+            <div class="profile-stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value" id="profile-workout-count">0</div>
+                    <div class="stat-label">Workouts</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="profile-total-distance">0</div>
+                    <div class="stat-label">Total Miles</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="profile-events">0</div>
+                    <div class="stat-label">Events</div>
+                </div>
+            </div>
+
+            <div class="profile-section" id="recent-workouts-section">
+                <h4>Recent Workouts</h4>
+                <div id="recent-workouts-list"></div>
+            </div>
+
+            <div class="profile-actions">
+                <button class="btn" onclick="zapMemberFromProfile()">⚡ Zap Member</button>
+                <button class="btn btn-secondary" onclick="viewOnNostr()">View on Nostr</button>
+                <button class="btn btn-secondary" id="profile-remove-btn" onclick="removeMemberFromProfile()" style="display: none;">Remove from Team</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Invite Member Modal -->
+    <div id="invite-member-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Invite Members</h2>
+                <button class="modal-close" onclick="closeInviteMemberModal()">×</button>
+            </div>
+
+            <!-- Invite Tabs -->
+            <div style="display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 1px solid var(--medium-gray);">
+                <button class="tab active" onclick="switchInviteTab('direct')">Direct Invite</button>
+                <button class="tab" onclick="switchInviteTab('link')">Shareable Link</button>
+            </div>
+
+            <!-- Direct Invite Tab -->
+            <div id="direct-invite-tab" class="invite-tab-content">
+                <form onsubmit="sendDirectInvite(event)">
+                    <div class="form-group">
+                        <label class="form-label">Nostr Public Key (npub or hex)</label>
+                        <input type="text" id="invite-npub" class="form-input" placeholder="npub1... or hex pubkey" required>
+                        <p style="color: var(--light-gray); font-size: 0.85rem; margin-top: 0.5rem;">Enter the npub or hex public key of the user you want to invite</p>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Personal Message (Optional)</label>
+                        <textarea id="invite-message" class="form-textarea" placeholder="Hey! Join our team..."></textarea>
+                    </div>
+                    <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                        <button type="button" class="btn btn-secondary" onclick="closeInviteMemberModal()">Cancel</button>
+                        <button type="submit" class="btn">Send Invite</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Shareable Link Tab -->
+            <div id="link-invite-tab" class="invite-tab-content" style="display: none;">
+                <div class="form-group">
+                    <label class="form-label">Invite Link Settings</label>
+
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; color: var(--light-gray); cursor: pointer;">
+                            <input type="checkbox" id="invite-auto-approve" checked>
+                            Auto-approve new members (no join request needed)
+                        </label>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                        <div>
+                            <label class="form-label" style="font-size: 0.85rem;">Max Uses</label>
+                            <input type="number" id="invite-max-uses" class="form-input" value="10" min="1">
+                        </div>
+                        <div>
+                            <label class="form-label" style="font-size: 0.85rem;">Expires In (days)</label>
+                            <input type="number" id="invite-expires-days" class="form-input" value="7" min="1">
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn" onclick="generateInviteLink()" style="width: 100%;">Generate Invite Link</button>
+
+                <div id="generated-invite" style="display: none; margin-top: 2rem; padding: 1.5rem; background: var(--medium-gray); border-radius: 8px;">
+                    <label class="form-label">Your Invite Link</label>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <input type="text" id="invite-link-url" class="form-input" readonly>
+                        <button class="btn" onclick="copyInviteLink()">Copy</button>
+                    </div>
+                    <p style="color: var(--light-gray); font-size: 0.85rem; margin-top: 0.5rem;" id="invite-link-info"></p>
+                </div>
+
+                <div id="active-invites" style="margin-top: 2rem;">
+                    <h4 style="margin-bottom: 1rem;">Active Invite Links</h4>
+                    <div id="active-invites-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let pool;
+        let currentUser = null;
+        let currentTeam = null;
+        let teamId = null;
+        let captainPubkey = null;
+        const RELAYS = ['wss://relay.damus.io', 'wss://nos.lol', 'wss://relay.nostr.band'];
+
+        // Member management
+        let allMembers = []; // Array of {pubkey, profile, joinedAt, workouts}
+        let filteredMembers = [];
+        let memberProfiles = {}; // Cache of kind 0 profiles
+        let currentProfilePubkey = null;
+
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        teamId = urlParams.get('teamId');
+        captainPubkey = urlParams.get('captain');
+
+        // Session persistence constants
+        const SESSION_KEY = 'runstr_nostr_session';
+        const SESSION_MAX_AGE = 30 * 24 * 60 * 60 * 1000; // 30 days in milliseconds
+
+        // Session management functions
+        function saveSession(userData) {
+            try {
+                const session = {
+                    pubkey: userData.pubkey,
+                    npub: userData.npub,
+                    loginTimestamp: Date.now()
+                };
+                localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+                console.log('💾 Session saved to localStorage');
+            } catch (error) {
+                console.error('❌ Failed to save session:', error);
+            }
+        }
+
+        function loadSession() {
+            try {
+                const sessionData = localStorage.getItem(SESSION_KEY);
+                if (!sessionData) {
+                    console.log('ℹ️ No saved session found');
+                    return null;
+                }
+
+                const session = JSON.parse(sessionData);
+
+                // Validate session age
+                const sessionAge = Date.now() - session.loginTimestamp;
+                if (sessionAge > SESSION_MAX_AGE) {
+                    console.log('⏰ Session expired, clearing...');
+                    clearSession();
+                    return null;
+                }
+
+                console.log('✅ Valid session found in localStorage');
+                return session;
+            } catch (error) {
+                console.error('❌ Failed to load session:', error);
+                clearSession();
+                return null;
+            }
+        }
+
+        function clearSession() {
+            try {
+                localStorage.removeItem(SESSION_KEY);
+                console.log('🗑️ Session cleared from localStorage');
+            } catch (error) {
+                console.error('❌ Failed to clear session:', error);
+            }
+        }
+
+        // Initialize nostr-tools SimplePool
+        function initializeNostr() {
+            try {
+                pool = new NostrTools.SimplePool();
+                console.log('✅ Nostr pool initialized');
+                return pool;
+            } catch (error) {
+                console.error('❌ Failed to initialize Nostr pool:', error);
+                throw error;
+            }
+        }
+
+        // Listen for nostr-login events
+        document.addEventListener('nlAuth', async (e) => {
+            console.log('🔐 User logged in:', e.detail);
+            currentUser = e.detail;
+
+            // Save session to localStorage
+            saveSession(currentUser);
+
+            // Initialize Nostr pool if not already done
+            if (!pool) {
+                initializeNostr();
+            }
+
+            // Load team data
+            await loadTeam();
+        });
+
+        // Listen for logout events
+        document.addEventListener('nlLogout', () => {
+            console.log('👋 User logged out');
+            currentUser = null;
+
+            // Clear session from localStorage
+            clearSession();
+
+            // Redirect to dashboard
+            window.location.href = 'dashboard.html';
+        });
+
+        // Load team details
+        async function loadTeam() {
+            try {
+                console.log('📋 Loading team:', teamId);
+
+                const filter = {
+                    kinds: [33404],
+                    authors: [captainPubkey],
+                    '#d': [teamId]
+                };
+
+                const events = await pool.querySync(RELAYS, filter);
+                const teamEvents = events || [];
+
+                if (teamEvents.length === 0) {
+                    alert('Team not found');
+                    window.location.href = 'dashboard.html';
+                    return;
+                }
+
+                currentTeam = teamEvents[0];
+
+                // Extract team details
+                const nameTag = currentTeam.tags.find(t => t[0] === 'name');
+                const name = nameTag ? nameTag[1] : 'Unnamed Team';
+                const description = currentTeam.content || 'No description';
+
+                // Extract banner image
+                const bannerTag = currentTeam.tags.find(t => t[0] === 'banner' || t[0] === 'image');
+                const bannerUrl = bannerTag ? bannerTag[1] : null;
+
+                // Extract charity
+                const charityTag = currentTeam.tags.find(t => t[0] === 'charity');
+                const charityId = charityTag ? charityTag[1] : null;
+
+                // Map charity IDs to display information
+                const charityInfo = {
+                    'opensats': { name: 'OpenSats', icon: '⚡', class: 'charity-opensats' },
+                    'hrf': { name: 'HRF', icon: '🗽', class: 'charity-hrf' }
+                };
+                const charity = charityId ? charityInfo[charityId] : null;
+
+                // Update UI
+                document.getElementById('team-loading').style.display = 'none';
+                document.getElementById('team-info').style.display = 'block';
+                document.getElementById('team-name').textContent = name;
+                document.getElementById('team-description').textContent = description;
+
+                // Update banner
+                const bannerElement = document.getElementById('team-banner');
+                if (bannerUrl) {
+                    bannerElement.style.backgroundImage = `url('${bannerUrl}')`;
+                }
+
+                // Update charity badge
+                const charityBadgeElement = document.getElementById('team-charity-badge');
+                if (charity) {
+                    charityBadgeElement.innerHTML = `<span class="charity-badge ${charity.class}">${charity.icon} ${charity.name}</span>`;
+                }
+
+                // Load additional data
+                await Promise.all([
+                    loadTeamEvents(),
+                    loadTeamMembers()
+                ]);
+
+            } catch (error) {
+                console.error('❌ Failed to load team:', error);
+                alert('Failed to load team');
+            }
+        }
+
+        // Load team events (30100 leagues and 30101 events)
+        async function loadTeamEvents() {
+            const eventLoading = document.getElementById('event-loading');
+            const eventList = document.getElementById('event-list');
+            const eventEmpty = document.getElementById('event-empty');
+
+            try {
+                eventLoading.style.display = 'block';
+                eventList.style.display = 'none';
+                eventEmpty.style.display = 'none';
+
+                // Query for leagues and events for this team
+                const filter = {
+                    kinds: [30100, 30101],
+                    '#team': [teamId],
+                    limit: 50
+                };
+
+                const events = await pool.querySync(RELAYS, filter);
+                const eventArray = events || [];
+
+                console.log(`✅ Found ${eventArray.length} events`);
+
+                eventLoading.style.display = 'none';
+
+                // Update stats
+                document.getElementById('event-count').textContent = eventArray.length;
+                document.getElementById('active-event-count').textContent = eventArray.filter(e => {
+                    const statusTag = e.tags.find(t => t[0] === 'status');
+                    return statusTag && (statusTag[1] === 'active' || statusTag[1] === 'upcoming');
+                }).length;
+
+                if (eventArray.length === 0) {
+                    eventEmpty.style.display = 'block';
+                    return;
+                }
+
+                eventList.style.display = 'flex';
+                eventList.innerHTML = eventArray
+                    .map(event => renderEventCard(event))
+                    .join('');
+
+            } catch (error) {
+                console.error('❌ Failed to load events:', error);
+                eventLoading.style.display = 'none';
+                eventEmpty.style.display = 'block';
+            }
+        }
+
+        // Render event card
+        function renderEventCard(event) {
+            const nameTag = event.tags.find(t => t[0] === 'name');
+            const name = nameTag ? nameTag[1] : 'Unnamed Event';
+
+            const dTag = event.tags.find(t => t[0] === 'd');
+            const eventId = dTag ? dTag[1] : event.id;
+
+            const typeTag = event.tags.find(t => t[0] === 'competition_type');
+            const type = typeTag ? typeTag[1] : 'Event';
+
+            const statusTag = event.tags.find(t => t[0] === 'status');
+            const status = statusTag ? statusTag[1] : 'unknown';
+
+            const isLeague = event.kind === 30100;
+            const eventType = isLeague ? 'League' : 'Event';
+
+            return `
+                <div class="event-card">
+                    <div class="event-header">
+                        <div>
+                            <div class="event-name">${name}</div>
+                            <div class="event-meta">${eventType} • ${type} • Status: ${status}</div>
+                        </div>
+                        <div class="event-actions">
+                            <button class="btn btn-secondary" onclick="viewEvent('${eventId}')">View</button>
+                            <button class="btn btn-secondary">Edit</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Load team members (from kind 30000 member list)
+        async function loadTeamMembers() {
+            const memberLoading = document.getElementById('member-loading');
+            const memberList = document.getElementById('member-list');
+            const memberEmpty = document.getElementById('member-empty');
+            const searchFilterBar = document.getElementById('search-filter-bar');
+
+            try {
+                memberLoading.style.display = 'block';
+                memberList.style.display = 'none';
+                memberEmpty.style.display = 'none';
+
+                // Query for member list
+                const filter = {
+                    kinds: [30000],
+                    authors: [captainPubkey],
+                    '#d': [teamId]
+                };
+
+                const events = await pool.querySync(RELAYS, filter);
+                const listEvents = events || [];
+
+                let memberPubkeys = [captainPubkey]; // Captain is always a member
+
+                if (listEvents.length > 0) {
+                    const memberListEvent = listEvents[0];
+                    const memberTags = memberListEvent.tags.filter(t => t[0] === 'p');
+                    memberPubkeys = [...new Set([captainPubkey, ...memberTags.map(t => t[1])])];
+                }
+
+                console.log(`✅ Found ${memberPubkeys.length} members`);
+
+                // Load member profiles (kind 0)
+                await loadMemberProfiles(memberPubkeys);
+
+                // Build member objects
+                allMembers = memberPubkeys.map(pubkey => ({
+                    pubkey: pubkey,
+                    profile: memberProfiles[pubkey] || {},
+                    joinedAt: pubkey === captainPubkey ? currentTeam?.created_at : null,
+                    role: pubkey === captainPubkey ? 'captain' : 'member'
+                }));
+
+                memberLoading.style.display = 'none';
+
+                // Update stats
+                document.getElementById('member-count').textContent = allMembers.length;
+
+                if (allMembers.length === 0) {
+                    memberEmpty.style.display = 'block';
+                    return;
+                }
+
+                // Show search/filter bar if we have members
+                searchFilterBar.style.display = 'block';
+
+                // Apply initial filters (shows all members)
+                applyMemberFilters();
+
+            } catch (error) {
+                console.error('❌ Failed to load members:', error);
+                memberLoading.style.display = 'none';
+                memberEmpty.style.display = 'block';
+            }
+        }
+
+        // Load profile metadata for all members
+        async function loadMemberProfiles(pubkeys) {
+            try {
+                console.log(`📥 Loading profiles for ${pubkeys.length} members`);
+
+                const filter = {
+                    kinds: [0],
+                    authors: pubkeys
+                };
+
+                const events = await pool.querySync(RELAYS, filter);
+                const profileEvents = events || [];
+
+                profileEvents.forEach(event => {
+                    try {
+                        const profile = JSON.parse(event.content);
+                        memberProfiles[event.pubkey] = profile;
+                    } catch (e) {
+                        console.error('Failed to parse profile:', e);
+                        memberProfiles[event.pubkey] = {};
+                    }
+                });
+
+                console.log(`✅ Loaded ${Object.keys(memberProfiles).length} profiles`);
+
+            } catch (error) {
+                console.error('❌ Failed to load member profiles:', error);
+            }
+        }
+
+        // Render member card
+        function renderMemberCard(member) {
+            const isCaptain = member.pubkey === captainPubkey;
+            const shortPubkey = member.pubkey.substring(0, 8) + '...' + member.pubkey.substring(member.pubkey.length - 8);
+
+            const profile = member.profile || {};
+            const displayName = profile.name || profile.display_name || shortPubkey;
+            const avatarUrl = profile.picture || '';
+            const nip05 = profile.nip05 || '';
+            const verified = nip05 ? '✓' : '';
+
+            return `
+                <div class="member-card" onclick="openMemberProfile('${member.pubkey}')">
+                    <div class="member-info">
+                        <img src="${avatarUrl}" alt="${displayName}" class="member-avatar" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2250%22 height=%2250%22%3E%3Crect width=%2250%22 height=%2250%22 fill=%22%232a2a2a%22/%3E%3C/svg%3E'">
+                        <div class="member-details">
+                            <div class="member-name">
+                                ${displayName}
+                                ${verified ? '<span class="verification-badge" title="NIP-05 Verified">✓</span>' : ''}
+                            </div>
+                            <div class="member-pubkey">${isCaptain ? '👑 Team Captain' : shortPubkey}</div>
+                        </div>
+                    </div>
+                    <div class="member-actions" onclick="event.stopPropagation()">
+                        ${!isCaptain && currentUser && currentUser.pubkey === captainPubkey ? '<button class="btn btn-danger" onclick="removeMember(\'' + member.pubkey + '\')">Remove</button>' : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Load join requests for team events
+        async function loadJoinRequests() {
+            const requestLoading = document.getElementById('request-loading');
+            const requestList = document.getElementById('request-list');
+            const requestEmpty = document.getElementById('request-empty');
+
+            try {
+                requestLoading.style.display = 'block';
+                requestList.style.display = 'none';
+                requestEmpty.style.display = 'none';
+
+                // First, get all event IDs for this team
+                const eventFilter = {
+                    kinds: [30100, 30101],
+                    '#team': [teamId],
+                    limit: 50
+                };
+
+                const events = await pool.querySync(RELAYS, eventFilter);
+                const teamEvents = events || [];
+                const eventIds = teamEvents.map(e => {
+                    const dTag = e.tags.find(t => t[0] === 'd');
+                    return dTag ? dTag[1] : null;
+                }).filter(id => id !== null);
+
+                if (eventIds.length === 0) {
+                    requestLoading.style.display = 'none';
+                    requestEmpty.style.display = 'block';
+                    return;
+                }
+
+                // Query for join requests (kind 1105) for these events
+                const requestFilter = {
+                    kinds: [1105],
+                    '#e': eventIds,
+                    limit: 100
+                };
+
+                const requestEvents = await pool.querySync(RELAYS, requestFilter);
+                const requests = (requestEvents || []).filter(req => {
+                    const statusTag = req.tags.find(t => t[0] === 'status');
+                    return statusTag && statusTag[1] === 'pending';
+                });
+
+                console.log(`✅ Found ${requests.length} pending join requests`);
+
+                requestLoading.style.display = 'none';
+
+                if (requests.length === 0) {
+                    requestEmpty.style.display = 'block';
+                    return;
+                }
+
+                // Group requests by event
+                const requestsByEvent = {};
+                requests.forEach(req => {
+                    const eTag = req.tags.find(t => t[0] === 'e');
+                    if (eTag) {
+                        const eventId = eTag[1];
+                        if (!requestsByEvent[eventId]) {
+                            requestsByEvent[eventId] = [];
+                        }
+                        requestsByEvent[eventId].push(req);
+                    }
+                });
+
+                requestList.style.display = 'flex';
+                requestList.innerHTML = Object.entries(requestsByEvent)
+                    .map(([eventId, eventRequests]) => renderJoinRequestGroup(eventId, eventRequests, teamEvents))
+                    .join('');
+
+            } catch (error) {
+                console.error('❌ Failed to load join requests:', error);
+                requestLoading.style.display = 'none';
+                requestEmpty.style.display = 'block';
+            }
+        }
+
+        // Render join request group
+        function renderJoinRequestGroup(eventId, requests, teamEvents) {
+            const event = teamEvents.find(e => {
+                const dTag = e.tags.find(t => t[0] === 'd');
+                return dTag && dTag[1] === eventId;
+            });
+
+            const eventNameTag = event?.tags.find(t => t[0] === 'name');
+            const eventName = eventNameTag ? eventNameTag[1] : 'Unnamed Event';
+
+            return `
+                <div class="event-card">
+                    <div style="padding: 1.5rem;">
+                        <div class="event-name" style="margin-bottom: 1rem;">${eventName}</div>
+                        ${requests.map(req => renderJoinRequestCard(req, eventId)).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render join request card
+        function renderJoinRequestCard(request, eventId) {
+            const shortPubkey = request.pubkey.substring(0, 8) + '...' + request.pubkey.substring(request.pubkey.length - 8);
+            const requestDate = new Date(request.created_at * 1000).toLocaleDateString();
+
+            return `
+                <div class="member-card" style="margin-bottom: 1rem;">
+                    <div class="member-info">
+                        <div class="member-name">Join Request</div>
+                        <div class="member-pubkey">${shortPubkey}</div>
+                        <div style="color: var(--light-gray); font-size: 0.85rem; margin-top: 0.25rem;">Requested: ${requestDate}</div>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button class="btn" style="padding: 0.5rem 1rem; font-size: 0.85rem;" onclick="approveJoinRequest('${eventId}', '${request.pubkey}', '${request.id}')">Approve</button>
+                        <button class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.85rem;" onclick="denyJoinRequest('${eventId}', '${request.pubkey}', '${request.id}')">Deny</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Approve join request
+        window.approveJoinRequest = async function(eventId, userPubkey, requestId) {
+            if (!currentUser) {
+                alert('Please log in to approve join requests');
+                return;
+            }
+
+            try {
+                console.log('✅ Approving join request for:', userPubkey);
+
+                // Query existing participant list
+                const filter = {
+                    kinds: [30000],
+                    authors: [captainPubkey],
+                    '#d': [eventId]
+                };
+
+                const events = await pool.querySync(RELAYS, filter);
+                const listEvents = events || [];
+
+                let participantTags = [];
+                let existingContent = `Participant list for event ${eventId}`;
+
+                if (listEvents.length > 0) {
+                    const existingList = listEvents[0];
+                    participantTags = existingList.tags.filter(t => t[0] === 'p');
+                    existingContent = existingList.content;
+                }
+
+                // Add new participant
+                participantTags.push(['p', userPubkey]);
+
+                // Create updated participant list
+                const updatedListEvent = {
+                    kind: 30000,
+                    created_at: Math.floor(Date.now() / 1000),
+                    tags: [
+                        ['d', eventId],
+                        ...participantTags
+                    ],
+                    content: existingContent
+                };
+
+                const signedList = await window.nostr.signEvent(updatedListEvent);
+
+                await Promise.any(
+                    RELAYS.map(relay => pool.publish(relay, signedList))
+                );
+
+                console.log('✅ Participant list updated');
+
+                // Publish approval response (kind 1105 with approved status)
+                const approvalEvent = {
+                    kind: 1105,
+                    created_at: Math.floor(Date.now() / 1000),
+                    tags: [
+                        ['e', requestId],
+                        ['p', userPubkey],
+                        ['status', 'approved']
+                    ],
+                    content: 'Join request approved'
+                };
+
+                const signedApproval = await window.nostr.signEvent(approvalEvent);
+
+                await Promise.any(
+                    RELAYS.map(relay => pool.publish(relay, signedApproval))
+                );
+
+                alert('Join request approved! Participant added to event.');
+
+                // Reload join requests
+                await loadJoinRequests();
+
+            } catch (error) {
+                console.error('❌ Failed to approve join request:', error);
+                alert('Failed to approve join request: ' + error.message);
+            }
+        }
+
+        // Deny join request
+        window.denyJoinRequest = async function(eventId, userPubkey, requestId) {
+            if (!currentUser) {
+                alert('Please log in to deny join requests');
+                return;
+            }
+
+            try {
+                console.log('❌ Denying join request for:', userPubkey);
+
+                // Publish denial response
+                const denialEvent = {
+                    kind: 1105,
+                    created_at: Math.floor(Date.now() / 1000),
+                    tags: [
+                        ['e', requestId],
+                        ['p', userPubkey],
+                        ['status', 'denied']
+                    ],
+                    content: 'Join request denied'
+                };
+
+                const signedDenial = await window.nostr.signEvent(denialEvent);
+
+                await Promise.any(
+                    RELAYS.map(relay => pool.publish(relay, signedDenial))
+                );
+
+                alert('Join request denied.');
+
+                // Reload join requests
+                await loadJoinRequests();
+
+            } catch (error) {
+                console.error('❌ Failed to deny join request:', error);
+                alert('Failed to deny join request: ' + error.message);
+            }
+        }
+
+        // Tab switching
+        window.switchTab = function(tabName) {
+            // Update tabs
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            // Activate selected tab
+            event.target.classList.add('active');
+            document.getElementById(tabName + '-tab').classList.add('active');
+
+            // Load data for specific tabs
+            if (tabName === 'requests') {
+                loadJoinRequests();
+            }
+        }
+
+        // Modal functions
+        window.openEditTeamModal = function() {
+            if (!currentTeam) return;
+
+            const nameTag = currentTeam.tags.find(t => t[0] === 'name');
+            const charityTag = currentTeam.tags.find(t => t[0] === 'charity');
+
+            document.getElementById('edit-team-name').value = nameTag ? nameTag[1] : '';
+            document.getElementById('edit-team-description').value = currentTeam.content || '';
+            document.getElementById('edit-team-charity').value = charityTag ? charityTag[1] : '';
+
+            document.getElementById('edit-team-modal').classList.add('active');
+        }
+
+        window.closeEditTeamModal = function() {
+            document.getElementById('edit-team-modal').classList.remove('active');
+        }
+
+        window.openCreateEventModal = function() {
+            // Navigate to event creation wizard
+            window.location.href = `event-creation-wizard.html?teamId=${encodeURIComponent(teamId)}&captain=${encodeURIComponent(captainPubkey)}`;
+        }
+
+        window.closeCreateEventModal = function() {
+            document.getElementById('create-event-modal').classList.remove('active');
+        }
+
+        window.saveTeamChanges = function(e) {
+            e.preventDefault();
+            alert('Team update coming soon! This will publish an updated 33404 event with the new team details.');
+            closeEditTeamModal();
+        }
+
+        window.deleteTeam = function() {
+            if (confirm('Are you sure you want to delete this team? This action cannot be undone.')) {
+                alert('Team deletion coming soon!');
+            }
+        }
+
+        window.copyTeamLink = function() {
+            const teamLink = window.location.href;
+            navigator.clipboard.writeText(teamLink);
+            alert('Team link copied to clipboard!');
+        }
+
+        window.removeMember = function(pubkey) {
+            if (confirm('Are you sure you want to remove this member?')) {
+                alert('Member removal coming soon! This will update the kind 30000 member list.');
+            }
+        }
+
+        window.viewEvent = function(eventId) {
+            window.location.href = `event-details.html?eventId=${encodeURIComponent(eventId)}&teamId=${encodeURIComponent(teamId)}&captain=${encodeURIComponent(captainPubkey)}`;
+        }
+
+        // ========== SEARCH & FILTER FUNCTIONS ==========
+
+        window.applyMemberFilters = function() {
+            const searchQuery = document.getElementById('member-search').value.toLowerCase();
+            const roleFilter = document.getElementById('role-filter').value;
+            const sortBy = document.getElementById('sort-filter').value;
+
+            // Start with all members
+            filteredMembers = [...allMembers];
+
+            // Apply search filter
+            if (searchQuery) {
+                filteredMembers = filteredMembers.filter(member => {
+                    const profile = member.profile || {};
+                    const name = (profile.name || profile.display_name || '').toLowerCase();
+                    const nip05 = (profile.nip05 || '').toLowerCase();
+                    const pubkey = member.pubkey.toLowerCase();
+
+                    return name.includes(searchQuery) ||
+                           nip05.includes(searchQuery) ||
+                           pubkey.includes(searchQuery);
+                });
+            }
+
+            // Apply role filter
+            if (roleFilter !== 'all') {
+                filteredMembers = filteredMembers.filter(member => member.role === roleFilter);
+            }
+
+            // Apply sorting
+            filteredMembers.sort((a, b) => {
+                const aProfile = a.profile || {};
+                const bProfile = b.profile || {};
+
+                switch (sortBy) {
+                    case 'name':
+                        const aName = (aProfile.name || aProfile.display_name || a.pubkey).toLowerCase();
+                        const bName = (bProfile.name || bProfile.display_name || b.pubkey).toLowerCase();
+                        return aName.localeCompare(bName);
+                    case 'name-desc':
+                        const aNameDesc = (aProfile.name || aProfile.display_name || a.pubkey).toLowerCase();
+                        const bNameDesc = (bProfile.name || bProfile.display_name || b.pubkey).toLowerCase();
+                        return bNameDesc.localeCompare(aNameDesc);
+                    case 'joined':
+                        return (b.joinedAt || 0) - (a.joinedAt || 0);
+                    case 'joined-desc':
+                        return (a.joinedAt || 0) - (b.joinedAt || 0);
+                    default:
+                        return 0;
+                }
+            });
+
+            // Update UI
+            renderFilteredMembers();
+
+            // Update results info
+            const resultsInfo = document.getElementById('results-info');
+            resultsInfo.textContent = `Showing ${filteredMembers.length} of ${allMembers.length} members`;
+
+            // Show/hide clear filters button
+            const clearBtn = document.getElementById('clear-filters-btn');
+            if (searchQuery || roleFilter !== 'all' || sortBy !== 'name') {
+                clearBtn.style.display = 'inline-block';
+            } else {
+                clearBtn.style.display = 'none';
+            }
+        }
+
+        window.clearMemberFilters = function() {
+            document.getElementById('member-search').value = '';
+            document.getElementById('role-filter').value = 'all';
+            document.getElementById('sort-filter').value = 'name';
+            applyMemberFilters();
+        }
+
+        function renderFilteredMembers() {
+            const memberList = document.getElementById('member-list');
+            const memberEmpty = document.getElementById('member-empty');
+
+            if (filteredMembers.length === 0) {
+                memberList.style.display = 'none';
+                memberEmpty.style.display = 'block';
+                memberEmpty.innerHTML = `
+                    <div class="empty-state-icon">🔍</div>
+                    <p>No members found</p>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Try adjusting your filters</p>
+                `;
+                return;
+            }
+
+            memberList.style.display = 'flex';
+            memberEmpty.style.display = 'none';
+            memberList.innerHTML = filteredMembers
+                .map(member => renderMemberCard(member))
+                .join('');
+        }
+
+        // ========== MEMBER PROFILE MODAL ==========
+
+        window.openMemberProfile = async function(pubkey) {
+            currentProfilePubkey = pubkey;
+            const member = allMembers.find(m => m.pubkey === pubkey);
+            if (!member) return;
+
+            const modal = document.getElementById('member-profile-modal');
+            const profile = member.profile || {};
+
+            // Set basic profile info
+            const displayName = profile.name || profile.display_name || pubkey.substring(0, 16) + '...';
+            const avatarUrl = profile.picture || '';
+            const bio = profile.about || 'No bio available';
+            const nip05 = profile.nip05 || '';
+
+            document.getElementById('profile-avatar').src = avatarUrl;
+            document.getElementById('profile-name').textContent = displayName;
+            document.getElementById('profile-bio').textContent = bio;
+            document.getElementById('profile-role').textContent = member.role === 'captain' ? '👑 Captain' : 'Member';
+
+            if (nip05) {
+                document.getElementById('profile-nip05').innerHTML = `<span class="verification-badge">✓</span> ${nip05}`;
+            } else {
+                document.getElementById('profile-nip05').textContent = '';
+            }
+
+            if (member.joinedAt) {
+                const joinDate = new Date(member.joinedAt * 1000).toLocaleDateString();
+                document.getElementById('profile-joined').textContent = `Member since ${joinDate}`;
+            } else {
+                document.getElementById('profile-joined').textContent = '';
+            }
+
+            // Load workout stats
+            await loadMemberWorkouts(pubkey);
+
+            // Show/hide remove button (only captain can remove members)
+            const removeBtn = document.getElementById('profile-remove-btn');
+            if (currentUser && currentUser.pubkey === captainPubkey && pubkey !== captainPubkey) {
+                removeBtn.style.display = 'inline-block';
+            } else {
+                removeBtn.style.display = 'none';
+            }
+
+            modal.classList.add('active');
+        }
+
+        window.closeMemberProfile = function() {
+            document.getElementById('member-profile-modal').classList.remove('active');
+            currentProfilePubkey = null;
+        }
+
+        async function loadMemberWorkouts(pubkey) {
+            try {
+                // Query for member's workouts (kind 1301)
+                const filter = {
+                    kinds: [1301],
+                    authors: [pubkey],
+                    limit: 50
+                };
+
+                const events = await pool.querySync(RELAYS, filter);
+                const workouts = events || [];
+
+                // Calculate stats
+                let totalDistance = 0;
+                let workoutCount = workouts.length;
+
+                workouts.forEach(workout => {
+                    const distanceTag = workout.tags.find(t => t[0] === 'distance');
+                    if (distanceTag) {
+                        const distanceMeters = parseFloat(distanceTag[1]);
+                        totalDistance += distanceMeters / 1609.34; // Convert to miles
+                    }
+                });
+
+                // Update stats display
+                document.getElementById('profile-workout-count').textContent = workoutCount;
+                document.getElementById('profile-total-distance').textContent = totalDistance.toFixed(1);
+                document.getElementById('profile-events').textContent = '0'; // TODO: Calculate events participated
+
+                // Display recent workouts
+                const recentWorkoutsList = document.getElementById('recent-workouts-list');
+                if (workouts.length === 0) {
+                    recentWorkoutsList.innerHTML = '<p style="color: var(--light-gray);">No workouts yet</p>';
+                } else {
+                    const recentWorkouts = workouts.slice(0, 5);
+                    recentWorkoutsList.innerHTML = recentWorkouts.map(workout => renderWorkoutItem(workout)).join('');
+                }
+
+            } catch (error) {
+                console.error('❌ Failed to load member workouts:', error);
+                document.getElementById('profile-workout-count').textContent = '0';
+                document.getElementById('profile-total-distance').textContent = '0';
+                document.getElementById('recent-workouts-list').innerHTML = '<p style="color: var(--light-gray);">Failed to load workouts</p>';
+            }
+        }
+
+        function renderWorkoutItem(workout) {
+            const typeTag = workout.tags.find(t => t[0] === 'type');
+            const type = typeTag ? typeTag[1] : 'Workout';
+
+            const distanceTag = workout.tags.find(t => t[0] === 'distance');
+            const distanceMeters = distanceTag ? parseFloat(distanceTag[1]) : 0;
+            const distanceMiles = (distanceMeters / 1609.34).toFixed(2);
+
+            const durationTag = workout.tags.find(t => t[0] === 'duration');
+            const durationSeconds = durationTag ? parseInt(durationTag[1]) : 0;
+            const durationMinutes = Math.floor(durationSeconds / 60);
+
+            const date = new Date(workout.created_at * 1000).toLocaleDateString();
+
+            return `
+                <div class="workout-item">
+                    <div class="workout-header">
+                        <div class="workout-type">${type}</div>
+                        <div style="color: var(--light-gray); font-size: 0.85rem;">${date}</div>
+                    </div>
+                    <div class="workout-stats">
+                        ${distanceMiles} miles • ${durationMinutes} minutes
+                    </div>
+                </div>
+            `;
+        }
+
+        window.zapMemberFromProfile = function() {
+            if (!currentProfilePubkey) return;
+            const member = allMembers.find(m => m.pubkey === currentProfilePubkey);
+            if (!member) return;
+
+            const lud16 = member.profile?.lud16 || member.profile?.lud06 || '';
+            if (!lud16) {
+                alert('This user does not have a Lightning address set up.');
+                return;
+            }
+
+            alert(`Zapping feature coming soon! This will send sats to ${lud16}`);
+        }
+
+        window.viewOnNostr = function() {
+            if (!currentProfilePubkey) return;
+            const npub = NostrTools.nip19.npubEncode(currentProfilePubkey);
+            window.open(`https://primal.net/p/${npub}`, '_blank');
+        }
+
+        window.removeMemberFromProfile = function() {
+            if (!currentProfilePubkey) return;
+            removeMember(currentProfilePubkey);
+            closeMemberProfile();
+        }
+
+        // ========== INVITE SYSTEM ==========
+
+        window.openInviteMemberModal = function() {
+            document.getElementById('invite-member-modal').classList.add('active');
+        }
+
+        window.closeInviteMemberModal = function() {
+            document.getElementById('invite-member-modal').classList.remove('active');
+        }
+
+        window.switchInviteTab = function(tabName) {
+            // Update tabs
+            const tabs = document.querySelectorAll('#invite-member-modal .tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Show/hide tab content
+            if (tabName === 'direct') {
+                document.getElementById('direct-invite-tab').style.display = 'block';
+                document.getElementById('link-invite-tab').style.display = 'none';
+            } else {
+                document.getElementById('direct-invite-tab').style.display = 'none';
+                document.getElementById('link-invite-tab').style.display = 'block';
+            }
+        }
+
+        window.sendDirectInvite = async function(event) {
+            event.preventDefault();
+
+            if (!currentUser) {
+                alert('Please log in to send invites');
+                return;
+            }
+
+            const npubInput = document.getElementById('invite-npub').value.trim();
+            const message = document.getElementById('invite-message').value.trim();
+
+            try {
+                // Convert npub to hex if needed
+                let invitedPubkey;
+                if (npubInput.startsWith('npub1')) {
+                    const decoded = NostrTools.nip19.decode(npubInput);
+                    invitedPubkey = decoded.data;
+                } else {
+                    invitedPubkey = npubInput;
+                }
+
+                console.log('📧 Sending invite to:', invitedPubkey);
+
+                // Create invite message
+                const inviteMessage = message || `You've been invited to join the ${currentTeam.tags.find(t => t[0] === 'name')?.[1] || 'RUNSTR'} team!\n\nClick here to join: ${window.location.origin}/pages/team-management.html?teamId=${teamId}&captain=${captainPubkey}&action=join`;
+
+                // Send encrypted DM (kind 4)
+                const dmEvent = {
+                    kind: 4,
+                    created_at: Math.floor(Date.now() / 1000),
+                    tags: [['p', invitedPubkey]],
+                    content: await window.nostr.nip04.encrypt(invitedPubkey, inviteMessage)
+                };
+
+                const signedDM = await window.nostr.signEvent(dmEvent);
+
+                await Promise.any(
+                    RELAYS.map(relay => pool.publish(relay, signedDM))
+                );
+
+                alert('✅ Invite sent successfully!');
+                closeInviteMemberModal();
+                document.getElementById('invite-npub').value = '';
+                document.getElementById('invite-message').value = '';
+
+            } catch (error) {
+                console.error('❌ Failed to send invite:', error);
+                alert('Failed to send invite: ' + error.message);
+            }
+        }
+
+        window.generateInviteLink = function() {
+            const autoApprove = document.getElementById('invite-auto-approve').checked;
+            const maxUses = document.getElementById('invite-max-uses').value;
+            const expiresDays = document.getElementById('invite-expires-days').value;
+
+            // Generate random invite code
+            const inviteCode = Math.random().toString(36).substring(2, 15);
+
+            // Calculate expiration timestamp
+            const expiresAt = Date.now() + (parseInt(expiresDays) * 24 * 60 * 60 * 1000);
+
+            // Create invite link
+            const inviteLink = `${window.location.origin}/pages/team-management.html?teamId=${encodeURIComponent(teamId)}&captain=${encodeURIComponent(captainPubkey)}&invite=${inviteCode}&autoApprove=${autoApprove}`;
+
+            // Display invite link
+            document.getElementById('invite-link-url').value = inviteLink;
+            document.getElementById('invite-link-info').textContent = `Expires in ${expiresDays} days • Max ${maxUses} uses • ${autoApprove ? 'Auto-approve' : 'Requires approval'}`;
+            document.getElementById('generated-invite').style.display = 'block';
+
+            // TODO: Store invite code in Nostr (kind 30003)
+            console.log('Generated invite:', { code: inviteCode, maxUses, expiresAt, autoApprove });
+        }
+
+        window.copyInviteLink = function() {
+            const linkInput = document.getElementById('invite-link-url');
+            linkInput.select();
+            navigator.clipboard.writeText(linkInput.value);
+            alert('✅ Invite link copied to clipboard!');
+        }
+
+        // Initialize on load
+        window.addEventListener('load', () => {
+            initializeNostr();
+
+            // Check for existing session in localStorage
+            const savedSession = loadSession();
+
+            if (savedSession) {
+                console.log('🔍 Found saved session, waiting for nostr-login to restore...');
+
+                // Set a timeout to check if nlAuth fired
+                let authFired = false;
+
+                // Track if nlAuth event fires
+                const checkAuthEvent = (e) => {
+                    authFired = true;
+                };
+                document.addEventListener('nlAuth', checkAuthEvent, { once: true });
+
+                // Fallback: If nlAuth doesn't fire within 2 seconds, manually restore
+                setTimeout(async () => {
+                    if (!authFired && !currentUser) {
+                        console.log('⚠️ nostr-login did not auto-restore session, using fallback...');
+                        currentUser = savedSession;
+
+                        // Load team data manually
+                        await loadTeam();
+                    } else if (authFired) {
+                        console.log('✅ nostr-login successfully auto-restored session');
+                    }
+                }, 2000);
+            } else {
+                console.log('ℹ️ No saved session, waiting for user to login...');
+                console.log('⚠️ User needs to login to view team management');
+            }
+        });
+    </script>
+</body>
+</html>
