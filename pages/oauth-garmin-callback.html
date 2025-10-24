@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connecting to Garmin - RUNSTR</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #0a0a0a;
+            --dark-gray: #1a1a1a;
+            --medium-gray: #2a2a2a;
+            --light-gray: #888;
+            --white: #ffffff;
+            --orange: #F5A356;
+            --bitcoin-orange: #F7931A;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--black);
+            color: var(--white);
+            line-height: 1.6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--white);
+            margin-bottom: 2rem;
+            letter-spacing: -2px;
+        }
+
+        .status-card {
+            background: var(--dark-gray);
+            border: 2px solid var(--medium-gray);
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+        }
+
+        .status-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .status-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--white);
+        }
+
+        .status-message {
+            color: var(--light-gray);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--medium-gray);
+            border-top-color: var(--orange);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--orange);
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 50px;
+            transition: all 0.3s;
+            border: 2px solid var(--orange);
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 0.5rem;
+        }
+
+        .btn:hover {
+            background: transparent;
+            color: var(--orange);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--light-gray);
+            border-color: var(--medium-gray);
+        }
+
+        .btn-secondary:hover {
+            color: var(--white);
+            border-color: var(--light-gray);
+        }
+
+        .help-text {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: var(--medium-gray);
+            border-radius: 10px;
+            border-left: 4px solid var(--orange);
+        }
+
+        .help-text h3 {
+            color: var(--orange);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .help-text p {
+            color: var(--light-gray);
+            font-size: 0.95rem;
+        }
+
+        .error-card {
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .success-card {
+            background: rgba(74, 222, 128, 0.1);
+            border: 2px solid rgba(74, 222, 128, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">RUNSTR</div>
+
+        <div id="statusCard" class="status-card">
+            <div class="status-icon">⏳</div>
+            <h1 class="status-title">Connecting to Garmin...</h1>
+            <p class="status-message">Please wait while we complete your Garmin connection.</p>
+            <div class="spinner"></div>
+        </div>
+
+        <div id="helpSection" style="display: none;">
+            <div class="help-text">
+                <h3>App Not Installed?</h3>
+                <p>Download RUNSTR from the App Store to connect your Garmin account and start tracking your workouts.</p>
+            </div>
+            <div style="margin-top: 1.5rem;">
+                <a href="https://apps.apple.com/us/app/runstr-teams/id6753015130" class="btn">Download RUNSTR</a>
+                <a href="../index.html" class="btn btn-secondary">Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Extract OAuth 2.0 PKCE parameters from URL
+        const urlParams = new URLSearchParams(window.location.search);
+
+        // Garmin OAuth 2.0 PKCE parameters
+        const code = urlParams.get('code');
+        const state = urlParams.get('state');
+
+        // Error handling
+        const error = urlParams.get('error');
+        const errorDescription = urlParams.get('error_description');
+
+        function updateStatus(icon, title, message, isError = false) {
+            const card = document.getElementById('statusCard');
+            const spinner = card.querySelector('.spinner');
+
+            if (isError) {
+                card.classList.add('error-card');
+            }
+
+            card.querySelector('.status-icon').textContent = icon;
+            card.querySelector('.status-title').textContent = title;
+            card.querySelector('.status-message').textContent = message;
+
+            if (spinner) {
+                spinner.style.display = 'none';
+            }
+        }
+
+        function showHelp() {
+            document.getElementById('helpSection').style.display = 'block';
+        }
+
+        function redirectToApp(params) {
+            // Build deep link URL for OAuth 2.0 PKCE flow
+            const deepLink = `runstr://oauth/garmin?${params}`;
+
+            console.log('Attempting to open app with:', deepLink);
+
+            // Try to open the app
+            window.location.href = deepLink;
+
+            // Update UI to show success
+            updateStatus('✓', 'Authorization Complete!', 'Opening RUNSTR app...');
+
+            // Show help section after a delay if app didn't open
+            setTimeout(() => {
+                updateStatus('📱', 'Continue in App', 'If the app didn\'t open automatically, make sure RUNSTR is installed on your device.');
+                showHelp();
+            }, 3000);
+        }
+
+        // Handle the OAuth 2.0 PKCE response
+        if (error) {
+            // OAuth error occurred
+            console.error('OAuth error:', error, errorDescription);
+            updateStatus('✗', 'Connection Failed', errorDescription || 'Authorization was denied or failed. Please try again.', true);
+            showHelp();
+
+        } else if (code) {
+            // OAuth 2.0 PKCE flow - Garmin Connect uses this
+            console.log('OAuth 2.0 PKCE: Received authorization code');
+            let params = `code=${encodeURIComponent(code)}`;
+            if (state) {
+                params += `&state=${encodeURIComponent(state)}`;
+            }
+            redirectToApp(params);
+
+        } else {
+            // No valid OAuth parameters
+            console.error('No valid OAuth parameters found in URL');
+            updateStatus('⚠️', 'Invalid Request', 'No authorization code was received from Garmin. Please try connecting again from the RUNSTR app.', true);
+            showHelp();
+        }
+
+        // Log all URL parameters for debugging
+        console.log('URL Parameters:', Object.fromEntries(urlParams.entries()));
+    </script>
+</body>
+</html>
