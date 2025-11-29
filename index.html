@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RUNSTR - Track. Compete. Earn.</title>
+    <link rel="icon" type="image/png" href="images/New Logo RUNSTR.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -24,7 +28,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background: var(--black);
             color: var(--white);
             line-height: 1.6;
@@ -70,7 +74,7 @@
             align-items: center;
             justify-content: center;
             padding: 4rem 2rem;
-            background: linear-gradient(135deg, var(--black) 0%, var(--dark-gray) 100%);
+            background: var(--black);
             position: relative;
             text-align: center;
         }
@@ -114,6 +118,7 @@
             border: 2px solid var(--orange);
             font-size: 1rem;
             min-width: 180px;
+            border-radius: 8px;
         }
 
         .splash-btn:hover {
@@ -186,12 +191,37 @@
             font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 1px;
+            border-radius: 8px;
         }
 
         .nav-dashboard-btn:hover {
             background: transparent;
             color: var(--orange);
             transform: translateY(-2px);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-link {
+            padding: 0.75rem 1.5rem;
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 2px solid transparent;
+            border-radius: 8px;
+        }
+
+        .nav-link:hover {
+            color: var(--orange);
+            border-color: var(--orange);
         }
 
         /* Hero Section */
@@ -276,12 +306,25 @@
         .screenshot {
             width: 250px;
             height: 500px;
-            background: var(--dark-gray);
-            border-radius: 20px;
-            border: 8px solid var(--medium-gray);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            background: var(--black);
+            border-radius: 40px;
+            border: 3px solid #333;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.8), inset 0 0 0 1px rgba(255,255,255,0.1);
             overflow: hidden;
             position: relative;
+        }
+
+        .screenshot::before {
+            content: '';
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 24px;
+            background: #1a1a1a;
+            border-radius: 12px;
+            z-index: 10;
         }
 
         /* Products Section */
@@ -305,6 +348,7 @@
             transition: all 0.3s;
             position: relative;
             overflow: hidden;
+            border-radius: 12px;
         }
 
         .product-card::before {
@@ -382,6 +426,7 @@
             transition: all 0.3s;
             border: 2px solid var(--orange);
             font-size: 1rem;
+            border-radius: 8px;
         }
 
         .store-btn:hover {
@@ -408,6 +453,7 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             font-size: 0.9rem;
+            border-radius: 8px;
         }
 
         .btn:hover {
@@ -554,6 +600,7 @@
             padding: 3rem;
             position: relative;
             overflow: hidden;
+            border-radius: 12px;
         }
 
         .monetization-card::before {
@@ -679,6 +726,7 @@
             padding: 2rem;
             margin-top: 2rem;
             border: 1px solid rgba(245, 163, 86, 0.3);
+            border-radius: 12px;
         }
 
         .charity-title {
@@ -700,6 +748,7 @@
             background: var(--dark-gray);
             border: 1px solid var(--medium-gray);
             transition: all 0.3s;
+            border-radius: 8px;
         }
 
         .charity-item:hover {
@@ -752,6 +801,7 @@
             padding: 2rem;
             transition: all 0.3s;
             cursor: pointer;
+            border-radius: 12px;
         }
 
         .faq-item:hover {
@@ -824,6 +874,7 @@
             letter-spacing: 2px;
             border: 2px solid var(--orange);
             transition: all 0.3s;
+            border-radius: 8px;
         }
 
         .merch-btn:hover {
@@ -975,13 +1026,16 @@
     <!-- Navigation Header -->
     <header class="nav-header">
         <a href="index.html" class="nav-logo">RUNSTR</a>
-        <a href="pages/dashboard.html" class="nav-dashboard-btn">Dashboard</a>
+        <nav class="nav-links">
+            <a href="pages/races.html" class="nav-link">Events</a>
+            <!-- <a href="pages/dashboard.html" class="nav-dashboard-btn">Dashboard</a> -->
+        </nav>
     </header>
 
     <!-- Splash Section -->
     <section class="splash">
         <img src="images/New Logo RUNSTR.png" alt="RUNSTR Logo" class="splash-logo">
-        <p class="splash-tagline">TEAMS • EVENTS • WORKOUTS</p>
+        <p class="splash-tagline">The Anonymous Fitness Tracker</p>
 
         <div class="splash-buttons">
             <a href="https://apps.apple.com/us/app/runstr-teams/id6753015130" target="_blank" rel="noopener noreferrer" class="splash-btn">
@@ -1013,85 +1067,93 @@
     <section class="hero">
         <div class="hero-content">
             <h1>THE APP IN ACTION</h1>
-            <p class="hero-subtitle">See how RUNSTR transforms your workouts into Bitcoin rewards through real competitions, teams, and decentralized tracking on Nostr</p>
+            <p class="hero-subtitle">No email, no phone number, no personal data harvesting—just pure fitness tracking with local first privacy.</p>
 
             <div class="app-screenshots">
                 <div class="screenshot-container">
                     <div class="screenshot">
-                        <img src="images/screenshot-2.png" alt="RUNSTR Activity Tracker - Track your runs, walks, and cycling with detailed metrics" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
+                        <img src="images/screenshot-1.png" alt="RUNSTR Profile - Access Stats, Events, and workout History" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
                     </div>
                 </div>
                 <div class="screenshot-container">
                     <div class="screenshot">
-                        <img src="images/screenshot-3.png" alt="RUNSTR Season 1 Leaderboard - Compete for 200,000 sats prize pool" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
+                        <img src="images/screenshot-2.png" alt="RUNSTR Health Metrics - View BMI, VO2 Max, Fitness Age, and personal achievements" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
                     </div>
                 </div>
                 <div class="screenshot-container">
                     <div class="screenshot">
-                        <img src="images/screenshot-4.png" alt="RUNSTR Teams - Join or create fitness teams on Nostr" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
+                        <img src="images/screenshot-3.png" alt="RUNSTR Exercise Tracker - Track runs, walks, and cycling with distance, duration, pace, and elevation" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Products Section -->
+    <!-- Core Pillars Section -->
     <section class="products">
         <div class="products-container">
             <div style="text-align: center; margin-bottom: 3rem; grid-column: 1 / -1;">
-                <h2 style="font-size: 2.5rem; font-weight: 900; margin-bottom: 1rem;">THREE CORE PILLARS</h2>
-                <p style="color: var(--light-gray); font-size: 1.1rem;">Join teams, compete in Bitcoin-powered events, and track your workouts with complete data ownership</p>
+                <h2 style="font-size: 2.5rem; font-weight: 900; margin-bottom: 1rem;">Anonymous • Local First • Open Source</h2>
             </div>
 
-            <!-- Teams Card -->
+            <!-- Anonymous Card -->
             <div class="product-card">
-                <h2 class="product-title">TEAMS</h2>
-                <p class="product-subtitle" style="text-transform: none; font-size: 1rem; line-height: 1.6;">Create or join decentralized fitness teams on Nostr. Build communities, support charities, and compete together.</p>
+                <h2 class="product-title">ANONYMOUS</h2>
+                <p class="product-subtitle" style="text-transform: none; font-size: 1rem; line-height: 1.6;">No email, no phone number, no account creation. Use Nostr keys for identity—your fitness data stays yours.</p>
                 <ul class="product-features">
-                    <li>Free team creation</li>
-                    <li>Support your favorite charities</li>
-                    <li>Free fitness event creation</li>
-                    <li>Captain tools for event management</li>
+                    <li>No personal data collection</li>
+                    <li>Nostr-based identity</li>
+                    <li>No tracking or analytics</li>
+                    <li>Privacy by default</li>
                 </ul>
             </div>
 
-            <!-- Events Card -->
+            <!-- Local First Card -->
             <div class="product-card">
-                <h2 class="product-title">EVENTS</h2>
-                <p class="product-subtitle" style="text-transform: none; font-size: 1rem; line-height: 1.6;">Bitcoin-powered competitions with real stakes. From friendly challenges to season-long leagues with massive prize pools.</p>
+                <h2 class="product-title">LOCAL FIRST</h2>
+                <p class="product-subtitle" style="text-transform: none; font-size: 1rem; line-height: 1.6;">Your workout data lives on your device. Import from Apple HealthKit, sync to Nostr only when you choose.</p>
                 <ul class="product-features">
-                    <li>RUNSTR Fitness League with bitcoin prize pool</li>
-                    <li>P2P Challenges</li>
-                    <li>Team Fitness Events</li>
-                    <li>View Event Leaderboards</li>
+                    <li>Data stored on your device</li>
+                    <li>Works offline</li>
+                    <li>You control what gets published</li>
+                    <li>No cloud dependency</li>
                 </ul>
             </div>
 
-            <!-- Workouts Card -->
+            <!-- Open Source Card -->
             <div class="product-card">
-                <h2 class="product-title">WORKOUTS</h2>
-                <p class="product-subtitle" style="text-transform: none; font-size: 1rem; line-height: 1.6;">Private activity tracker with local data storage. Import from Apple HealthKit, publish to Nostr on your terms.</p>
+                <h2 class="product-title">OPEN SOURCE</h2>
+                <p class="product-subtitle" style="text-transform: none; font-size: 1rem; line-height: 1.6;">Fully transparent codebase. Verify what the app does, contribute improvements, or fork it for your own use.</p>
                 <ul class="product-features">
-                    <li>Track running, walking, cycling & more</li>
-                    <li>Import workouts from Apple Health</li>
-                    <li>Local first, your data, your control</li>
-                    <li>Push workouts into competitions</li>
+                    <li>100% open source code</li>
+                    <li>Community-driven development</li>
+                    <li>Auditable and transparent</li>
+                    <li>Built on open protocols</li>
                     <li>Post workouts to social media</li>
                 </ul>
             </div>
         </div>
     </section>
 
-    <!-- Stats Section -->
+    <!-- Season 1 Section -->
     <section class="stats-section">
-        <div class="stats-container">
-            <h2 class="stats-title">OUR USERS HAVE STACKED</h2>
-            <div class="sats-counter">
-                <span class="bitcoin-symbol">₿</span>
-                <span id="sats-count">0</span>
-                <span>SATS</span>
+        <div class="stats-container" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 3rem; max-width: 1000px;">
+            <div style="flex: 1; min-width: 300px; text-align: center;">
+                <h2 class="stats-title" style="margin-bottom: 1.5rem;">SEASON 1 COMPLETE</h2>
+                <div class="sats-counter" style="margin-bottom: 1rem;">
+                    <span class="bitcoin-symbol">₿</span>
+                    <span>200,000</span>
+                    <span>SATS</span>
+                </div>
+                <p style="color: var(--light-gray); font-size: 1.1rem; margin-bottom: 1.5rem;">Prize pool distributed to top athletes</p>
+                <p style="color: var(--white); font-size: 1rem; line-height: 1.8;">
+                    Top runners, walkers, and cyclists earned real Bitcoin.<br>
+                    <span style="color: var(--orange);">Get zapped on leaderboards</span> — supporters can send you sats directly through your profile.
+                </p>
             </div>
-            <p class="counter-label">And Counting...</p>
+            <div style="flex: 0 0 auto;">
+                <img src="images/season-1.png" alt="RUNSTR Season 1 Leaderboard" style="max-width: 280px; border-radius: 20px; box-shadow: 0 20px 60px rgba(245, 163, 86, 0.2);">
+            </div>
         </div>
     </section>
 
@@ -1104,28 +1166,50 @@
                 <p style="color: var(--orange); margin-bottom: 2rem; font-size: 1.2rem; font-weight: 600;">Launching January 2026</p>
 
                 <ul class="monetization-features">
-                    <li>Access to RUNSTR Season 2 League</li>
-                    <li>300,000 sats prize pool</li>
-                    <li>Competition runs January 1st - March 1st, 2026</li>
+                    <li>Access to RUNSTR Season 2</li>
+                    <li>BMI, VO2 Max, Fitness Age</li>
+                    <li>Goal and Habit Tracking</li>
+                    <li>COACH RUNSTR - AI insights via your own API key</li>
+                    <li>RUNSTR Fitness Test</li>
+                    <li>NOSTR Health Sync - sync Nostr workouts locally</li>
                 </ul>
 
                 <div class="charity-section">
                     <div class="charity-title">SUPPORT OPEN-SOURCE & FREEDOM</div>
-                    <p style="margin-bottom: 1rem;">Teams can designate a charity to support through Lightning payments</p>
-                    <div class="charity-grid">
-                        <div class="charity-item">
+                    <p style="margin-bottom: 1rem;">Anon can designate which charity they want to support and display the charity donation button beneath their profile on leaderboards</p>
+                    <div class="charity-grid" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem;">
+                        <div class="charity-item" style="padding: 0.75rem;">
                             <div class="charity-name">OpenSats</div>
-                            <div class="charity-desc">Supporting open-source Bitcoin and Nostr projects</div>
                         </div>
-                        <div class="charity-item">
+                        <div class="charity-item" style="padding: 0.75rem;">
                             <div class="charity-name">Human Rights Foundation</div>
-                            <div class="charity-desc">Promoting freedom and human rights globally through Bitcoin</div>
+                        </div>
+                        <div class="charity-item" style="padding: 0.75rem;">
+                            <div class="charity-name">Bitcoin Beach</div>
+                        </div>
+                        <div class="charity-item" style="padding: 0.75rem;">
+                            <div class="charity-name">Bitcoin Bay</div>
+                        </div>
+                        <div class="charity-item" style="padding: 0.75rem;">
+                            <div class="charity-name">Bitcoin Ekasi</div>
+                        </div>
+                        <div class="charity-item" style="padding: 0.75rem;">
+                            <div class="charity-name">Bitcoin Isla</div>
+                        </div>
+                        <div class="charity-item" style="padding: 0.75rem;">
+                            <div class="charity-name">Bitcoin Valley</div>
+                        </div>
+                        <div class="charity-item" style="padding: 0.75rem;">
+                            <div class="charity-name">Bitcoin District</div>
+                        </div>
+                        <div class="charity-item" style="padding: 0.75rem;">
+                            <div class="charity-name">Bitcoin Yucatan</div>
+                        </div>
+                        <div class="charity-item" style="padding: 0.75rem;">
+                            <div class="charity-name">Bitcoin Veterans</div>
                         </div>
                     </div>
-                    <p style="margin-top: 1rem; color: var(--light-gray); font-size: 0.9rem;">More charity partnerships coming soon</p>
                 </div>
-
-                <a href="https://apps.apple.com/us/app/runstr-teams/id6753015130" target="_blank" rel="noopener noreferrer" class="btn" style="margin-top: 2rem; background: var(--medium-gray); border-color: var(--medium-gray); cursor: not-allowed;" onclick="event.preventDefault();">Coming January 2026</a>
             </div>
         </div>
     </section>

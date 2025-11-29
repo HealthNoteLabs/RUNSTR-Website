@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Race Details - RUNSTR</title>
+    <meta name="description" content="View race details and register with Lightning. Zero platform fees.">
+
+    <!-- Nostr Login -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nostr-login@latest/dist/unpkg.css">
+    <script type="module" src="https://cdn.jsdelivr.net/npm/nostr-login@latest/dist/unpkg.js"></script>
+
+    <!-- Nostr Tools -->
+    <script src="https://unpkg.com/nostr-tools@2.7.2/lib/nostr.bundle.js"></script>
+
+    <!-- QR Code Library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #0a0a0a;
+            --dark-gray: #1a1a1a;
+            --medium-gray: #2a2a2a;
+            --light-gray: #888;
+            --white: #ffffff;
+            --accent: #f0f0f0;
+            --orange: #F5A356;
+            --bitcoin-orange: #F7931A;
+            --green: #44ff44;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--black);
+            color: var(--white);
+            line-height: 1.6;
+        }
+
+        /* Navigation Header */
+        .nav-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--medium-gray);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--white);
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-link {
+            padding: 0.75rem 1.5rem;
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 2px solid transparent;
+        }
+
+        .nav-link:hover {
+            color: var(--orange);
+            border-color: var(--orange);
+        }
+
+        .nav-dashboard-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--orange);
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+            border: 2px solid var(--orange);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-dashboard-btn:hover {
+            background: transparent;
+            color: var(--orange);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 6rem 2rem 2rem;
+        }
+
+        /* Back Link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--light-gray);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: var(--orange);
+        }
+
+        /* Race Header */
+        .race-header {
+            margin-bottom: 2rem;
+        }
+
+        .race-banner {
+            width: 100%;
+            height: 300px;
+            background: var(--dark-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            font-weight: 900;
+            color: var(--orange);
+            letter-spacing: -3px;
+            margin-bottom: 2rem;
+            border: 1px solid var(--medium-gray);
+        }
+
+        .race-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .race-distance-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--orange);
+            color: var(--black);
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+
+        .race-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .race-organizer {
+            color: var(--light-gray);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .race-organizer a {
+            color: var(--orange);
+            text-decoration: none;
+        }
+
+        /* Race Info Grid */
+        .race-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-card {
+            background: var(--dark-gray);
+            border: 1px solid var(--medium-gray);
+            padding: 1.5rem;
+        }
+
+        .info-label {
+            color: var(--light-gray);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .info-value a {
+            color: var(--orange);
+            text-decoration: none;
+        }
+
+        .info-value a:hover {
+            text-decoration: underline;
+        }
+
+        /* Registration Section */
+        .registration-section {
+            background: var(--dark-gray);
+            border: 1px solid var(--medium-gray);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .registration-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--bitcoin-orange), var(--orange));
+        }
+
+        .registration-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .registration-price {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--orange);
+            margin-bottom: 0.5rem;
+        }
+
+        .registration-price.free {
+            color: var(--orange);
+        }
+
+        .registration-price-usd {
+            color: var(--light-gray);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .registration-spots {
+            color: var(--light-gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .spots-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--medium-gray);
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .spots-bar-fill {
+            height: 100%;
+            background: var(--orange);
+            transition: width 0.3s;
+        }
+
+        .register-btn {
+            display: inline-block;
+            padding: 1rem 3rem;
+            background: var(--orange);
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+            border: 2px solid var(--orange);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+        }
+
+        .register-btn:hover {
+            background: transparent;
+            color: var(--orange);
+        }
+
+        .register-btn:disabled {
+            background: var(--medium-gray);
+            border-color: var(--medium-gray);
+            color: var(--light-gray);
+            cursor: not-allowed;
+        }
+
+        /* Description Section */
+        .description-section {
+            background: var(--dark-gray);
+            border: 1px solid var(--medium-gray);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .description-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .description-content {
+            color: var(--accent);
+            line-height: 1.8;
+        }
+
+        /* Participants Section */
+        .participants-section {
+            background: var(--dark-gray);
+            border: 1px solid var(--medium-gray);
+            padding: 2rem;
+        }
+
+        .participants-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .participants-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .participant-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--medium-gray);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .more-participants {
+            width: 40px;
+            height: 40px;
+            background: var(--orange);
+            color: var(--black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        /* Payment Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--dark-gray);
+            border: 1px solid var(--medium-gray);
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--light-gray);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-close:hover {
+            color: var(--white);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .payment-qr {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .payment-qr canvas {
+            background: white;
+            padding: 1rem;
+        }
+
+        .payment-address {
+            background: var(--black);
+            padding: 1rem;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .payment-amount {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--orange);
+            margin-bottom: 1.5rem;
+        }
+
+        .copy-btn {
+            display: block;
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--medium-gray);
+            border: 1px solid var(--light-gray);
+            color: var(--white);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 1rem;
+        }
+
+        .copy-btn:hover {
+            background: var(--light-gray);
+        }
+
+        .confirm-payment-btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            background: var(--orange);
+            border: none;
+            color: var(--black);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .confirm-payment-btn:hover {
+            background: var(--bitcoin-orange);
+        }
+
+        .payment-note {
+            text-align: center;
+            color: var(--light-gray);
+            font-size: 0.85rem;
+            margin-top: 1rem;
+        }
+
+        .payment-input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .payment-input-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .payment-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--black);
+            border: 1px solid var(--medium-gray);
+            color: var(--white);
+            font-size: 1rem;
+        }
+
+        .payment-input:focus {
+            outline: none;
+            border-color: var(--orange);
+        }
+
+        .payment-input::placeholder {
+            color: var(--light-gray);
+        }
+
+        .payment-hint {
+            color: var(--light-gray);
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+        }
+
+        .payment-reference {
+            background: var(--medium-gray);
+            padding: 1rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            border: 1px solid var(--orange);
+        }
+
+        .payment-reference-label {
+            font-size: 0.8rem;
+            color: var(--light-gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.25rem;
+        }
+
+        .payment-reference-code {
+            font-family: monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--orange);
+        }
+
+        .payment-instruction {
+            background: var(--black);
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--accent);
+            border-left: 3px solid var(--orange);
+        }
+
+        /* Success State */
+        .success-message {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .success-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--green);
+        }
+
+        /* Share Section */
+        .share-section {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .share-btn {
+            padding: 0.5rem 1rem;
+            background: var(--medium-gray);
+            border: 1px solid var(--light-gray);
+            color: var(--white);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .share-btn:hover {
+            background: var(--orange);
+            color: var(--black);
+            border-color: var(--orange);
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--light-gray);
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--medium-gray);
+            border-top-color: var(--orange);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 4rem;
+            padding: 2rem;
+            border-top: 1px solid var(--medium-gray);
+            text-align: center;
+            color: var(--light-gray);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--orange);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .race-title {
+                font-size: 1.8rem;
+            }
+
+            .race-banner {
+                height: 200px;
+                font-size: 4rem;
+            }
+
+            .share-section {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="nav-header">
+        <a href="../index.html" class="nav-logo">RUNSTR</a>
+        <nav class="nav-links">
+            <a href="races.html" class="nav-link">Races</a>
+            <!-- <a href="dashboard.html" class="nav-dashboard-btn">Dashboard</a> -->
+        </nav>
+    </header>
+
+    <main class="main-content" id="main-content">
+        <div class="loading">
+            <div class="loading-spinner"></div>
+            <p>Loading race details...</p>
+        </div>
+    </main>
+
+    <!-- Payment Modal -->
+    <div class="modal-overlay" id="payment-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closePaymentModal()">&times;</button>
+            <div id="payment-content">
+                <!-- Payment content will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Powered by Nostr & Lightning | <a href="../index.html">RUNSTR</a></p>
+    </footer>
+
+    <script>
+        // Nostr relay configuration
+        const RELAYS = [
+            'wss://relay.damus.io',
+            'wss://nos.lol',
+            'wss://relay.nostr.band',
+            'wss://relay.primal.net'
+        ];
+
+        // NIP-52 Calendar Event Kind & RSVP Kind
+        const CALENDAR_EVENT_KIND = 31923;
+        const RSVP_KIND = 31925;
+        const WORKOUT_KIND = 1301;
+
+        // State
+        let currentRace = null;
+        let currentRaceEvent = null;  // Raw Nostr event
+        let isLoggedIn = false;
+        let userPubkey = null;
+        let userContact = '';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadRaceDetails();
+            checkLoginStatus();
+        });
+
+        // Check Nostr login status
+        function checkLoginStatus() {
+            // Listen for nostr-login events
+            document.addEventListener('nlAuth', (e) => {
+                if (e.detail.type === 'login') {
+                    isLoggedIn = true;
+                    userPubkey = e.detail.pubkey;
+                } else if (e.detail.type === 'logout') {
+                    isLoggedIn = false;
+                    userPubkey = null;
+                }
+            });
+
+            // Check if already logged in
+            if (window.nostr) {
+                window.nostr.getPublicKey().then(pubkey => {
+                    if (pubkey) {
+                        isLoggedIn = true;
+                        userPubkey = pubkey;
+                    }
+                }).catch(() => {});
+            }
+        }
+
+        // Load race details from URL params
+        async function loadRaceDetails() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const raceId = urlParams.get('id');
+
+            if (!raceId) {
+                showError('Race not found');
+                return;
+            }
+
+            try {
+                // Get race from Nostr
+                const race = await getRaceById(raceId);
+
+                if (!race) {
+                    showError('Race not found');
+                    return;
+                }
+
+                currentRace = race;
+                renderRaceDetails(race);
+
+                // Load leaderboard after rendering
+                loadLeaderboard(race);
+
+            } catch (error) {
+                console.error('Error loading race:', error);
+                showError('Error loading race details');
+            }
+        }
+
+        // Get race from Nostr (Kind 31923)
+        async function getRaceById(id) {
+            const pool = new NostrTools.SimplePool();
+
+            try {
+                // Query for Kind 31923 events with matching d-tag
+                const filter = {
+                    kinds: [CALENDAR_EVENT_KIND],
+                    '#d': [id]
+                };
+
+                console.log('Querying relays for race:', id);
+
+                // Set up timeout
+                const timeoutPromise = new Promise((resolve) => {
+                    setTimeout(() => resolve([]), 10000);
+                });
+
+                const queryPromise = pool.querySync(RELAYS, filter);
+                const events = await Promise.race([queryPromise, timeoutPromise]);
+
+                console.log(`Found ${events.length} matching events`);
+
+                if (events.length === 0) {
+                    return null;
+                }
+
+                // Get the most recent version (parameterized replaceable events)
+                const latestEvent = events.sort((a, b) => b.created_at - a.created_at)[0];
+                currentRaceEvent = latestEvent;
+
+                return parseRaceEvent(latestEvent);
+
+            } catch (error) {
+                console.error('Error fetching race:', error);
+                return null;
+            }
+        }
+
+        // Parse NIP-52 Calendar Event
+        function parseRaceEvent(event) {
+            const getTag = (name) => {
+                const tag = event.tags.find(t => t[0] === name);
+                return tag ? tag[1] : null;
+            };
+
+            const title = getTag('title');
+            const startTimestamp = parseInt(getTag('start') || '0');
+            const endTimestamp = parseInt(getTag('end') || '0');
+
+            if (!title || !startTimestamp) {
+                return null;
+            }
+
+            const startDate = new Date(startTimestamp * 1000);
+            const dateStr = startDate.toISOString().split('T')[0];
+            const timeStr = startDate.toTimeString().substring(0, 5);
+
+            const distance = getTag('distance') || '5k';
+
+            // Get participants from p-tags
+            const participantTags = event.tags.filter(t => t[0] === 'p');
+            const organizer = participantTags.find(t => t[3] === 'organizer');
+            const participants = participantTags.filter(t => t[3] === 'participant');
+
+            return {
+                id: getTag('d'),
+                eventId: event.id,
+                name: title,
+                date: dateStr,
+                time: timeStr,
+                startTimestamp: startTimestamp,
+                endTimestamp: endTimestamp,
+                location: getTag('location') || 'Virtual',
+                distance: distance,
+                distanceLabel: getDistanceLabel(distance),
+                distanceMeters: parseInt(getTag('distance_meters') || '5000'),
+                entryFee: parseInt(getTag('entry_fee') || '0'),
+                maxParticipants: parseInt(getTag('max_participants') || '100'),
+                participants: participants.length,
+                participantPubkeys: participants.map(p => p[1]),
+                organizer: organizer ? organizer[1] : event.pubkey,
+                organizerLightning: getTag('lightning'),
+                image: getTag('image'),
+                description: getTag('summary') || event.content || 'Virtual race - run anywhere during the event window!',
+                deadline: getTag('deadline') ? new Date(parseInt(getTag('deadline')) * 1000).toISOString().split('T')[0] : dateStr,
+                mapUrl: '#',
+                status: endTimestamp > Math.floor(Date.now() / 1000) ? 'open' : 'closed'
+            };
+        }
+
+        // Get human-readable distance label
+        function getDistanceLabel(distance) {
+            const labels = {
+                '5k': '5K',
+                '10k': '10K',
+                'half': 'Half Marathon',
+                'marathon': 'Marathon'
+            };
+            return labels[distance] || distance?.toUpperCase() || '5K';
+        }
+
+        // Fetch user profile (Kind 0) for display name
+        async function fetchProfile(pubkey) {
+            const pool = new NostrTools.SimplePool();
+            try {
+                const filter = {
+                    kinds: [0],
+                    authors: [pubkey],
+                    limit: 1
+                };
+                const events = await pool.querySync(RELAYS, filter);
+                if (events.length > 0) {
+                    const profile = JSON.parse(events[0].content);
+                    return {
+                        name: profile.display_name || profile.name || null,
+                        nip05: profile.nip05 || null,
+                        picture: profile.picture || null
+                    };
+                }
+            } catch (e) {
+                console.error('Error fetching profile:', e);
+            }
+            return null;
+        }
+
+        // Get display name with fallback
+        function getDisplayName(profile, pubkey) {
+            if (profile) {
+                if (profile.nip05) return profile.nip05;
+                if (profile.name) return profile.name;
+            }
+            // Fallback to truncated pubkey
+            return pubkey.substring(0, 8) + '...' + pubkey.substring(pubkey.length - 4);
+        }
+
+        // Render race details
+        function renderRaceDetails(race) {
+            const main = document.getElementById('main-content');
+            const spotsLeft = race.maxParticipants - race.participants;
+            const spotsPct = (race.participants / race.maxParticipants) * 100;
+            const satsToUsd = (race.entryFee / 100000 * 97000).toFixed(2); // Rough BTC price estimate
+
+            main.innerHTML = `
+                <a href="races.html" class="back-link">← Back to Races</a>
+
+                <div class="race-header">
+                    <div class="race-banner">
+                        ${getDistanceIcon(race.distance)}
+                    </div>
+                    <span class="race-distance-badge">${race.distanceLabel}</span>
+                    <h1 class="race-title">${race.name}</h1>
+                    <p class="race-organizer">Hosted by <a href="#" id="organizer-name">Loading...</a></p>
+                </div>
+
+                <div class="race-info-grid">
+                    <div class="info-card">
+                        <div class="info-label">Date & Time</div>
+                        <div class="info-value">${formatDate(race.date)}<br>${race.time}</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">Location</div>
+                        <div class="info-value">
+                            <a href="${race.mapUrl}" target="_blank">${race.location}</a>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">Distance</div>
+                        <div class="info-value">${race.distanceLabel}</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">Registration Deadline</div>
+                        <div class="info-value">${formatDate(race.deadline)}</div>
+                    </div>
+                </div>
+
+                <div class="registration-section">
+                    <h2 class="registration-title">Registration</h2>
+                    <div class="registration-price ${race.entryFee === 0 ? 'free' : ''}">
+                        ${race.entryFee === 0 ? 'FREE' : `⚡ ${race.entryFee.toLocaleString()} sats`}
+                    </div>
+                    ${race.entryFee > 0 ? `<div class="registration-price-usd">≈ $${satsToUsd} USD</div>` : ''}
+                    <div class="registration-spots">
+                        ${spotsLeft} spots remaining (${race.participants} / ${race.maxParticipants} registered)
+                        <div class="spots-bar">
+                            <div class="spots-bar-fill" style="width: ${spotsPct}%"></div>
+                        </div>
+                    </div>
+                    <button class="register-btn" onclick="handleRegister()" ${spotsLeft === 0 ? 'disabled' : ''}>
+                        ${spotsLeft === 0 ? 'Sold Out' : (race.entryFee === 0 ? 'Register Now' : 'Register with Lightning')}
+                    </button>
+                </div>
+
+                <div class="description-section">
+                    <h2 class="description-title">About This Race</h2>
+                    <div class="description-content">${race.description.replace(/\n/g, '<br>')}</div>
+                </div>
+
+                <div class="participants-section">
+                    <h2 class="participants-title">Registered Runners (${race.participants})</h2>
+                    <div class="participants-grid">
+                        ${generateParticipantAvatars(race.participantPubkeys || [])}
+                    </div>
+                </div>
+
+                <div class="participants-section" style="margin-top: 2rem;">
+                    <h2 class="participants-title">Leaderboard</h2>
+                    <div id="leaderboard-content">
+                        <div class="loading" style="padding: 2rem;">
+                            <div class="loading-spinner"></div>
+                            <p>Loading results...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="share-section">
+                    <button class="share-btn" onclick="copyLink()">Copy Link</button>
+                    <button class="share-btn" onclick="shareToNostr()">Share to Nostr</button>
+                </div>
+            `;
+
+            document.title = `${race.name} - RUNSTR`;
+
+            // Fetch organizer profile and update display name
+            fetchProfile(race.organizer).then(profile => {
+                const displayName = getDisplayName(profile, race.organizer);
+                const organizerEl = document.getElementById('organizer-name');
+                if (organizerEl) {
+                    organizerEl.textContent = displayName;
+                }
+            });
+        }
+
+        // Generate participant avatars from pubkeys
+        function generateParticipantAvatars(pubkeys) {
+            if (!pubkeys || pubkeys.length === 0) {
+                return '<p style="color: var(--light-gray);">No participants yet. Be the first to register!</p>';
+            }
+
+            const display = Math.min(pubkeys.length, 10);
+            const remaining = pubkeys.length - display;
+            let html = '';
+
+            for (let i = 0; i < display; i++) {
+                const shortPubkey = pubkeys[i].substring(0, 4);
+                html += `<div class="participant-avatar" title="${pubkeys[i]}">${shortPubkey}</div>`;
+            }
+
+            if (remaining > 0) {
+                html += `<div class="more-participants">+${remaining}</div>`;
+            }
+
+            return html;
+        }
+
+        // Handle register button click - show contact input first
+        async function handleRegister() {
+            const modal = document.getElementById('payment-modal');
+            const content = document.getElementById('payment-content');
+
+            // Show loading state
+            content.innerHTML = `
+                <h2 class="modal-title">Register for Race</h2>
+                <div style="text-align: center; padding: 2rem;">
+                    <div class="loading-spinner"></div>
+                    <p style="color: var(--light-gray);">Loading your profile...</p>
+                </div>
+            `;
+            modal.classList.add('active');
+
+            // Try to fetch user's NIP-05 from their profile
+            let prefillContact = '';
+            let hasNIP05 = false;
+
+            if (userPubkey) {
+                const profile = await fetchProfile(userPubkey);
+                if (profile && profile.nip05) {
+                    prefillContact = profile.nip05;
+                    hasNIP05 = true;
+                }
+            }
+
+            content.innerHTML = `
+                <h2 class="modal-title">Register for Race</h2>
+                <p style="text-align: center; color: var(--light-gray); margin-bottom: 1.5rem;">
+                    ${currentRace.entryFee > 0
+                        ? 'Your contact will be used to verify your payment.'
+                        : 'Enter your contact info so the organizer can reach you.'}
+                </p>
+                <div class="payment-input-group">
+                    <label class="payment-input-label">NIP-05 or Email (for payment verification)</label>
+                    <input type="text" class="payment-input" id="user-contact"
+                           value="${prefillContact}"
+                           placeholder="you@primal.net or you@gmail.com" required>
+                    <p class="payment-hint">
+                        ${hasNIP05
+                            ? 'Found your NIP-05! You can change this if needed.'
+                            : 'Enter your NIP-05 or email. Include this in your payment memo.'}
+                    </p>
+                </div>
+                ${!userPubkey ? `
+                    <div style="background: var(--medium-gray); padding: 0.75rem; margin-bottom: 1rem; border-left: 3px solid var(--orange);">
+                        <p style="font-size: 0.85rem; color: var(--accent);">
+                            <strong>Note:</strong> Without Nostr login, you won't appear on the leaderboard for virtual races.
+                        </p>
+                    </div>
+                ` : ''}
+                <button class="confirm-payment-btn" onclick="proceedToPayment()">Continue</button>
+            `;
+        }
+
+        // Proceed to payment after contact input
+        function proceedToPayment() {
+            const contactInput = document.getElementById('user-contact').value.trim();
+
+            if (!contactInput) {
+                alert('Please enter your NIP-05 or email address');
+                return;
+            }
+
+            userContact = contactInput;
+
+            if (currentRace.entryFee === 0) {
+                // Free event - just register
+                showFreeRegistration();
+            } else {
+                // Paid event - show payment modal
+                showPaymentModal();
+            }
+        }
+
+        // Show payment modal
+        function showPaymentModal() {
+            const modal = document.getElementById('payment-modal');
+            const content = document.getElementById('payment-content');
+
+            content.innerHTML = `
+                <h2 class="modal-title">Pay with Lightning</h2>
+                <div class="payment-amount">${currentRace.entryFee.toLocaleString()} sats</div>
+
+                <div class="payment-reference" style="background: var(--orange); border-color: var(--orange);">
+                    <div class="payment-reference-label" style="color: var(--black);">Include in Payment Memo</div>
+                    <div class="payment-reference-code" style="color: var(--black); font-size: 1.1rem;">${userContact}</div>
+                </div>
+
+                <div class="payment-instruction">
+                    The organizer will search their wallet for "<strong>${userContact}</strong>" to verify your payment.
+                </div>
+
+                <p style="text-align: center; color: var(--light-gray); margin-bottom: 0.5rem; font-size: 0.9rem;">
+                    Send to:
+                </p>
+                <div class="payment-address" id="lightning-address">${currentRace.organizerLightning}</div>
+                <div class="payment-qr" id="qr-container"></div>
+                <button class="copy-btn" onclick="copyLightningAddress()">Copy Lightning Address</button>
+                <button class="copy-btn" style="margin-top: 0.5rem;" onclick="copyMemo()">Copy Memo: ${userContact}</button>
+                <button class="confirm-payment-btn" onclick="confirmPayment()">I've Paid</button>
+                <p class="payment-note">
+                    Payment goes directly to the organizer.<br>
+                    Zero platform fees.
+                </p>
+            `;
+
+            // Generate QR code
+            const qrContainer = document.getElementById('qr-container');
+            if (typeof QRCode !== 'undefined') {
+                QRCode.toCanvas(currentRace.organizerLightning, { width: 200 }, (error, canvas) => {
+                    if (!error) {
+                        qrContainer.appendChild(canvas);
+                    }
+                });
+            }
+
+            modal.classList.add('active');
+        }
+
+        // Copy memo (user contact) to clipboard
+        function copyMemo() {
+            navigator.clipboard.writeText(userContact).then(() => {
+                const btns = document.querySelectorAll('.copy-btn');
+                const memoBtn = btns[1];
+                if (memoBtn) {
+                    memoBtn.textContent = 'Copied!';
+                    setTimeout(() => {
+                        memoBtn.textContent = `Copy Memo: ${userContact}`;
+                    }, 2000);
+                }
+            });
+        }
+
+        // Show free registration
+        function showFreeRegistration() {
+            const content = document.getElementById('payment-content');
+
+            content.innerHTML = `
+                <h2 class="modal-title">Free Registration</h2>
+                <p style="text-align: center; margin-bottom: 1.5rem; color: var(--light-gray);">
+                    This is a free event!
+                </p>
+                <div class="payment-reference">
+                    <div class="payment-reference-label">Registering as</div>
+                    <div class="payment-reference-code">${userContact}</div>
+                </div>
+                <button class="confirm-payment-btn" onclick="confirmPayment()">Complete Registration</button>
+            `;
+        }
+
+        // Close payment modal
+        function closePaymentModal() {
+            document.getElementById('payment-modal').classList.remove('active');
+        }
+
+        // Copy lightning address
+        function copyLightningAddress() {
+            const address = currentRace.organizerLightning;
+            navigator.clipboard.writeText(address).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.textContent = 'Copied!';
+                setTimeout(() => {
+                    btn.textContent = 'Copy Lightning Address';
+                }, 2000);
+            });
+        }
+
+        // Confirm payment - Publish Kind 31925 RSVP
+        async function confirmPayment() {
+            const content = document.getElementById('payment-content');
+
+            try {
+                // Check if logged in with Nostr
+                if (!window.nostr) {
+                    throw new Error('Please login with Nostr to register');
+                }
+
+                const pubkey = await window.nostr.getPublicKey();
+
+                // Check for duplicate registration
+                const pool = new NostrTools.SimplePool();
+                const existingFilter = {
+                    kinds: [RSVP_KIND],
+                    authors: [pubkey],
+                    '#a': [`${CALENDAR_EVENT_KIND}:${currentRace.organizer}:${currentRace.id}`]
+                };
+
+                const existing = await pool.querySync(RELAYS, existingFilter);
+                if (existing.length > 0) {
+                    alert('You are already registered for this race!');
+                    closePaymentModal();
+                    return;
+                }
+
+                // Generate unique RSVP ID
+                const rsvpId = `rsvp-${Date.now().toString(36)}-${Math.random().toString(36).substr(2, 9)}`;
+
+                // Create Kind 31925 RSVP event
+                const rsvpEvent = {
+                    kind: RSVP_KIND,
+                    created_at: Math.floor(Date.now() / 1000),
+                    content: '',
+                    tags: [
+                        // NIP-52 Standard RSVP tags
+                        ['a', `${CALENDAR_EVENT_KIND}:${currentRace.organizer}:${currentRace.id}`],
+                        ['d', rsvpId],
+                        ['status', 'accepted'],
+                        ['p', currentRace.organizer],
+
+                        // RUNSTR custom tags (contact is used for payment verification)
+                        ['contact', userContact],
+                        ['amount', currentRace.entryFee.toString()]
+                    ]
+                };
+
+                // Sign and publish
+                console.log('Signing RSVP event:', rsvpEvent);
+                const signedEvent = await window.nostr.signEvent(rsvpEvent);
+                console.log('Signed event:', signedEvent);
+
+                await publishToRelays(signedEvent);
+                console.log('RSVP published successfully!');
+
+                // Also store in localStorage for backup
+                const registration = {
+                    raceId: currentRace.id,
+                    raceName: currentRace.name,
+                    contact: userContact,
+                    amount: currentRace.entryFee,
+                    timestamp: new Date().toISOString(),
+                    status: 'submitted',
+                    nostrEventId: signedEvent.id
+                };
+
+                const registrations = JSON.parse(localStorage.getItem('runstr_registrations') || '[]');
+                registrations.push(registration);
+                localStorage.setItem('runstr_registrations', JSON.stringify(registrations));
+
+                // Show success
+                content.innerHTML = `
+                    <div class="success-message">
+                        <div class="success-icon" style="color: var(--orange);">✓</div>
+                        <h2 class="success-title" style="color: var(--orange);">Registration Submitted!</h2>
+                        <p style="color: var(--light-gray); margin-bottom: 1rem;">
+                            Your RSVP has been published to Nostr.<br>
+                            The organizer will approve your registration.
+                        </p>
+                        <div class="payment-reference" style="margin-bottom: 1.5rem;">
+                            <div class="payment-reference-label">Registered as</div>
+                            <div class="payment-reference-code">${userContact}</div>
+                        </div>
+                        <p style="color: var(--light-gray); font-size: 0.9rem;">
+                            ${formatDate(currentRace.date)} at ${currentRace.time}<br>
+                            ${currentRace.location}
+                        </p>
+                        <button class="confirm-payment-btn" style="margin-top: 2rem;" onclick="closePaymentModal()">
+                            Close
+                        </button>
+                    </div>
+                `;
+
+            } catch (error) {
+                console.error('Registration error:', error);
+                content.innerHTML = `
+                    <div class="success-message">
+                        <div class="success-icon" style="color: var(--red);">✗</div>
+                        <h2 class="success-title" style="color: var(--red);">Registration Failed</h2>
+                        <p style="color: var(--light-gray); margin-bottom: 2rem;">
+                            ${error.message || 'An error occurred. Please try again.'}
+                        </p>
+                        <button class="confirm-payment-btn" onclick="closePaymentModal()">Close</button>
+                    </div>
+                `;
+            }
+        }
+
+        // Publish event to Nostr relays
+        async function publishToRelays(event) {
+            const pool = new NostrTools.SimplePool();
+
+            try {
+                const pubs = pool.publish(RELAYS, event);
+                const results = await Promise.allSettled(pubs);
+
+                const successful = results.filter(r => r.status === 'fulfilled').length;
+                console.log(`Published to ${successful}/${RELAYS.length} relays`);
+
+                if (successful === 0) {
+                    throw new Error('Failed to publish to any relay');
+                }
+
+                return results;
+            } catch (error) {
+                console.error('Publish error:', error);
+                throw error;
+            }
+        }
+
+        // Copy event link
+        function copyLink() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                alert('Link copied!');
+            });
+        }
+
+        // Share to Nostr
+        function shareToNostr() {
+            const text = `I'm registered for ${currentRace.name}! Join me:\n\n${window.location.href}\n\n#RUNSTR #running`;
+            // In production, this would open a Nostr post composer
+            alert('Share to Nostr feature coming soon!\n\n' + text);
+        }
+
+        // Show error
+        function showError(message) {
+            const main = document.getElementById('main-content');
+            main.innerHTML = `
+                <a href="races.html" class="back-link">← Back to Races</a>
+                <div style="text-align: center; padding: 4rem 2rem;">
+                    <h2 style="margin-bottom: 1rem;">${message}</h2>
+                    <a href="races.html" class="register-btn" style="display: inline-block;">Browse Races</a>
+                </div>
+            `;
+        }
+
+        // Utility functions
+        function getDistanceIcon(distance) {
+            const icons = {
+                '5k': '5K',
+                '10k': '10K',
+                'half': '21K',
+                'marathon': '42K'
+            };
+            return icons[distance] || '5K';
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        // Load leaderboard from Kind 1301 workouts
+        async function loadLeaderboard(race) {
+            const leaderboardContent = document.getElementById('leaderboard-content');
+
+            // Check if race has started
+            const now = Math.floor(Date.now() / 1000);
+            if (now < race.startTimestamp) {
+                leaderboardContent.innerHTML = `
+                    <p style="color: var(--light-gray); text-align: center; padding: 2rem;">
+                        Leaderboard will be available after the race starts.
+                    </p>
+                `;
+                return;
+            }
+
+            // Check if there are participants
+            if (!race.participantPubkeys || race.participantPubkeys.length === 0) {
+                leaderboardContent.innerHTML = `
+                    <p style="color: var(--light-gray); text-align: center; padding: 2rem;">
+                        No participants registered yet.
+                    </p>
+                `;
+                return;
+            }
+
+            try {
+                const pool = new NostrTools.SimplePool();
+
+                // Query Kind 1301 workouts from participants within race time window
+                const filter = {
+                    kinds: [WORKOUT_KIND],
+                    authors: race.participantPubkeys,
+                    since: race.startTimestamp,
+                    until: race.endTimestamp
+                };
+
+                console.log('Querying workouts for leaderboard...');
+
+                const timeoutPromise = new Promise((resolve) => {
+                    setTimeout(() => resolve([]), 10000);
+                });
+
+                const queryPromise = pool.querySync(RELAYS, filter);
+                const workouts = await Promise.race([queryPromise, timeoutPromise]);
+
+                console.log(`Found ${workouts.length} workouts`);
+
+                // Filter workouts by split count (must have enough splits for the distance)
+                const requiredSplits = getRequiredSplits(race.distance);
+                const eligibleWorkouts = workouts.filter(w => {
+                    const splits = w.tags.filter(t => t[0] === 'split');
+                    return splits.length >= requiredSplits;
+                });
+
+                console.log(`${eligibleWorkouts.length} workouts meet split requirements`);
+
+                // Calculate rankings
+                const rankings = calculateRankings(eligibleWorkouts, race.distance);
+
+                // Render leaderboard
+                renderLeaderboard(rankings, leaderboardContent);
+
+            } catch (error) {
+                console.error('Error loading leaderboard:', error);
+                leaderboardContent.innerHTML = `
+                    <p style="color: var(--red); text-align: center; padding: 2rem;">
+                        Error loading leaderboard. Please try again.
+                    </p>
+                `;
+            }
+        }
+
+        // Get required splits for distance verification
+        function getRequiredSplits(distance) {
+            const splits = {
+                '5k': 5,
+                '10k': 10,
+                'half': 21,
+                'marathon': 42
+            };
+            return splits[distance] || 5;
+        }
+
+        // Calculate rankings from workouts
+        function calculateRankings(workouts, distance) {
+            const requiredSplits = getRequiredSplits(distance);
+            const participantBestTimes = {};
+
+            workouts.forEach(workout => {
+                const pubkey = workout.pubkey;
+
+                // Find the split at target distance
+                const targetSplit = workout.tags.find(t =>
+                    t[0] === 'split' && t[1] === requiredSplits.toString()
+                );
+
+                if (!targetSplit) return;
+
+                const timeSeconds = parseDuration(targetSplit[2]);
+
+                // Keep best time per participant
+                if (!participantBestTimes[pubkey] || timeSeconds < participantBestTimes[pubkey].time) {
+                    participantBestTimes[pubkey] = {
+                        pubkey: pubkey,
+                        time: timeSeconds,
+                        workout: workout
+                    };
+                }
+            });
+
+            // Convert to array and sort by time
+            const rankings = Object.values(participantBestTimes)
+                .sort((a, b) => a.time - b.time)
+                .map((entry, index) => ({
+                    ...entry,
+                    rank: index + 1,
+                    timeFormatted: formatDuration(entry.time),
+                    pace: calculatePace(distance, entry.time)
+                }));
+
+            return rankings;
+        }
+
+        // Parse duration string "HH:MM:SS" to seconds
+        function parseDuration(durationStr) {
+            if (!durationStr) return Infinity;
+            const parts = durationStr.split(':').map(p => parseInt(p) || 0);
+            if (parts.length === 3) {
+                return parts[0] * 3600 + parts[1] * 60 + parts[2];
+            }
+            if (parts.length === 2) {
+                return parts[0] * 60 + parts[1];
+            }
+            return parseInt(durationStr) || Infinity;
+        }
+
+        // Format seconds to "MM:SS" or "H:MM:SS"
+        function formatDuration(seconds) {
+            const hrs = Math.floor(seconds / 3600);
+            const mins = Math.floor((seconds % 3600) / 60);
+            const secs = seconds % 60;
+
+            if (hrs > 0) {
+                return `${hrs}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Calculate pace per km
+        function calculatePace(distance, timeSeconds) {
+            const distanceKm = getDistanceKm(distance);
+            const paceSecondsPerKm = timeSeconds / distanceKm;
+
+            const mins = Math.floor(paceSecondsPerKm / 60);
+            const secs = Math.floor(paceSecondsPerKm % 60);
+
+            return `${mins}:${secs.toString().padStart(2, '0')} /km`;
+        }
+
+        // Get distance in km
+        function getDistanceKm(distance) {
+            const distances = {
+                '5k': 5,
+                '10k': 10,
+                'half': 21.097,
+                'marathon': 42.195
+            };
+            return distances[distance] || 5;
+        }
+
+        // Render leaderboard
+        function renderLeaderboard(rankings, container) {
+            if (rankings.length === 0) {
+                container.innerHTML = `
+                    <p style="color: var(--light-gray); text-align: center; padding: 2rem;">
+                        No qualifying results yet. Submit your workout using the RUNSTR app!
+                    </p>
+                `;
+                return;
+            }
+
+            container.innerHTML = `
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid var(--medium-gray);">
+                            <th style="padding: 1rem; text-align: left; color: var(--light-gray); font-size: 0.8rem; text-transform: uppercase;">Rank</th>
+                            <th style="padding: 1rem; text-align: left; color: var(--light-gray); font-size: 0.8rem; text-transform: uppercase;">Runner</th>
+                            <th style="padding: 1rem; text-align: left; color: var(--light-gray); font-size: 0.8rem; text-transform: uppercase;">Time</th>
+                            <th style="padding: 1rem; text-align: left; color: var(--light-gray); font-size: 0.8rem; text-transform: uppercase;">Pace</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rankings.map(result => `
+                            <tr style="border-bottom: 1px solid var(--medium-gray); ${result.rank <= 3 ? 'background: rgba(245, 163, 86, 0.1);' : ''}">
+                                <td style="padding: 1rem; text-align: center;">
+                                    ${getRankDisplay(result.rank)}
+                                </td>
+                                <td style="padding: 1rem;">
+                                    ${truncatePubkey(result.pubkey)}
+                                </td>
+                                <td style="padding: 1rem; font-family: monospace; font-size: 1.1rem; color: var(--orange);">
+                                    ${result.timeFormatted}
+                                </td>
+                                <td style="padding: 1rem; color: var(--light-gray);">
+                                    ${result.pace}
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        // Get rank display with medals
+        function getRankDisplay(rank) {
+            if (rank === 1) return '<span style="font-size: 1.5rem;">🥇</span>';
+            if (rank === 2) return '<span style="font-size: 1.5rem;">🥈</span>';
+            if (rank === 3) return '<span style="font-size: 1.5rem;">🥉</span>';
+            return rank;
+        }
+
+        // Truncate pubkey for display
+        function truncatePubkey(pubkey) {
+            return pubkey.substring(0, 8) + '...' + pubkey.substring(pubkey.length - 4);
+        }
+    </script>
+</body>
+</html>

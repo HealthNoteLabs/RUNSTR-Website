@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Races - RUNSTR</title>
+    <meta name="description" content="Discover and register for running races. Zero platform fees - pay with Lightning, organizers keep 100%.">
+
+    <!-- Nostr Login -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nostr-login@latest/dist/unpkg.css">
+    <script type="module" src="https://cdn.jsdelivr.net/npm/nostr-login@latest/dist/unpkg.js"></script>
+
+    <!-- Nostr Tools -->
+    <script src="https://unpkg.com/nostr-tools@2.7.2/lib/nostr.bundle.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #0a0a0a;
+            --dark-gray: #1a1a1a;
+            --medium-gray: #2a2a2a;
+            --light-gray: #888;
+            --white: #ffffff;
+            --accent: #f0f0f0;
+            --orange: #F5A356;
+            --bitcoin-orange: #F7931A;
+            --green: #44ff44;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--black);
+            color: var(--white);
+            line-height: 1.6;
+        }
+
+        /* Navigation Header */
+        .nav-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--medium-gray);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--white);
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-link {
+            padding: 0.75rem 1.5rem;
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 2px solid transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--orange);
+            border-color: var(--orange);
+        }
+
+        .nav-dashboard-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--orange);
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+            border: 2px solid var(--orange);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-dashboard-btn:hover {
+            background: transparent;
+            color: var(--orange);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 6rem 2rem 2rem;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 900;
+            letter-spacing: -2px;
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle {
+            color: var(--light-gray);
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .hero-highlight {
+            color: var(--orange);
+            font-weight: 700;
+        }
+
+        .create-race-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--orange);
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+            border: 2px solid var(--orange);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 1rem;
+        }
+
+        .create-race-btn:hover {
+            background: transparent;
+            color: var(--orange);
+            transform: translateY(-2px);
+        }
+
+        /* Filters Section */
+        .filters-section {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            background: var(--dark-gray);
+            border: 1px solid var(--medium-gray);
+            color: var(--white);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--orange);
+            color: var(--black);
+            border-color: var(--orange);
+        }
+
+        .search-input {
+            padding: 0.5rem 1rem;
+            background: var(--dark-gray);
+            border: 1px solid var(--medium-gray);
+            color: var(--white);
+            font-size: 0.9rem;
+            min-width: 250px;
+        }
+
+        .search-input::placeholder {
+            color: var(--light-gray);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--orange);
+        }
+
+        /* Races Grid */
+        .races-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .race-card {
+            background: var(--dark-gray);
+            border: 1px solid var(--medium-gray);
+            transition: all 0.3s;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .race-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--bitcoin-orange), var(--orange));
+            transform: translateX(-100%);
+            transition: transform 0.3s;
+        }
+
+        .race-card:hover::before {
+            transform: translateX(0);
+        }
+
+        .race-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--orange);
+        }
+
+        .race-image {
+            width: 100%;
+            height: 180px;
+            background: var(--medium-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--orange);
+            letter-spacing: -2px;
+        }
+
+        .race-content {
+            padding: 1.5rem;
+        }
+
+        .race-distance-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--medium-gray);
+            color: var(--orange);
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.75rem;
+        }
+
+        .race-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .race-date {
+            color: var(--light-gray);
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .race-location {
+            color: var(--light-gray);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .race-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid var(--medium-gray);
+        }
+
+        .race-price {
+            font-weight: 700;
+            color: var(--orange);
+            font-size: 1.1rem;
+        }
+
+        .race-price.free {
+            color: var(--orange);
+        }
+
+        .race-participants {
+            color: var(--light-gray);
+            font-size: 0.85rem;
+        }
+
+        .view-race-btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: 2px solid var(--orange);
+            color: var(--orange);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+
+        .view-race-btn:hover {
+            background: var(--orange);
+            color: var(--black);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--dark-gray);
+            border: 1px solid var(--medium-gray);
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state p {
+            color: var(--light-gray);
+            margin-bottom: 2rem;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--light-gray);
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--medium-gray);
+            border-top-color: var(--orange);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            padding: 1.5rem;
+            background: var(--dark-gray);
+            border: 1px solid var(--medium-gray);
+            margin-bottom: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--orange);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--light-gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 4rem;
+            padding: 2rem;
+            border-top: 1px solid var(--medium-gray);
+            text-align: center;
+            color: var(--light-gray);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--orange);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .races-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filters-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-input {
+                min-width: 100%;
+            }
+
+            .stats-bar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                gap: 0.5rem;
+            }
+
+            .nav-link {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="nav-header">
+        <a href="../index.html" class="nav-logo">RUNSTR</a>
+        <nav class="nav-links">
+            <a href="races.html" class="nav-link active">Events</a>
+            <!-- <a href="dashboard.html" class="nav-dashboard-btn">Dashboard</a> -->
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h1 class="hero-title">DISCOVER RACES</h1>
+            <p class="hero-subtitle">
+                Register for races with <span class="hero-highlight">Lightning</span>.
+                Zero platform fees - organizers keep <span class="hero-highlight">100%</span>.
+            </p>
+            <a href="create-race.html" class="create-race-btn">Create a Race</a>
+        </section>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-value" id="total-races">0</div>
+                <div class="stat-label">Upcoming Races</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="total-participants">0</div>
+                <div class="stat-label">Registered Runners</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">0%</div>
+                <div class="stat-label">Platform Fees</div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <section class="filters-section">
+            <div class="filter-group">
+                <button class="filter-btn active" data-distance="all">All</button>
+                <button class="filter-btn" data-distance="5k">5K</button>
+                <button class="filter-btn" data-distance="10k">10K</button>
+                <button class="filter-btn" data-distance="half">Half Marathon</button>
+                <button class="filter-btn" data-distance="marathon">Marathon</button>
+            </div>
+            <input type="text" class="search-input" placeholder="Search races..." id="search-input">
+        </section>
+
+        <!-- Races Grid -->
+        <section class="races-grid" id="races-grid">
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                <p>Loading races from Nostr...</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Powered by Nostr & Lightning | <a href="../index.html">RUNSTR</a></p>
+    </footer>
+
+    <script>
+        // Nostr relay configuration
+        const RELAYS = [
+            'wss://relay.damus.io',
+            'wss://nos.lol',
+            'wss://relay.nostr.band',
+            'wss://relay.primal.net'
+        ];
+
+        // NIP-52 Calendar Event Kind
+        const CALENDAR_EVENT_KIND = 31923;
+
+        // State
+        let allRaces = [];
+        let currentFilter = 'all';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadRaces();
+            setupFilters();
+            setupSearch();
+        });
+
+        // Load races from Nostr (Kind 31923 Calendar Events)
+        async function loadRaces() {
+            const grid = document.getElementById('races-grid');
+
+            try {
+                const pool = new NostrTools.SimplePool();
+
+                // Query Kind 31923 events tagged with 'runstr'
+                const filter = {
+                    kinds: [CALENDAR_EVENT_KIND],
+                    '#t': ['runstr'],
+                    limit: 100
+                };
+
+                console.log('Querying relays for RUNSTR events...');
+
+                // Set up timeout for relay query
+                const timeoutPromise = new Promise((resolve) => {
+                    setTimeout(() => resolve([]), 10000); // 10 second timeout
+                });
+
+                const queryPromise = pool.querySync(RELAYS, filter);
+                const events = await Promise.race([queryPromise, timeoutPromise]);
+
+                console.log(`Found ${events.length} calendar events`);
+
+                // Parse events into race objects
+                const races = events
+                    .map(parseRaceEvent)
+                    .filter(race => race !== null)
+                    .filter(race => {
+                        // Only show upcoming events (end time in future)
+                        const now = Math.floor(Date.now() / 1000);
+                        return race.endTimestamp > now;
+                    })
+                    .sort((a, b) => a.startTimestamp - b.startTimestamp); // Sort by start date
+
+                allRaces = races;
+                renderRaces(allRaces);
+                updateStats(allRaces);
+
+            } catch (error) {
+                console.error('Error loading races:', error);
+                grid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <h3>Unable to load races</h3>
+                        <p>Please check your connection and try again.</p>
+                        <a href="create-race.html" class="create-race-btn" style="margin-top: 1rem;">Create a Race</a>
+                    </div>
+                `;
+            }
+        }
+
+        // Render races to grid
+        function renderRaces(races) {
+            const grid = document.getElementById('races-grid');
+
+            if (races.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <h3>No races found</h3>
+                        <p>Be the first to create a race!</p>
+                        <a href="create-race.html" class="create-race-btn" style="margin-top: 1rem;">Create a Race</a>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = races.map(race => `
+                <article class="race-card">
+                    <div class="race-image">
+                        ${race.image ? `<img src="${race.image}" alt="${race.name}">` : getDistanceIcon(race.distance)}
+                    </div>
+                    <div class="race-content">
+                        <span class="race-distance-badge">${race.distanceLabel}</span>
+                        <h3 class="race-title">${race.name}</h3>
+                        <p class="race-date">${formatDate(race.date)} at ${race.time}</p>
+                        <p class="race-location">${race.location}</p>
+                        <div class="race-footer">
+                            <div>
+                                <span class="race-price ${race.entryFee === 0 ? 'free' : ''}">
+                                    ${race.entryFee === 0 ? 'FREE' : `⚡ ${race.entryFee.toLocaleString()} sats`}
+                                </span>
+                                <p class="race-participants">${race.participants} / ${race.maxParticipants} registered</p>
+                            </div>
+                            <a href="race.html?id=${race.id}" class="view-race-btn">View</a>
+                        </div>
+                    </div>
+                </article>
+            `).join('');
+        }
+
+        // Get icon for distance (text-based)
+        function getDistanceIcon(distance) {
+            const icons = {
+                '5k': '5K',
+                '10k': '10K',
+                'half': '21K',
+                'marathon': '42K'
+            };
+            return icons[distance] || '5K';
+        }
+
+        // Format date
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        // Update stats
+        function updateStats(races) {
+            document.getElementById('total-races').textContent = races.length;
+            const totalParticipants = races.reduce((sum, r) => sum + r.participants, 0);
+            document.getElementById('total-participants').textContent = totalParticipants;
+        }
+
+        // Setup filter buttons
+        function setupFilters() {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentFilter = btn.dataset.distance;
+                    applyFilters();
+                });
+            });
+        }
+
+        // Setup search
+        function setupSearch() {
+            const searchInput = document.getElementById('search-input');
+            let debounceTimer;
+
+            searchInput.addEventListener('input', () => {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(applyFilters, 300);
+            });
+        }
+
+        // Apply filters
+        function applyFilters() {
+            const searchQuery = document.getElementById('search-input').value.toLowerCase();
+
+            let filtered = allRaces;
+
+            // Distance filter
+            if (currentFilter !== 'all') {
+                filtered = filtered.filter(race => race.distance === currentFilter);
+            }
+
+            // Search filter
+            if (searchQuery) {
+                filtered = filtered.filter(race =>
+                    race.name.toLowerCase().includes(searchQuery) ||
+                    race.location.toLowerCase().includes(searchQuery) ||
+                    race.organizer.toLowerCase().includes(searchQuery)
+                );
+            }
+
+            renderRaces(filtered);
+        }
+
+        // Parse NIP-52 Calendar Event (Kind 31923)
+        function parseRaceEvent(event) {
+            const getTag = (name) => {
+                const tag = event.tags.find(t => t[0] === name);
+                return tag ? tag[1] : null;
+            };
+
+            // Get title (NIP-52 standard)
+            const title = getTag('title');
+            const startTimestamp = parseInt(getTag('start') || '0');
+            const endTimestamp = parseInt(getTag('end') || '0');
+
+            // Validate required fields
+            if (!title || !startTimestamp) {
+                console.warn('Invalid event (missing title or start):', event.id);
+                return null;
+            }
+
+            // Convert timestamps to date/time strings
+            const startDate = new Date(startTimestamp * 1000);
+            const dateStr = startDate.toISOString().split('T')[0];
+            const timeStr = startDate.toTimeString().substring(0, 5);
+
+            // Get distance from RUNSTR custom tag
+            const distance = getTag('distance') || '5k';
+
+            // Count participants from p-tags (role = 'participant')
+            const participants = event.tags.filter(t =>
+                t[0] === 'p' && t[3] === 'participant'
+            ).length;
+
+            return {
+                id: getTag('d'),                    // d-tag is unique identifier
+                eventId: event.id,                  // Full Nostr event ID
+                name: title,
+                date: dateStr,
+                time: timeStr,
+                startTimestamp: startTimestamp,
+                endTimestamp: endTimestamp,
+                location: getTag('location') || 'Virtual',
+                distance: distance,
+                distanceLabel: getDistanceLabel(distance),
+                distanceMeters: parseInt(getTag('distance_meters') || '5000'),
+                entryFee: parseInt(getTag('entry_fee') || '0'),
+                maxParticipants: parseInt(getTag('max_participants') || '100'),
+                participants: participants,
+                organizer: event.pubkey,
+                organizerLightning: getTag('lightning'),
+                image: getTag('image'),
+                summary: getTag('summary') || event.content,
+                status: endTimestamp > Math.floor(Date.now() / 1000) ? 'open' : 'closed'
+            };
+        }
+
+        // Get human-readable distance label
+        function getDistanceLabel(distance) {
+            const labels = {
+                '5k': '5K',
+                '10k': '10K',
+                'half': 'Half Marathon',
+                'marathon': 'Marathon'
+            };
+            return labels[distance] || distance?.toUpperCase() || '5K';
+        }
+    </script>
+</body>
+</html>

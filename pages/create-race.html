@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Race - RUNSTR</title>
+    <meta name="description" content="Create a race on RUNSTR. Zero platform fees - keep 100% of ticket sales.">
+
+    <!-- Nostr Login -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nostr-login@latest/dist/unpkg.css">
+    <script type="module" src="https://cdn.jsdelivr.net/npm/nostr-login@latest/dist/unpkg.js"></script>
+
+    <!-- Nostr Tools -->
+    <script src="https://unpkg.com/nostr-tools@2.7.2/lib/nostr.bundle.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #0a0a0a;
+            --dark-gray: #1a1a1a;
+            --medium-gray: #2a2a2a;
+            --light-gray: #888;
+            --white: #ffffff;
+            --accent: #f0f0f0;
+            --orange: #F5A356;
+            --bitcoin-orange: #F7931A;
+            --green: #44ff44;
+            --red: #ff4444;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--black);
+            color: var(--white);
+            line-height: 1.6;
+        }
+
+        /* Navigation Header */
+        .nav-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--medium-gray);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--white);
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-link {
+            padding: 0.75rem 1.5rem;
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 2px solid transparent;
+        }
+
+        .nav-link:hover {
+            color: var(--orange);
+            border-color: var(--orange);
+        }
+
+        .nav-dashboard-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--orange);
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+            border: 2px solid var(--orange);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-dashboard-btn:hover {
+            background: transparent;
+            color: var(--orange);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 6rem 2rem 2rem;
+        }
+
+        /* Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: var(--light-gray);
+            font-size: 1.1rem;
+        }
+
+        .page-subtitle span {
+            color: var(--orange);
+            font-weight: 600;
+        }
+
+        /* Login Required */
+        .login-required {
+            background: var(--dark-gray);
+            border: 1px solid var(--medium-gray);
+            padding: 3rem;
+            text-align: center;
+        }
+
+        .login-required h2 {
+            margin-bottom: 1rem;
+        }
+
+        .login-required p {
+            color: var(--light-gray);
+            margin-bottom: 2rem;
+        }
+
+        /* Form */
+        .create-form {
+            background: var(--dark-gray);
+            border: 1px solid var(--medium-gray);
+            padding: 2rem;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .form-section:last-of-type {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--orange);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-label .required {
+            color: var(--red);
+        }
+
+        .form-hint {
+            color: var(--light-gray);
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--black);
+            border: 1px solid var(--medium-gray);
+            color: var(--white);
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--orange);
+        }
+
+        .form-input::placeholder,
+        .form-textarea::placeholder {
+            color: var(--light-gray);
+        }
+
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .form-select {
+            cursor: pointer;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* Distance Selector */
+        .distance-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .distance-option {
+            padding: 1rem;
+            background: var(--black);
+            border: 2px solid var(--medium-gray);
+            color: var(--white);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .distance-option:hover {
+            border-color: var(--orange);
+        }
+
+        .distance-option.selected {
+            background: var(--orange);
+            color: var(--black);
+            border-color: var(--orange);
+        }
+
+        .distance-option .distance-icon {
+            font-size: 1.5rem;
+            font-weight: 900;
+            display: block;
+            margin-bottom: 0.25rem;
+            color: var(--orange);
+        }
+
+        .distance-option.selected .distance-icon {
+            color: var(--black);
+        }
+
+        .distance-option .label {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Price Input */
+        .price-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .price-input-wrapper .lightning-icon {
+            color: var(--bitcoin-orange);
+            font-size: 1.2rem;
+        }
+
+        .price-input-wrapper input {
+            flex: 1;
+        }
+
+        .price-input-wrapper .unit {
+            color: var(--light-gray);
+        }
+
+        .free-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .free-toggle input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .free-toggle label {
+            color: var(--light-gray);
+            cursor: pointer;
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 1.25rem 2rem;
+            background: var(--orange);
+            color: var(--black);
+            border: 2px solid var(--orange);
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 2rem;
+        }
+
+        .submit-btn:hover {
+            background: transparent;
+            color: var(--orange);
+        }
+
+        .submit-btn:disabled {
+            background: var(--medium-gray);
+            border-color: var(--medium-gray);
+            color: var(--light-gray);
+            cursor: not-allowed;
+        }
+
+        /* Benefits */
+        .benefits {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .benefit {
+            text-align: center;
+            padding: 1rem;
+            background: var(--dark-gray);
+            border: 1px solid var(--medium-gray);
+        }
+
+        .benefit-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .benefit-text {
+            font-size: 0.85rem;
+            color: var(--light-gray);
+        }
+
+        .benefit-text strong {
+            color: var(--white);
+            display: block;
+        }
+
+        /* Success State */
+        .success-state {
+            text-align: center;
+            padding: 3rem;
+            background: var(--dark-gray);
+            border: 1px solid var(--medium-gray);
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .success-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--orange);
+        }
+
+        .success-message {
+            color: var(--light-gray);
+            margin-bottom: 2rem;
+        }
+
+        .race-link {
+            display: block;
+            background: var(--black);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .action-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--medium-gray);
+            border: 1px solid var(--light-gray);
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .action-btn:hover {
+            background: var(--orange);
+            color: var(--black);
+            border-color: var(--orange);
+        }
+
+        .action-btn.primary {
+            background: var(--orange);
+            color: var(--black);
+            border-color: var(--orange);
+        }
+
+        .action-btn.primary:hover {
+            background: transparent;
+            color: var(--orange);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 4rem;
+            padding: 2rem;
+            border-top: 1px solid var(--medium-gray);
+            text-align: center;
+            color: var(--light-gray);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--orange);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .benefits {
+                grid-template-columns: 1fr;
+            }
+
+            .action-btns {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="nav-header">
+        <a href="../index.html" class="nav-logo">RUNSTR</a>
+        <nav class="nav-links">
+            <a href="races.html" class="nav-link">Races</a>
+            <!-- <a href="dashboard.html" class="nav-dashboard-btn">Dashboard</a> -->
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">CREATE A RACE</h1>
+            <p class="page-subtitle">Sell tickets with Lightning. <span>Keep 100%</span> - zero platform fees.</p>
+        </div>
+
+        <!-- Login Required State -->
+        <div class="login-required" id="login-required">
+            <h2>Login Required</h2>
+            <p>Please login with Nostr to create a race.</p>
+            <nl-button></nl-button>
+        </div>
+
+        <!-- Create Form -->
+        <form class="create-form" id="create-form" style="display: none;">
+            <!-- Race Details -->
+            <div class="form-section">
+                <h2 class="section-title">Race Details</h2>
+
+                <div class="form-group">
+                    <label class="form-label">Race Name <span class="required">*</span></label>
+                    <input type="text" class="form-input" id="race-name" placeholder="e.g. Austin Turkey Trot 5K" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Distance <span class="required">*</span></label>
+                    <div class="distance-options" id="distance-options">
+                        <div class="distance-option" data-distance="5k">
+                            <span class="distance-icon">5K</span>
+                            <span class="label">3.1 mi</span>
+                        </div>
+                        <div class="distance-option" data-distance="10k">
+                            <span class="distance-icon">10K</span>
+                            <span class="label">6.2 mi</span>
+                        </div>
+                        <div class="distance-option" data-distance="half">
+                            <span class="distance-icon">21K</span>
+                            <span class="label">Half Marathon</span>
+                        </div>
+                        <div class="distance-option" data-distance="marathon">
+                            <span class="distance-icon">42K</span>
+                            <span class="label">Marathon</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Date <span class="required">*</span></label>
+                        <input type="date" class="form-input" id="race-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Start Time <span class="required">*</span></label>
+                        <input type="time" class="form-input" id="race-time" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Location <span class="required">*</span></label>
+                    <input type="text" class="form-input" id="race-location" placeholder="e.g. Zilker Park, Austin TX" required>
+                    <p class="form-hint">Full address or venue name with city</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-textarea" id="race-description" placeholder="Tell runners what to expect. Include details about the course, what to bring, parking info, etc."></textarea>
+                </div>
+            </div>
+
+            <!-- Registration Settings -->
+            <div class="form-section">
+                <h2 class="section-title">Registration Settings</h2>
+
+                <div class="form-group">
+                    <label class="form-label">Entry Fee</label>
+                    <div class="price-input-wrapper">
+                        <span class="lightning-icon">⚡</span>
+                        <input type="number" class="form-input" id="entry-fee" placeholder="1000" min="0" value="1000">
+                        <span class="unit">sats</span>
+                    </div>
+                    <div class="free-toggle">
+                        <input type="checkbox" id="free-event">
+                        <label for="free-event">This is a free event</label>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Max Participants</label>
+                        <input type="number" class="form-input" id="max-participants" placeholder="100" min="1" value="100">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Registration Deadline</label>
+                        <input type="date" class="form-input" id="registration-deadline">
+                        <p class="form-hint">Leave blank to allow registration until race day</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Settings -->
+            <div class="form-section">
+                <h2 class="section-title">Payment Settings</h2>
+
+                <div class="form-group">
+                    <label class="form-label">Your Lightning Address <span class="required">*</span></label>
+                    <input type="text" class="form-input" id="lightning-address" placeholder="you@getalby.com or you@strike.me" required>
+                    <p class="form-hint">Runners will pay directly to this address. You keep 100% - no platform fees.</p>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submit-btn">Create Race</button>
+        </form>
+
+        <!-- Success State -->
+        <div class="success-state" id="success-state" style="display: none;">
+            <div class="success-icon">✓</div>
+            <h2 class="success-title">Race Created!</h2>
+            <p class="success-message">Your race is now live and ready for registrations.</p>
+            <div class="race-link" id="race-link"></div>
+            <div class="action-btns">
+                <button class="action-btn" onclick="copyRaceLink()">Copy Link</button>
+                <button class="action-btn" onclick="shareToNostr()">Share to Nostr</button>
+                <a href="#" class="action-btn primary" id="view-race-btn">View Race</a>
+            </div>
+        </div>
+
+        <!-- Benefits -->
+        <div class="benefits">
+            <div class="benefit">
+                <div class="benefit-icon">⚡</div>
+                <div class="benefit-text">
+                    <strong>Lightning Payments</strong>
+                    Instant, global payments
+                </div>
+            </div>
+            <div class="benefit">
+                <div class="benefit-icon">0%</div>
+                <div class="benefit-text">
+                    <strong>Zero Fees</strong>
+                    Keep 100% of sales
+                </div>
+            </div>
+            <div class="benefit">
+                <div class="benefit-icon">🔐</div>
+                <div class="benefit-text">
+                    <strong>Non-Custodial</strong>
+                    Your wallet, your funds
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Powered by Nostr & Lightning | <a href="../index.html">RUNSTR</a></p>
+    </footer>
+
+    <script>
+        // State
+        let isLoggedIn = false;
+        let userPubkey = null;
+        let selectedDistance = null;
+        let createdRaceId = null;
+
+        // Nostr relay configuration
+        const RELAYS = [
+            'wss://relay.damus.io',
+            'wss://nos.lol',
+            'wss://relay.nostr.band',
+            'wss://relay.primal.net'
+        ];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            setupDistanceSelector();
+            setupFreeToggle();
+            setupForm();
+            checkLoginStatus();
+        });
+
+        // Check Nostr login status
+        function checkLoginStatus() {
+            document.addEventListener('nlAuth', (e) => {
+                if (e.detail.type === 'login') {
+                    isLoggedIn = true;
+                    userPubkey = e.detail.pubkey;
+                    showForm();
+                } else if (e.detail.type === 'logout') {
+                    isLoggedIn = false;
+                    userPubkey = null;
+                    showLoginRequired();
+                }
+            });
+
+            // Check if already logged in
+            if (window.nostr) {
+                window.nostr.getPublicKey().then(pubkey => {
+                    if (pubkey) {
+                        isLoggedIn = true;
+                        userPubkey = pubkey;
+                        showForm();
+                    }
+                }).catch(() => {
+                    showLoginRequired();
+                });
+            }
+        }
+
+        // Show/hide form based on login state
+        function showForm() {
+            document.getElementById('login-required').style.display = 'none';
+            document.getElementById('create-form').style.display = 'block';
+        }
+
+        function showLoginRequired() {
+            document.getElementById('login-required').style.display = 'block';
+            document.getElementById('create-form').style.display = 'none';
+        }
+
+        // Setup distance selector
+        function setupDistanceSelector() {
+            const options = document.querySelectorAll('.distance-option');
+            options.forEach(option => {
+                option.addEventListener('click', () => {
+                    options.forEach(o => o.classList.remove('selected'));
+                    option.classList.add('selected');
+                    selectedDistance = option.dataset.distance;
+                });
+            });
+        }
+
+        // Setup free event toggle
+        function setupFreeToggle() {
+            const checkbox = document.getElementById('free-event');
+            const feeInput = document.getElementById('entry-fee');
+
+            checkbox.addEventListener('change', () => {
+                if (checkbox.checked) {
+                    feeInput.value = 0;
+                    feeInput.disabled = true;
+                } else {
+                    feeInput.value = 1000;
+                    feeInput.disabled = false;
+                }
+            });
+        }
+
+        // Setup form submission
+        function setupForm() {
+            const form = document.getElementById('create-form');
+            form.addEventListener('submit', handleSubmit);
+        }
+
+        // Handle form submission
+        async function handleSubmit(e) {
+            e.preventDefault();
+
+            // Validate required fields
+            if (!selectedDistance) {
+                alert('Please select a distance');
+                return;
+            }
+
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Creating...';
+
+            try {
+                // Gather form data
+                const raceData = {
+                    name: document.getElementById('race-name').value,
+                    distance: selectedDistance,
+                    distanceLabel: getDistanceLabel(selectedDistance),
+                    date: document.getElementById('race-date').value,
+                    time: document.getElementById('race-time').value,
+                    location: document.getElementById('race-location').value,
+                    description: document.getElementById('race-description').value,
+                    entryFee: parseInt(document.getElementById('entry-fee').value) || 0,
+                    maxParticipants: parseInt(document.getElementById('max-participants').value) || 100,
+                    deadline: document.getElementById('registration-deadline').value,
+                    lightningAddress: document.getElementById('lightning-address').value
+                };
+
+                // Create Nostr event
+                const raceId = await createRaceEvent(raceData);
+                createdRaceId = raceId;
+
+                // Show success
+                showSuccess(raceId);
+
+            } catch (error) {
+                console.error('Error creating race:', error);
+                alert('Error creating race. Please try again.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Create Race';
+            }
+        }
+
+        // Create Nostr race event (NIP-52 Calendar Event - Kind 31923)
+        async function createRaceEvent(data) {
+            // Generate unique ID
+            const raceId = generateId();
+
+            // Calculate timestamps
+            const startTimestamp = Math.floor(new Date(`${data.date}T${data.time}:00`).getTime() / 1000);
+            // Virtual events: 24-hour window from start time
+            const endTimestamp = startTimestamp + (24 * 60 * 60);
+
+            // Get distance in meters for leaderboard matching
+            const distanceMeters = getDistanceMeters(data.distance);
+
+            // Build NIP-52 compliant event tags
+            const tags = [
+                // NIP-52 Standard Tags (Required)
+                ['d', raceId],
+                ['title', data.name],
+                ['start', startTimestamp.toString()],
+                ['end', endTimestamp.toString()],
+                ['start_tzid', Intl.DateTimeFormat().resolvedOptions().timeZone],
+                ['location', 'Virtual - Run anywhere'],
+
+                // NIP-52 Optional Tags
+                ['summary', data.description || `Virtual ${data.distanceLabel} race - run anywhere during the event window!`],
+                ['t', 'running'],
+                ['t', data.distance],
+                ['t', 'runstr'],
+                ['t', 'virtual'],
+
+                // RUNSTR Custom Tags
+                ['distance', data.distance],
+                ['distance_meters', distanceMeters.toString()],
+                ['entry_fee', data.entryFee.toString()],
+                ['lightning', data.lightningAddress],
+                ['max_participants', data.maxParticipants.toString()],
+
+                // Organizer as first participant
+                ['p', userPubkey, '', 'organizer']
+            ];
+
+            // Add registration deadline if set
+            if (data.deadline) {
+                const deadlineTimestamp = Math.floor(new Date(`${data.deadline}T23:59:59`).getTime() / 1000);
+                tags.push(['deadline', deadlineTimestamp.toString()]);
+            }
+
+            // Create unsigned event (Kind 31923 = NIP-52 Time-Based Calendar Event)
+            const event = {
+                kind: 31923,
+                created_at: Math.floor(Date.now() / 1000),
+                tags: tags,
+                content: data.description || ''
+            };
+
+            // Check for Nostr extension
+            if (!window.nostr) {
+                throw new Error('Nostr extension not found. Please install Alby or another Nostr signer.');
+            }
+
+            // Sign the event
+            console.log('Signing event:', event);
+            const signedEvent = await window.nostr.signEvent(event);
+            console.log('Signed event:', signedEvent);
+
+            // Publish to relays
+            await publishToRelays(signedEvent);
+            console.log('Event published successfully!');
+
+            return raceId;
+        }
+
+        // Get distance in meters for precise matching
+        function getDistanceMeters(distance) {
+            const distances = {
+                '5k': 5000,
+                '10k': 10000,
+                'half': 21097,
+                'marathon': 42195
+            };
+            return distances[distance] || 5000;
+        }
+
+        // Show success state
+        function showSuccess(raceId) {
+            document.getElementById('create-form').style.display = 'none';
+            document.getElementById('success-state').style.display = 'block';
+
+            const raceLink = `${window.location.origin}/pages/race.html?id=${raceId}`;
+            document.getElementById('race-link').textContent = raceLink;
+            document.getElementById('view-race-btn').href = `race.html?id=${raceId}`;
+        }
+
+        // Copy race link
+        function copyRaceLink() {
+            const link = document.getElementById('race-link').textContent;
+            navigator.clipboard.writeText(link).then(() => {
+                alert('Link copied!');
+            });
+        }
+
+        // Generate unique ID
+        function generateId() {
+            return 'race-' + Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
+        }
+
+        // Get distance label
+        function getDistanceLabel(distance) {
+            const labels = {
+                '5k': '5K',
+                '10k': '10K',
+                'half': 'Half Marathon',
+                'marathon': 'Marathon'
+            };
+            return labels[distance] || distance;
+        }
+
+        // Share event to Nostr as kind 1 note
+        async function shareToNostr() {
+            const raceData = {
+                name: document.getElementById('race-name').value,
+                date: document.getElementById('race-date').value,
+                time: document.getElementById('race-time').value,
+                location: document.getElementById('race-location').value,
+                distance: selectedDistance,
+                entryFee: parseInt(document.getElementById('entry-fee').value) || 0
+            };
+
+            const content = formatNostrPost(raceData, createdRaceId);
+
+            // Reference the calendar event with 'a' tag (NIP-52)
+            const event = {
+                kind: 1,
+                created_at: Math.floor(Date.now() / 1000),
+                tags: [
+                    ['a', `31923:${userPubkey}:${createdRaceId}`],
+                    ['t', 'RUNSTR'],
+                    ['t', 'running'],
+                    ['t', raceData.distance],
+                    ['t', 'Bitcoin'],
+                    ['t', 'Lightning'],
+                    ['t', 'virtual']
+                ],
+                content: content
+            };
+
+            try {
+                const signedEvent = await window.nostr.signEvent(event);
+                await publishToRelays(signedEvent);
+                alert('Event shared to Nostr! Your followers can now see it.');
+            } catch (error) {
+                console.error('Error sharing to Nostr:', error);
+                alert('Failed to share. Make sure you are logged in with Nostr.');
+            }
+        }
+
+        // Format the Nostr post content
+        function formatNostrPost(race, raceId) {
+            const date = new Date(race.date);
+            const formattedDate = date.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            const fee = race.entryFee === 0
+                ? 'FREE'
+                : `${race.entryFee.toLocaleString()} sats`;
+
+            const url = `${window.location.origin}/pages/race.html?id=${raceId}`;
+
+            return `🏁 ${race.name}
+
+📅 ${formattedDate} at ${race.time}
+📍 ${race.location}
+🏃 ${getDistanceLabel(race.distance)}
+⚡ ${fee}
+
+Register now: ${url}
+
+#RUNSTR #running #${race.distance} #Bitcoin #Lightning`;
+        }
+
+        // Publish event to Nostr relays
+        async function publishToRelays(event) {
+            const pool = new NostrTools.SimplePool();
+
+            try {
+                // SimplePool.publish returns array of promises
+                const pubs = pool.publish(RELAYS, event);
+                const results = await Promise.allSettled(pubs);
+
+                const successful = results.filter(r => r.status === 'fulfilled').length;
+                console.log(`Published to ${successful}/${RELAYS.length} relays`);
+
+                if (successful === 0) {
+                    throw new Error('Failed to publish to any relay');
+                }
+
+                return results;
+            } catch (error) {
+                console.error('Publish error:', error);
+                throw error;
+            }
+        }
+    </script>
+</body>
+</html>
