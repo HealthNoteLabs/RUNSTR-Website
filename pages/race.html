@@ -3,12 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Race Details - RUNSTR</title>
-    <meta name="description" content="View race details and register with Lightning. Zero platform fees.">
-
-    <!-- Nostr Login -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nostr-login@latest/dist/unpkg.css">
-    <script type="module" src="https://cdn.jsdelivr.net/npm/nostr-login@latest/dist/unpkg.js"></script>
+    <title>Event Details - RUNSTR</title>
+    <meta name="description" content="View event leaderboard and donate to charity. Open participation - no registration needed.">
 
     <!-- Nostr Tools -->
     <script src="https://unpkg.com/nostr-tools@2.7.2/lib/nostr.bundle.js"></script>
@@ -38,7 +34,7 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background: var(--black);
-            color: var(--white);
+            color: var(--light-gray);
             line-height: 1.6;
         }
 
@@ -61,7 +57,7 @@
         .nav-logo {
             font-size: 1.5rem;
             font-weight: 900;
-            color: var(--white);
+            color: var(--orange);
             text-decoration: none;
             letter-spacing: -1px;
         }
@@ -74,7 +70,7 @@
 
         .nav-link {
             padding: 0.75rem 1.5rem;
-            color: var(--white);
+            color: var(--light-gray);
             text-decoration: none;
             font-weight: 600;
             transition: all 0.3s;
@@ -172,6 +168,7 @@
             font-weight: 900;
             letter-spacing: -1px;
             margin-bottom: 0.5rem;
+            color: var(--orange);
         }
 
         .race-organizer {
@@ -458,7 +455,7 @@
             padding: 0.75rem;
             background: var(--medium-gray);
             border: 1px solid var(--light-gray);
-            color: var(--white);
+            color: var(--light-gray);
             font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.3s;
@@ -466,7 +463,9 @@
         }
 
         .copy-btn:hover {
-            background: var(--light-gray);
+            background: var(--orange);
+            color: var(--black);
+            border-color: var(--orange);
         }
 
         .confirm-payment-btn {
@@ -581,6 +580,186 @@
             color: var(--green);
         }
 
+        /* Blurred Leaderboard Overlay */
+        .leaderboard-container {
+            position: relative;
+        }
+
+        .leaderboard-blurred {
+            filter: blur(8px);
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .leaderboard-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 10, 10, 0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .overlay-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .overlay-charity {
+            color: var(--orange);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .overlay-amount {
+            color: var(--light-gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .donate-btn {
+            padding: 1rem 2rem;
+            background: var(--orange);
+            color: var(--black);
+            border: 2px solid var(--orange);
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+
+        .donate-btn:hover {
+            background: transparent;
+            color: var(--orange);
+        }
+
+        /* Charity Info Card */
+        .charity-card {
+            background: var(--dark-gray);
+            border: 1px solid var(--medium-gray);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .charity-icon {
+            font-size: 2rem;
+        }
+
+        .charity-info {
+            flex: 1;
+        }
+
+        .charity-label {
+            color: var(--light-gray);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .charity-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--orange);
+        }
+
+        /* Runner Avatar & Enhanced Leaderboard */
+        .runner-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 0.75rem;
+            border: 1px solid var(--medium-gray);
+            background: var(--medium-gray);
+        }
+
+        .runner-cell {
+            display: flex;
+            align-items: center;
+        }
+
+        .runner-name {
+            font-weight: 500;
+        }
+
+        .runner-avatar-fallback {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--medium-gray);
+            border: 1px solid var(--medium-gray);
+            margin-right: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--light-gray);
+            flex-shrink: 0;
+        }
+
+        .runner-charity {
+            font-size: 0.85rem;
+            color: var(--orange);
+        }
+
+        /* Prize Pool Card */
+        .prize-pool-card {
+            background: var(--dark-gray);
+            border: 2px solid var(--orange);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .prize-pool-card h3 {
+            color: var(--orange);
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .prize-pool-card .subtitle {
+            color: var(--light-gray);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .prize-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .prize-row:last-child {
+            border-bottom: none;
+        }
+
+        .prize-rank {
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .prize-amount {
+            color: var(--orange);
+            font-weight: 600;
+        }
+
+        .prize-winner {
+            color: var(--light-gray);
+            font-size: 0.85rem;
+        }
+
         /* Share Section */
         .share-section {
             display: flex;
@@ -592,7 +771,7 @@
             padding: 0.5rem 1rem;
             background: var(--medium-gray);
             border: 1px solid var(--light-gray);
-            color: var(--white);
+            color: var(--light-gray);
             font-size: 0.85rem;
             cursor: pointer;
             transition: all 0.3s;
@@ -664,7 +843,7 @@
     <header class="nav-header">
         <a href="../index.html" class="nav-logo">RUNSTR</a>
         <nav class="nav-links">
-            <a href="races.html" class="nav-link">Races</a>
+            <a href="races.html" class="nav-link">Events</a>
             <!-- <a href="dashboard.html" class="nav-dashboard-btn">Dashboard</a> -->
         </nav>
     </header>
@@ -704,40 +883,58 @@
         const RSVP_KIND = 31925;
         const WORKOUT_KIND = 1301;
 
+        // Hardcoded charity lightning addresses
+        const CHARITIES = {
+            'opensats': { name: 'OpenSats', lightning: 'opensats@vlt.ge' },
+            'hrf': { name: 'Human Rights Foundation', lightning: 'hrf@btcpay.hrf.org' },
+            'bitcoin-beach': { name: 'Bitcoin Beach', lightning: 'growbitcoinbeach@geyser.fund' },
+            'bitcoin-bay': { name: 'Bitcoin Bay', lightning: 'bitcoinbayfoundation@geyser.fund' },
+            'bitcoin-ekasi': { name: 'Bitcoin Ekasi', lightning: 'bitcoinekasi@geyser.fund' },
+            'bitcoin-isla': { name: 'Bitcoin Isla', lightning: 'btcisla@geyser.fund' },
+            'bitcoin-valley': { name: 'Bitcoin Valley', lightning: 'bitcoinvalleycirculareconomy@geyser.fund' },
+            'bitcoin-district': { name: 'Bitcoin District', lightning: 'bitcoindc@geyser.fund' },
+            'bitcoin-yucatan': { name: 'Bitcoin Yucatan', lightning: 'bitcoinyucatancommunity@geyser.fund' },
+            'bitcoin-veterans': { name: 'Bitcoin Veterans', lightning: 'operationbitcoin@geyser.fund' }
+        };
+
         // State
         let currentRace = null;
         let currentRaceEvent = null;  // Raw Nostr event
-        let isLoggedIn = false;
-        let userPubkey = null;
-        let userContact = '';
+        let leaderboardUnlocked = false;
+
+        // Cache configuration
+        const EVENT_CACHE_PREFIX = 'runstr_event_';
+        const EVENT_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             loadRaceDetails();
-            checkLoginStatus();
         });
 
-        // Check Nostr login status
-        function checkLoginStatus() {
-            // Listen for nostr-login events
-            document.addEventListener('nlAuth', (e) => {
-                if (e.detail.type === 'login') {
-                    isLoggedIn = true;
-                    userPubkey = e.detail.pubkey;
-                } else if (e.detail.type === 'logout') {
-                    isLoggedIn = false;
-                    userPubkey = null;
-                }
-            });
+        // Cache helper functions
+        function getCachedEvent(id) {
+            try {
+                const cached = localStorage.getItem(EVENT_CACHE_PREFIX + id);
+                if (!cached) return null;
 
-            // Check if already logged in
-            if (window.nostr) {
-                window.nostr.getPublicKey().then(pubkey => {
-                    if (pubkey) {
-                        isLoggedIn = true;
-                        userPubkey = pubkey;
-                    }
-                }).catch(() => {});
+                const data = JSON.parse(cached);
+                if (Date.now() - data.timestamp > EVENT_CACHE_TTL) {
+                    return null; // Cache expired
+                }
+                return data.event;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function cacheEvent(id, event) {
+            try {
+                localStorage.setItem(EVENT_CACHE_PREFIX + id, JSON.stringify({
+                    event: event,
+                    timestamp: Date.now()
+                }));
+            } catch (e) {
+                console.error('Failed to cache event:', e);
             }
         }
 
@@ -752,7 +949,7 @@
             }
 
             try {
-                // Get race from Nostr
+                // Get race from Nostr (with caching)
                 const race = await getRaceById(raceId);
 
                 if (!race) {
@@ -773,7 +970,15 @@
         }
 
         // Get race from Nostr (Kind 31923)
+        // Optimized: Cache-first strategy with reduced timeout
         async function getRaceById(id) {
+            // Step 1: Try to return cached event immediately
+            const cached = getCachedEvent(id);
+            if (cached) {
+                console.log('Showing cached event...');
+                return cached;
+            }
+
             const pool = new NostrTools.SimplePool();
 
             try {
@@ -785,13 +990,11 @@
 
                 console.log('Querying relays for race:', id);
 
-                // Set up timeout
-                const timeoutPromise = new Promise((resolve) => {
-                    setTimeout(() => resolve([]), 10000);
-                });
-
-                const queryPromise = pool.querySync(RELAYS, filter);
-                const events = await Promise.race([queryPromise, timeoutPromise]);
+                // 10 second timeout for relay query
+                const events = await Promise.race([
+                    pool.querySync(RELAYS, filter),
+                    new Promise(resolve => setTimeout(() => resolve([]), 10000))
+                ]);
 
                 console.log(`Found ${events.length} matching events`);
 
@@ -803,7 +1006,14 @@
                 const latestEvent = events.sort((a, b) => b.created_at - a.created_at)[0];
                 currentRaceEvent = latestEvent;
 
-                return parseRaceEvent(latestEvent);
+                const race = parseRaceEvent(latestEvent);
+
+                // Cache the result
+                if (race) {
+                    cacheEvent(id, race);
+                }
+
+                return race;
 
             } catch (error) {
                 console.error('Error fetching race:', error);
@@ -827,7 +1037,11 @@
             }
 
             const startDate = new Date(startTimestamp * 1000);
-            const dateStr = startDate.toISOString().split('T')[0];
+            // Use local date formatting instead of ISO (UTC)
+            const year = startDate.getFullYear();
+            const month = String(startDate.getMonth() + 1).padStart(2, '0');
+            const dayNum = String(startDate.getDate()).padStart(2, '0');
+            const dateStr = `${year}-${month}-${dayNum}`;
             const timeStr = startDate.toTimeString().substring(0, 5);
 
             const distance = getTag('distance') || '5k';
@@ -836,6 +1050,10 @@
             const participantTags = event.tags.filter(t => t[0] === 'p');
             const organizer = participantTags.find(t => t[3] === 'organizer');
             const participants = participantTags.filter(t => t[3] === 'participant');
+
+            // Get charity info
+            const charityKey = getTag('charity') || 'opensats';
+            const charityInfo = CHARITIES[charityKey] || CHARITIES['opensats'];
 
             return {
                 id: getTag('d'),
@@ -849,6 +1067,16 @@
                 distance: distance,
                 distanceLabel: getDistanceLabel(distance),
                 distanceMeters: parseInt(getTag('distance_meters') || '5000'),
+                // Charity info
+                charityKey: charityKey,
+                charityName: getTag('charity_name') || charityInfo.name,
+                charityLightning: getTag('charity_lightning') || charityInfo.lightning,
+                donationAmount: parseInt(getTag('donation_amount') || '500'),
+                // Prize pool
+                prize1st: parseInt(getTag('prize_1st') || '0'),
+                prize2nd: parseInt(getTag('prize_2nd') || '0'),
+                prize3rd: parseInt(getTag('prize_3rd') || '0'),
+                // Legacy support
                 entryFee: parseInt(getTag('entry_fee') || '0'),
                 maxParticipants: parseInt(getTag('max_participants') || '100'),
                 participants: participants.length,
@@ -908,15 +1136,49 @@
             return pubkey.substring(0, 8) + '...' + pubkey.substring(pubkey.length - 4);
         }
 
+        // Render prize pool card (returns empty string if no prizes)
+        function renderPrizePoolCard(race) {
+            const hasPrizes = race.prize1st > 0 || race.prize2nd > 0 || race.prize3rd > 0;
+            if (!hasPrizes) return '';
+
+            const totalPool = race.prize1st + race.prize2nd + race.prize3rd;
+
+            return `
+                <div class="prize-pool-card">
+                    <h3>Prize Pool: ${totalPool.toLocaleString()} sats</h3>
+                    <p class="subtitle">Prizes go to winners' chosen charities</p>
+                    ${race.prize1st > 0 ? `
+                        <div class="prize-row">
+                            <span class="prize-rank">1st Place</span>
+                            <span class="prize-amount">⚡ ${race.prize1st.toLocaleString()} sats</span>
+                        </div>
+                    ` : ''}
+                    ${race.prize2nd > 0 ? `
+                        <div class="prize-row">
+                            <span class="prize-rank">2nd Place</span>
+                            <span class="prize-amount">⚡ ${race.prize2nd.toLocaleString()} sats</span>
+                        </div>
+                    ` : ''}
+                    ${race.prize3rd > 0 ? `
+                        <div class="prize-row">
+                            <span class="prize-rank">3rd Place</span>
+                            <span class="prize-amount">⚡ ${race.prize3rd.toLocaleString()} sats</span>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
         // Render race details
         function renderRaceDetails(race) {
             const main = document.getElementById('main-content');
-            const spotsLeft = race.maxParticipants - race.participants;
-            const spotsPct = (race.participants / race.maxParticipants) * 100;
-            const satsToUsd = (race.entryFee / 100000 * 97000).toFixed(2); // Rough BTC price estimate
+
+            // Check if this event has been unlocked (user has donated)
+            const unlockedEvents = JSON.parse(localStorage.getItem('runstr_unlocked_events') || '[]');
+            leaderboardUnlocked = unlockedEvents.includes(race.id);
 
             main.innerHTML = `
-                <a href="races.html" class="back-link">← Back to Races</a>
+                <a href="races.html" class="back-link">← Back to Events</a>
 
                 <div class="race-header">
                     <div class="race-banner">
@@ -929,54 +1191,54 @@
 
                 <div class="race-info-grid">
                     <div class="info-card">
-                        <div class="info-label">Date & Time</div>
-                        <div class="info-value">${formatDate(race.date)}<br>${race.time}</div>
+                        <div class="info-label">Event Window</div>
+                        <div class="info-value">${formatDate(race.date)}<br>${race.time} (24 hours)</div>
                     </div>
                     <div class="info-card">
-                        <div class="info-label">Location</div>
-                        <div class="info-value">
-                            <a href="${race.mapUrl}" target="_blank">${race.location}</a>
-                        </div>
+                        <div class="info-label">Type</div>
+                        <div class="info-value">${race.location}</div>
                     </div>
                     <div class="info-card">
                         <div class="info-label">Distance</div>
                         <div class="info-value">${race.distanceLabel}</div>
                     </div>
                     <div class="info-card">
-                        <div class="info-label">Registration Deadline</div>
-                        <div class="info-value">${formatDate(race.deadline)}</div>
-                    </div>
-                </div>
-
-                <div class="registration-section">
-                    <h2 class="registration-title">Registration</h2>
-                    <div class="registration-price ${race.entryFee === 0 ? 'free' : ''}">
-                        ${race.entryFee === 0 ? 'FREE' : `⚡ ${race.entryFee.toLocaleString()} sats`}
-                    </div>
-                    ${race.entryFee > 0 ? `<div class="registration-price-usd">≈ $${satsToUsd} USD</div>` : ''}
-                    <div class="registration-spots">
-                        ${spotsLeft} spots remaining (${race.participants} / ${race.maxParticipants} registered)
-                        <div class="spots-bar">
-                            <div class="spots-bar-fill" style="width: ${spotsPct}%"></div>
+                        <div class="info-label">Status</div>
+                        <div class="info-value" style="color: ${race.status === 'open' ? 'var(--orange)' : 'var(--light-gray)'}">
+                            ${race.status === 'open' ? 'Active' : 'Ended'}
                         </div>
                     </div>
-                    <button class="register-btn" onclick="handleRegister()" ${spotsLeft === 0 ? 'disabled' : ''}>
-                        ${spotsLeft === 0 ? 'Sold Out' : (race.entryFee === 0 ? 'Register Now' : 'Register with Lightning')}
-                    </button>
                 </div>
 
-                <div class="description-section">
-                    <h2 class="description-title">About This Race</h2>
-                    <div class="description-content">${race.description.replace(/\n/g, '<br>')}</div>
-                </div>
-
-                <div class="participants-section">
-                    <h2 class="participants-title">Registered Runners (${race.participants})</h2>
-                    <div class="participants-grid">
-                        ${generateParticipantAvatars(race.participantPubkeys || [])}
+                <!-- Charity Card -->
+                <div class="charity-card">
+                    <div class="charity-icon">💛</div>
+                    <div class="charity-info">
+                        <div class="charity-label">Supporting</div>
+                        <div class="charity-name">${race.charityName}</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div class="charity-label">Suggested Donation</div>
+                        <div style="font-weight: 700; color: var(--orange);">⚡ ${race.donationAmount.toLocaleString()} sats</div>
                     </div>
                 </div>
 
+                ${renderPrizePoolCard(race)}
+
+                <!-- How It Works -->
+                <div class="description-section">
+                    <h2 class="description-title">How It Works</h2>
+                    <div class="description-content">
+                        <p><strong>No registration needed!</strong> Just run ${race.distanceLabel} during the event window and your workout will automatically appear on the leaderboard.</p>
+                        <br>
+                        <p>1. Run ${race.distanceLabel} using the RUNSTR app (or any app that posts Kind 1301 workouts)</p>
+                        <p>2. Your time will appear on the leaderboard automatically</p>
+                        <p>3. Donate to ${race.charityName} to reveal the full results</p>
+                        ${race.description ? `<br><p>${race.description.replace(/\n/g, '<br>')}</p>` : ''}
+                    </div>
+                </div>
+
+                <!-- Leaderboard Section -->
                 <div class="participants-section" style="margin-top: 2rem;">
                     <h2 class="participants-title">Leaderboard</h2>
                     <div id="leaderboard-content">
@@ -1374,7 +1636,8 @@
             });
         }
 
-        // Load leaderboard from Kind 1301 workouts
+        // Load leaderboard from ALL Kind 1301 workouts (open participation)
+        // Optimized: Single profile fetch for both NIP-05 verification and display names
         async function loadLeaderboard(race) {
             const leaderboardContent = document.getElementById('leaderboard-content');
 
@@ -1383,17 +1646,7 @@
             if (now < race.startTimestamp) {
                 leaderboardContent.innerHTML = `
                     <p style="color: var(--light-gray); text-align: center; padding: 2rem;">
-                        Leaderboard will be available after the race starts.
-                    </p>
-                `;
-                return;
-            }
-
-            // Check if there are participants
-            if (!race.participantPubkeys || race.participantPubkeys.length === 0) {
-                leaderboardContent.innerHTML = `
-                    <p style="color: var(--light-gray); text-align: center; padding: 2rem;">
-                        No participants registered yet.
+                        Leaderboard will be available after the event starts.
                     </p>
                 `;
                 return;
@@ -1402,44 +1655,88 @@
             try {
                 const pool = new NostrTools.SimplePool();
 
-                // Query Kind 1301 workouts from participants within race time window
-                const filter = {
+                // Step 1: Query ALL Kind 1301 workouts within the event time window
+                const workoutFilter = {
                     kinds: [WORKOUT_KIND],
-                    authors: race.participantPubkeys,
                     since: race.startTimestamp,
                     until: race.endTimestamp
                 };
 
                 console.log('Querying workouts for leaderboard...');
+                console.log(`Time window: ${new Date(race.startTimestamp * 1000).toISOString()} to ${new Date(race.endTimestamp * 1000).toISOString()}`);
 
-                const timeoutPromise = new Promise((resolve) => {
-                    setTimeout(() => resolve([]), 10000);
-                });
+                // Reduced timeout from 15s to 8s
+                const workouts = await Promise.race([
+                    pool.querySync(RELAYS, workoutFilter),
+                    new Promise(resolve => setTimeout(() => resolve([]), 8000))
+                ]);
 
-                const queryPromise = pool.querySync(RELAYS, filter);
-                const workouts = await Promise.race([queryPromise, timeoutPromise]);
+                console.log(`Found ${workouts.length} total workouts in time window`);
 
-                console.log(`Found ${workouts.length} workouts`);
-
-                // Filter workouts by split count (must have enough splits for the distance)
+                // Step 2: Filter workouts by split count
                 const requiredSplits = getRequiredSplits(race.distance);
                 const eligibleWorkouts = workouts.filter(w => {
                     const splits = w.tags.filter(t => t[0] === 'split');
                     return splits.length >= requiredSplits;
                 });
 
-                console.log(`${eligibleWorkouts.length} workouts meet split requirements`);
+                console.log(`${eligibleWorkouts.length} workouts meet split requirements (${requiredSplits}+ splits)`);
 
-                // Calculate rankings
-                const rankings = calculateRankings(eligibleWorkouts, race.distance);
+                if (eligibleWorkouts.length === 0) {
+                    renderLeaderboard([], leaderboardContent, race);
+                    return;
+                }
 
-                // Render leaderboard
-                renderLeaderboard(rankings, leaderboardContent);
+                // Step 3: Fetch profiles ONCE for all unique pubkeys
+                // Used for both NIP-05 verification AND display names
+                const uniquePubkeys = [...new Set(eligibleWorkouts.map(w => w.pubkey))];
+                const profileMap = {};
+                const verifiedPubkeys = new Set();
+
+                try {
+                    const profiles = await Promise.race([
+                        pool.querySync(RELAYS, { kinds: [0], authors: uniquePubkeys }),
+                        new Promise(resolve => setTimeout(() => resolve([]), 5000))
+                    ]);
+
+                    console.log(`Fetched ${profiles.length} profiles`);
+
+                    profiles.forEach(p => {
+                        try {
+                            const content = JSON.parse(p.content);
+                            profileMap[p.pubkey] = {
+                                name: content.display_name || content.name || null,
+                                nip05: content.nip05 || null,
+                                picture: content.picture || null
+                            };
+                            // Track NIP-05 verified users for spam prevention
+                            if (content.nip05) {
+                                verifiedPubkeys.add(p.pubkey);
+                            }
+                        } catch (e) {}
+                    });
+
+                    console.log(`${verifiedPubkeys.size} NIP-05 verified users found`);
+                } catch (e) {
+                    console.error('Error fetching profiles:', e);
+                    // Graceful degradation: allow all workouts if profile fetch fails
+                    eligibleWorkouts.forEach(w => verifiedPubkeys.add(w.pubkey));
+                }
+
+                // Step 4: Filter to verified users only
+                const verifiedWorkouts = eligibleWorkouts.filter(w => verifiedPubkeys.has(w.pubkey));
+                console.log(`${verifiedWorkouts.length} workouts from NIP-05 verified users`);
+
+                // Step 5: Calculate rankings using pre-fetched profiles (no additional fetch needed)
+                const rankings = calculateRankings(verifiedWorkouts, race.distance, profileMap);
+
+                // Render leaderboard (with blur if not unlocked)
+                renderLeaderboard(rankings, leaderboardContent, race);
 
             } catch (error) {
                 console.error('Error loading leaderboard:', error);
                 leaderboardContent.innerHTML = `
-                    <p style="color: var(--red); text-align: center; padding: 2rem;">
+                    <p style="color: var(--light-gray); text-align: center; padding: 2rem;">
                         Error loading leaderboard. Please try again.
                     </p>
                 `;
@@ -1457,8 +1754,8 @@
             return splits[distance] || 5;
         }
 
-        // Calculate rankings from workouts
-        function calculateRankings(workouts, distance) {
+        // Calculate rankings from workouts (now sync - profiles are pre-fetched)
+        function calculateRankings(workouts, distance, profileMap) {
             const requiredSplits = getRequiredSplits(distance);
             const participantBestTimes = {};
 
@@ -1474,24 +1771,39 @@
 
                 const timeSeconds = parseDuration(targetSplit[2]);
 
+                // Extract runner's charity from workout tags
+                // Format: ["charity", "id", "name", "lightning"]
+                const charityTag = workout.tags.find(t => t[0] === 'charity');
+                let runnerCharity = null;
+                if (charityTag && charityTag.length >= 3) {
+                    runnerCharity = {
+                        id: charityTag[1],
+                        name: charityTag[2],
+                        lightning: charityTag[3] || null
+                    };
+                }
+
                 // Keep best time per participant
                 if (!participantBestTimes[pubkey] || timeSeconds < participantBestTimes[pubkey].time) {
                     participantBestTimes[pubkey] = {
                         pubkey: pubkey,
                         time: timeSeconds,
-                        workout: workout
+                        workout: workout,
+                        charity: runnerCharity
                     };
                 }
             });
 
-            // Convert to array and sort by time
+            // Convert to array and sort by time, add profile info from pre-fetched map
             const rankings = Object.values(participantBestTimes)
                 .sort((a, b) => a.time - b.time)
                 .map((entry, index) => ({
                     ...entry,
                     rank: index + 1,
                     timeFormatted: formatDuration(entry.time),
-                    pace: calculatePace(distance, entry.time)
+                    pace: calculatePace(distance, entry.time),
+                    profile: profileMap[entry.pubkey] || null,
+                    displayName: getDisplayName(profileMap[entry.pubkey], entry.pubkey)
                 }));
 
             return rankings;
@@ -1544,35 +1856,43 @@
             return distances[distance] || 5;
         }
 
-        // Render leaderboard
-        function renderLeaderboard(rankings, container) {
+        // Render leaderboard with blur overlay if not unlocked
+        function renderLeaderboard(rankings, container, race) {
             if (rankings.length === 0) {
                 container.innerHTML = `
                     <p style="color: var(--light-gray); text-align: center; padding: 2rem;">
-                        No qualifying results yet. Submit your workout using the RUNSTR app!
+                        No qualifying results yet. Run ${race.distanceLabel} during the event window to appear on the leaderboard!
                     </p>
                 `;
                 return;
             }
 
-            container.innerHTML = `
+            const tableHTML = `
                 <table style="width: 100%; border-collapse: collapse;">
                     <thead>
                         <tr style="border-bottom: 1px solid var(--medium-gray);">
-                            <th style="padding: 1rem; text-align: left; color: var(--light-gray); font-size: 0.8rem; text-transform: uppercase;">Rank</th>
+                            <th style="padding: 1rem; text-align: center; color: var(--light-gray); font-size: 0.8rem; text-transform: uppercase; width: 60px;">Rank</th>
                             <th style="padding: 1rem; text-align: left; color: var(--light-gray); font-size: 0.8rem; text-transform: uppercase;">Runner</th>
                             <th style="padding: 1rem; text-align: left; color: var(--light-gray); font-size: 0.8rem; text-transform: uppercase;">Time</th>
                             <th style="padding: 1rem; text-align: left; color: var(--light-gray); font-size: 0.8rem; text-transform: uppercase;">Pace</th>
+                            <th style="padding: 1rem; text-align: left; color: var(--light-gray); font-size: 0.8rem; text-transform: uppercase;">Charity</th>
                         </tr>
                     </thead>
                     <tbody>
                         ${rankings.map(result => `
                             <tr style="border-bottom: 1px solid var(--medium-gray); ${result.rank <= 3 ? 'background: rgba(245, 163, 86, 0.1);' : ''}">
-                                <td style="padding: 1rem; text-align: center;">
+                                <td style="padding: 1rem; text-align: center; font-weight: 700; ${result.rank <= 3 ? 'color: var(--orange);' : ''}">
                                     ${getRankDisplay(result.rank)}
                                 </td>
                                 <td style="padding: 1rem;">
-                                    ${truncatePubkey(result.pubkey)}
+                                    <div class="runner-cell">
+                                        ${result.profile?.picture
+                                            ? `<img src="${result.profile.picture}" alt="" class="runner-avatar" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                               <span class="runner-avatar-fallback" style="display:none;">${(result.displayName || '?')[0].toUpperCase()}</span>`
+                                            : `<span class="runner-avatar-fallback">${(result.displayName || '?')[0].toUpperCase()}</span>`
+                                        }
+                                        <span class="runner-name">${result.displayName || truncatePubkey(result.pubkey)}</span>
+                                    </div>
                                 </td>
                                 <td style="padding: 1rem; font-family: monospace; font-size: 1.1rem; color: var(--orange);">
                                     ${result.timeFormatted}
@@ -1580,19 +1900,112 @@
                                 <td style="padding: 1rem; color: var(--light-gray);">
                                     ${result.pace}
                                 </td>
+                                <td style="padding: 1rem;" class="runner-charity">
+                                    ${result.charity ? result.charity.name : '-'}
+                                </td>
                             </tr>
                         `).join('')}
                     </tbody>
                 </table>
             `;
+
+            // Check if leaderboard is unlocked
+            if (leaderboardUnlocked) {
+                container.innerHTML = tableHTML;
+            } else {
+                // Show blurred leaderboard with donation overlay
+                container.innerHTML = `
+                    <div class="leaderboard-container">
+                        <div class="leaderboard-blurred">
+                            ${tableHTML}
+                        </div>
+                        <div class="leaderboard-overlay">
+                            <div class="overlay-title">Support ${race.charityName}</div>
+                            <div class="overlay-charity">to reveal the leaderboard</div>
+                            <div class="overlay-amount">Suggested: ${race.donationAmount.toLocaleString()} sats</div>
+                            <button class="donate-btn" onclick="showDonationModal()">Donate Now</button>
+                            <button class="donate-btn" style="margin-top: 0.5rem; background: transparent; color: var(--orange);" onclick="unlockLeaderboard()">I've Already Donated</button>
+                        </div>
+                    </div>
+                `;
+            }
         }
 
-        // Get rank display with medals
+        // Show donation modal
+        function showDonationModal() {
+            const modal = document.getElementById('payment-modal');
+            const content = document.getElementById('payment-content');
+            const race = currentRace;
+
+            content.innerHTML = `
+                <h2 class="modal-title">Donate to ${race.charityName}</h2>
+                <div class="payment-amount">${race.donationAmount.toLocaleString()} sats</div>
+                <p style="text-align: center; color: var(--light-gray); margin-bottom: 1.5rem;">
+                    100% of your donation goes directly to ${race.charityName}
+                </p>
+
+                <p style="text-align: center; color: var(--light-gray); margin-bottom: 0.5rem; font-size: 0.9rem;">
+                    Send to:
+                </p>
+                <div class="payment-address" id="charity-lightning-address">${race.charityLightning}</div>
+                <div class="payment-qr" id="qr-container"></div>
+                <button class="copy-btn" onclick="copyCharityAddress()">Copy Lightning Address</button>
+                <button class="confirm-payment-btn" onclick="confirmDonation()">I've Donated</button>
+                <p class="payment-note">
+                    This is an honor-system donation.<br>
+                    No payment verification required.
+                </p>
+            `;
+
+            // Generate QR code
+            const qrContainer = document.getElementById('qr-container');
+            if (typeof QRCode !== 'undefined') {
+                QRCode.toCanvas(race.charityLightning, { width: 200 }, (error, canvas) => {
+                    if (!error) {
+                        qrContainer.appendChild(canvas);
+                    }
+                });
+            }
+
+            modal.classList.add('active');
+        }
+
+        // Copy charity lightning address
+        function copyCharityAddress() {
+            const address = currentRace.charityLightning;
+            navigator.clipboard.writeText(address).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.textContent = 'Copied!';
+                setTimeout(() => {
+                    btn.textContent = 'Copy Lightning Address';
+                }, 2000);
+            });
+        }
+
+        // Confirm donation and unlock leaderboard
+        function confirmDonation() {
+            unlockLeaderboard();
+            closePaymentModal();
+        }
+
+        // Unlock leaderboard (store in localStorage)
+        function unlockLeaderboard() {
+            const unlockedEvents = JSON.parse(localStorage.getItem('runstr_unlocked_events') || '[]');
+            if (!unlockedEvents.includes(currentRace.id)) {
+                unlockedEvents.push(currentRace.id);
+                localStorage.setItem('runstr_unlocked_events', JSON.stringify(unlockedEvents));
+            }
+            leaderboardUnlocked = true;
+
+            // Re-render leaderboard without blur
+            const leaderboardContent = document.getElementById('leaderboard-content');
+            loadLeaderboard(currentRace);
+        }
+
+        // Get rank display (plain text)
         function getRankDisplay(rank) {
-            if (rank === 1) return '<span style="font-size: 1.5rem;">🥇</span>';
-            if (rank === 2) return '<span style="font-size: 1.5rem;">🥈</span>';
-            if (rank === 3) return '<span style="font-size: 1.5rem;">🥉</span>';
-            return rank;
+            const suffix = rank === 1 ? 'st' : rank === 2 ? 'nd' : rank === 3 ? 'rd' : 'th';
+            return `${rank}${suffix}`;
         }
 
         // Truncate pubkey for display

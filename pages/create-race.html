@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Race - RUNSTR</title>
-    <meta name="description" content="Create a race on RUNSTR. Zero platform fees - keep 100% of ticket sales.">
+    <title>Create Event - RUNSTR</title>
+    <meta name="description" content="Create a fitness event on RUNSTR. Open leaderboards with charity donations.">
 
     <!-- Nostr Login -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nostr-login@latest/dist/unpkg.css">
@@ -36,7 +36,7 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background: var(--black);
-            color: var(--white);
+            color: var(--light-gray);
             line-height: 1.6;
         }
 
@@ -59,7 +59,7 @@
         .nav-logo {
             font-size: 1.5rem;
             font-weight: 900;
-            color: var(--white);
+            color: var(--orange);
             text-decoration: none;
             letter-spacing: -1px;
         }
@@ -72,7 +72,7 @@
 
         .nav-link {
             padding: 0.75rem 1.5rem;
-            color: var(--white);
+            color: var(--light-gray);
             text-decoration: none;
             font-weight: 600;
             transition: all 0.3s;
@@ -123,6 +123,7 @@
             font-weight: 900;
             letter-spacing: -1px;
             margin-bottom: 0.5rem;
+            color: var(--orange);
         }
 
         .page-subtitle {
@@ -375,8 +376,38 @@
         }
 
         .benefit-text strong {
-            color: var(--white);
+            color: var(--orange);
             display: block;
+        }
+
+        /* Prize Pool Section */
+        .prize-inputs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .prize-inputs .form-group {
+            margin-bottom: 0;
+        }
+
+        .prize-inputs .form-label {
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .prize-rank {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--orange);
+            margin-bottom: 0.25rem;
+        }
+
+        @media (max-width: 768px) {
+            .prize-inputs {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* Success State */
@@ -424,7 +455,7 @@
             padding: 0.75rem 1.5rem;
             background: var(--medium-gray);
             border: 1px solid var(--light-gray);
-            color: var(--white);
+            color: var(--light-gray);
             text-decoration: none;
             font-weight: 600;
             cursor: pointer;
@@ -495,8 +526,8 @@
 
     <main class="main-content">
         <div class="page-header">
-            <h1 class="page-title">CREATE A RACE</h1>
-            <p class="page-subtitle">Sell tickets with Lightning. <span>Keep 100%</span> - zero platform fees.</p>
+            <h1 class="page-title">CREATE AN EVENT</h1>
+            <p class="page-subtitle">Open leaderboards powered by charity. <span>100% to good causes.</span></p>
         </div>
 
         <!-- Login Required State -->
@@ -562,55 +593,97 @@
                 </div>
             </div>
 
-            <!-- Registration Settings -->
+            <!-- Charity Settings -->
             <div class="form-section">
-                <h2 class="section-title">Registration Settings</h2>
+                <h2 class="section-title">Charity Settings</h2>
+                <p class="form-hint" style="margin-top: -1rem; margin-bottom: 1.5rem;">
+                    Viewers donate to your chosen charity to reveal the leaderboard. 100% goes to the cause.
+                </p>
 
                 <div class="form-group">
-                    <label class="form-label">Entry Fee</label>
+                    <label class="form-label">Select Charity <span class="required">*</span></label>
+                    <select class="form-select" id="charity-select" required>
+                        <option value="">Choose a charity...</option>
+                        <option value="opensats">OpenSats - Bitcoin Development</option>
+                        <option value="hrf">Human Rights Foundation</option>
+                        <option value="bitcoin-beach">Bitcoin Beach - El Salvador</option>
+                        <option value="bitcoin-bay">Bitcoin Bay Foundation</option>
+                        <option value="bitcoin-ekasi">Bitcoin Ekasi - South Africa</option>
+                        <option value="bitcoin-isla">Bitcoin Isla - Philippines</option>
+                        <option value="bitcoin-valley">Bitcoin Valley - Guatemala</option>
+                        <option value="bitcoin-district">Bitcoin District - DC</option>
+                        <option value="bitcoin-yucatan">Bitcoin Yucatan - Mexico</option>
+                        <option value="bitcoin-veterans">Bitcoin Veterans</option>
+                    </select>
+                    <p class="form-hint">All donations go directly to this charity's Lightning address.</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Suggested Donation <span class="required">*</span></label>
                     <div class="price-input-wrapper">
                         <span class="lightning-icon">⚡</span>
-                        <input type="number" class="form-input" id="entry-fee" placeholder="1000" min="0" value="1000">
+                        <input type="number" class="form-input" id="donation-amount" placeholder="500" min="100" value="500" required>
                         <span class="unit">sats</span>
                     </div>
-                    <div class="free-toggle">
-                        <input type="checkbox" id="free-event">
-                        <label for="free-event">This is a free event</label>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Max Participants</label>
-                        <input type="number" class="form-input" id="max-participants" placeholder="100" min="1" value="100">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Registration Deadline</label>
-                        <input type="date" class="form-input" id="registration-deadline">
-                        <p class="form-hint">Leave blank to allow registration until race day</p>
-                    </div>
+                    <p class="form-hint">Viewers will be encouraged to donate this amount to reveal the leaderboard.</p>
                 </div>
             </div>
 
-            <!-- Payment Settings -->
+            <!-- Prize Pool Section (Optional) -->
             <div class="form-section">
-                <h2 class="section-title">Payment Settings</h2>
+                <h2 class="section-title">Prize Pool (Optional)</h2>
+                <p class="form-hint" style="margin-top: -1rem; margin-bottom: 1.5rem;">
+                    Set prizes for top finishers. Prizes go to each winner's chosen charity. Leave blank for no prizes.
+                </p>
 
-                <div class="form-group">
-                    <label class="form-label">Your Lightning Address <span class="required">*</span></label>
-                    <input type="text" class="form-input" id="lightning-address" placeholder="you@getalby.com or you@strike.me" required>
-                    <p class="form-hint">Runners will pay directly to this address. You keep 100% - no platform fees.</p>
+                <div class="prize-inputs">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="prize-rank">1st</span>
+                            Place
+                        </label>
+                        <div class="price-input-wrapper">
+                            <span class="lightning-icon">⚡</span>
+                            <input type="number" class="form-input" id="prize-1st" placeholder="0" min="0">
+                            <span class="unit">sats</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="prize-rank">2nd</span>
+                            Place
+                        </label>
+                        <div class="price-input-wrapper">
+                            <span class="lightning-icon">⚡</span>
+                            <input type="number" class="form-input" id="prize-2nd" placeholder="0" min="0">
+                            <span class="unit">sats</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="prize-rank">3rd</span>
+                            Place
+                        </label>
+                        <div class="price-input-wrapper">
+                            <span class="lightning-icon">⚡</span>
+                            <input type="number" class="form-input" id="prize-3rd" placeholder="0" min="0">
+                            <span class="unit">sats</span>
+                        </div>
+                    </div>
                 </div>
+                <p class="form-hint" style="margin-top: 1rem;">
+                    After the event, you'll send prizes to winners' charities via Lightning (honor system).
+                </p>
             </div>
 
-            <button type="submit" class="submit-btn" id="submit-btn">Create Race</button>
+            <button type="submit" class="submit-btn" id="submit-btn">Create Event</button>
         </form>
 
         <!-- Success State -->
         <div class="success-state" id="success-state" style="display: none;">
             <div class="success-icon">✓</div>
-            <h2 class="success-title">Race Created!</h2>
-            <p class="success-message">Your race is now live and ready for registrations.</p>
+            <h2 class="success-title">Event Created!</h2>
+            <p class="success-message">Your event is live! Anyone who runs the distance during the event window will appear on the leaderboard.</p>
             <div class="race-link" id="race-link"></div>
             <div class="action-btns">
                 <button class="action-btn" onclick="copyRaceLink()">Copy Link</button>
@@ -622,24 +695,24 @@
         <!-- Benefits -->
         <div class="benefits">
             <div class="benefit">
+                <div class="benefit-icon">🌍</div>
+                <div class="benefit-text">
+                    <strong>Open Participation</strong>
+                    No registration needed
+                </div>
+            </div>
+            <div class="benefit">
+                <div class="benefit-icon">💛</div>
+                <div class="benefit-text">
+                    <strong>100% to Charity</strong>
+                    Support great causes
+                </div>
+            </div>
+            <div class="benefit">
                 <div class="benefit-icon">⚡</div>
                 <div class="benefit-text">
-                    <strong>Lightning Payments</strong>
-                    Instant, global payments
-                </div>
-            </div>
-            <div class="benefit">
-                <div class="benefit-icon">0%</div>
-                <div class="benefit-text">
-                    <strong>Zero Fees</strong>
-                    Keep 100% of sales
-                </div>
-            </div>
-            <div class="benefit">
-                <div class="benefit-icon">🔐</div>
-                <div class="benefit-text">
-                    <strong>Non-Custodial</strong>
-                    Your wallet, your funds
+                    <strong>Lightning Native</strong>
+                    Instant donations
                 </div>
             </div>
         </div>
@@ -664,10 +737,53 @@
             'wss://relay.primal.net'
         ];
 
+        // Hardcoded charity lightning addresses
+        const CHARITIES = {
+            'opensats': {
+                name: 'OpenSats',
+                lightning: 'opensats@vlt.ge'
+            },
+            'hrf': {
+                name: 'Human Rights Foundation',
+                lightning: 'hrf@btcpay.hrf.org'
+            },
+            'bitcoin-beach': {
+                name: 'Bitcoin Beach',
+                lightning: 'growbitcoinbeach@geyser.fund'
+            },
+            'bitcoin-bay': {
+                name: 'Bitcoin Bay',
+                lightning: 'bitcoinbayfoundation@geyser.fund'
+            },
+            'bitcoin-ekasi': {
+                name: 'Bitcoin Ekasi',
+                lightning: 'bitcoinekasi@geyser.fund'
+            },
+            'bitcoin-isla': {
+                name: 'Bitcoin Isla',
+                lightning: 'btcisla@geyser.fund'
+            },
+            'bitcoin-valley': {
+                name: 'Bitcoin Valley',
+                lightning: 'bitcoinvalleycirculareconomy@geyser.fund'
+            },
+            'bitcoin-district': {
+                name: 'Bitcoin District',
+                lightning: 'bitcoindc@geyser.fund'
+            },
+            'bitcoin-yucatan': {
+                name: 'Bitcoin Yucatan',
+                lightning: 'bitcoinyucatancommunity@geyser.fund'
+            },
+            'bitcoin-veterans': {
+                name: 'Bitcoin Veterans',
+                lightning: 'operationbitcoin@geyser.fund'
+            }
+        };
+
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             setupDistanceSelector();
-            setupFreeToggle();
             setupForm();
             checkLoginStatus();
         });
@@ -723,22 +839,6 @@
             });
         }
 
-        // Setup free event toggle
-        function setupFreeToggle() {
-            const checkbox = document.getElementById('free-event');
-            const feeInput = document.getElementById('entry-fee');
-
-            checkbox.addEventListener('change', () => {
-                if (checkbox.checked) {
-                    feeInput.value = 0;
-                    feeInput.disabled = true;
-                } else {
-                    feeInput.value = 1000;
-                    feeInput.disabled = false;
-                }
-            });
-        }
-
         // Setup form submission
         function setupForm() {
             const form = document.getElementById('create-form');
@@ -755,12 +855,19 @@
                 return;
             }
 
+            const charityKey = document.getElementById('charity-select').value;
+            if (!charityKey) {
+                alert('Please select a charity');
+                return;
+            }
+
             const submitBtn = document.getElementById('submit-btn');
             submitBtn.disabled = true;
             submitBtn.textContent = 'Creating...';
 
             try {
                 // Gather form data
+                const charity = CHARITIES[charityKey];
                 const raceData = {
                     name: document.getElementById('race-name').value,
                     distance: selectedDistance,
@@ -769,10 +876,14 @@
                     time: document.getElementById('race-time').value,
                     location: document.getElementById('race-location').value,
                     description: document.getElementById('race-description').value,
-                    entryFee: parseInt(document.getElementById('entry-fee').value) || 0,
-                    maxParticipants: parseInt(document.getElementById('max-participants').value) || 100,
-                    deadline: document.getElementById('registration-deadline').value,
-                    lightningAddress: document.getElementById('lightning-address').value
+                    charityKey: charityKey,
+                    charityName: charity.name,
+                    charityLightning: charity.lightning,
+                    donationAmount: parseInt(document.getElementById('donation-amount').value) || 500,
+                    // Prize pool (optional)
+                    prize1st: parseInt(document.getElementById('prize-1st').value) || 0,
+                    prize2nd: parseInt(document.getElementById('prize-2nd').value) || 0,
+                    prize3rd: parseInt(document.getElementById('prize-3rd').value) || 0
                 };
 
                 // Create Nostr event
@@ -795,8 +906,11 @@
             // Generate unique ID
             const raceId = generateId();
 
-            // Calculate timestamps
-            const startTimestamp = Math.floor(new Date(`${data.date}T${data.time}:00`).getTime() / 1000);
+            // Calculate timestamps - parse components to use local timezone
+            const [year, month, day] = data.date.split('-').map(Number);
+            const [hours, minutes] = data.time.split(':').map(Number);
+            const localDate = new Date(year, month - 1, day, hours, minutes, 0);
+            const startTimestamp = Math.floor(localDate.getTime() / 1000);
             // Virtual events: 24-hour window from start time
             const endTimestamp = startTimestamp + (24 * 60 * 60);
 
@@ -814,27 +928,34 @@
                 ['location', 'Virtual - Run anywhere'],
 
                 // NIP-52 Optional Tags
-                ['summary', data.description || `Virtual ${data.distanceLabel} race - run anywhere during the event window!`],
+                ['summary', data.description || `Virtual ${data.distanceLabel} - run anywhere during the event window! Leaderboard donations support ${data.charityName}.`],
                 ['t', 'running'],
                 ['t', data.distance],
                 ['t', 'runstr'],
                 ['t', 'virtual'],
+                ['t', 'charity'],
 
                 // RUNSTR Custom Tags
                 ['distance', data.distance],
                 ['distance_meters', distanceMeters.toString()],
-                ['entry_fee', data.entryFee.toString()],
-                ['lightning', data.lightningAddress],
-                ['max_participants', data.maxParticipants.toString()],
+                ['charity', data.charityKey],
+                ['charity_name', data.charityName],
+                ['charity_lightning', data.charityLightning],
+                ['donation_amount', data.donationAmount.toString()],
 
-                // Organizer as first participant
+                // Organizer
                 ['p', userPubkey, '', 'organizer']
             ];
 
-            // Add registration deadline if set
-            if (data.deadline) {
-                const deadlineTimestamp = Math.floor(new Date(`${data.deadline}T23:59:59`).getTime() / 1000);
-                tags.push(['deadline', deadlineTimestamp.toString()]);
+            // Add prize pool tags if any prizes are set
+            if (data.prize1st > 0) {
+                tags.push(['prize_1st', data.prize1st.toString()]);
+            }
+            if (data.prize2nd > 0) {
+                tags.push(['prize_2nd', data.prize2nd.toString()]);
+            }
+            if (data.prize3rd > 0) {
+                tags.push(['prize_3rd', data.prize3rd.toString()]);
             }
 
             // Create unsigned event (Kind 31923 = NIP-52 Time-Based Calendar Event)
@@ -909,13 +1030,16 @@
 
         // Share event to Nostr as kind 1 note
         async function shareToNostr() {
+            const charityKey = document.getElementById('charity-select').value;
+            const charity = CHARITIES[charityKey];
             const raceData = {
                 name: document.getElementById('race-name').value,
                 date: document.getElementById('race-date').value,
                 time: document.getElementById('race-time').value,
                 location: document.getElementById('race-location').value,
                 distance: selectedDistance,
-                entryFee: parseInt(document.getElementById('entry-fee').value) || 0
+                charityName: charity ? charity.name : 'Charity',
+                donationAmount: parseInt(document.getElementById('donation-amount').value) || 500
             };
 
             const content = formatNostrPost(raceData, createdRaceId);
@@ -956,22 +1080,19 @@
                 day: 'numeric'
             });
 
-            const fee = race.entryFee === 0
-                ? 'FREE'
-                : `${race.entryFee.toLocaleString()} sats`;
-
             const url = `${window.location.origin}/pages/race.html?id=${raceId}`;
 
             return `🏁 ${race.name}
 
 📅 ${formattedDate} at ${race.time}
-📍 ${race.location}
 🏃 ${getDistanceLabel(race.distance)}
-⚡ ${fee}
+💛 Supporting ${race.charityName}
 
-Register now: ${url}
+No registration needed - just run the distance during the event window and you're on the leaderboard!
 
-#RUNSTR #running #${race.distance} #Bitcoin #Lightning`;
+${url}
+
+#RUNSTR #running #${race.distance} #Bitcoin #charity`;
         }
 
         // Publish event to Nostr relays

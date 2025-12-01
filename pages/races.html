@@ -3,12 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Races - RUNSTR</title>
-    <meta name="description" content="Discover and register for running races. Zero platform fees - pay with Lightning, organizers keep 100%.">
-
-    <!-- Nostr Login -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nostr-login@latest/dist/unpkg.css">
-    <script type="module" src="https://cdn.jsdelivr.net/npm/nostr-login@latest/dist/unpkg.js"></script>
+    <title>Events - RUNSTR</title>
+    <meta name="description" content="Discover open running events. No registration needed - just run and appear on the leaderboard. Support Bitcoin charities.">
 
     <!-- Nostr Tools -->
     <script src="https://unpkg.com/nostr-tools@2.7.2/lib/nostr.bundle.js"></script>
@@ -35,7 +31,7 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background: var(--black);
-            color: var(--white);
+            color: var(--light-gray);
             line-height: 1.6;
         }
 
@@ -58,7 +54,7 @@
         .nav-logo {
             font-size: 1.5rem;
             font-weight: 900;
-            color: var(--white);
+            color: var(--orange);
             text-decoration: none;
             letter-spacing: -1px;
         }
@@ -71,7 +67,7 @@
 
         .nav-link {
             padding: 0.75rem 1.5rem;
-            color: var(--white);
+            color: var(--light-gray);
             text-decoration: none;
             font-weight: 600;
             transition: all 0.3s;
@@ -79,6 +75,7 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             border: 2px solid transparent;
+            border-radius: 8px;
         }
 
         .nav-link:hover,
@@ -124,6 +121,7 @@
             font-weight: 900;
             letter-spacing: -2px;
             margin-bottom: 1rem;
+            color: var(--orange);
         }
 
         .hero-subtitle {
@@ -177,7 +175,7 @@
             padding: 0.5rem 1rem;
             background: var(--dark-gray);
             border: 1px solid var(--medium-gray);
-            color: var(--white);
+            color: var(--light-gray);
             font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.3s;
@@ -466,27 +464,27 @@
     <main class="main-content">
         <!-- Hero Section -->
         <section class="hero-section">
-            <h1 class="hero-title">DISCOVER RACES</h1>
+            <h1 class="hero-title">DISCOVER EVENTS</h1>
             <p class="hero-subtitle">
-                Register for races with <span class="hero-highlight">Lightning</span>.
-                Zero platform fees - organizers keep <span class="hero-highlight">100%</span>.
+                Open events - <span class="hero-highlight">no registration needed</span>.
+                Just run and support <span class="hero-highlight">Bitcoin charities</span>.
             </p>
-            <a href="create-race.html" class="create-race-btn">Create a Race</a>
+            <a href="create-race.html" class="create-race-btn">Create an Event</a>
         </section>
 
         <!-- Stats Bar -->
         <div class="stats-bar">
             <div class="stat-item">
                 <div class="stat-value" id="total-races">0</div>
-                <div class="stat-label">Upcoming Races</div>
+                <div class="stat-label">Active Events</div>
             </div>
             <div class="stat-item">
-                <div class="stat-value" id="total-participants">0</div>
-                <div class="stat-label">Registered Runners</div>
+                <div class="stat-value" id="total-charities">10</div>
+                <div class="stat-label">Charities Supported</div>
             </div>
             <div class="stat-item">
-                <div class="stat-value">0%</div>
-                <div class="stat-label">Platform Fees</div>
+                <div class="stat-value">100%</div>
+                <div class="stat-label">To Charity</div>
             </div>
         </div>
 
@@ -499,14 +497,14 @@
                 <button class="filter-btn" data-distance="half">Half Marathon</button>
                 <button class="filter-btn" data-distance="marathon">Marathon</button>
             </div>
-            <input type="text" class="search-input" placeholder="Search races..." id="search-input">
+            <input type="text" class="search-input" placeholder="Search events..." id="search-input">
         </section>
 
-        <!-- Races Grid -->
+        <!-- Events Grid -->
         <section class="races-grid" id="races-grid">
             <div class="loading">
                 <div class="loading-spinner"></div>
-                <p>Loading races from Nostr...</p>
+                <p>Loading events from Nostr...</p>
             </div>
         </section>
     </main>
@@ -527,9 +525,27 @@
         // NIP-52 Calendar Event Kind
         const CALENDAR_EVENT_KIND = 31923;
 
+        // Hardcoded charity lightning addresses
+        const CHARITIES = {
+            'opensats': { name: 'OpenSats', lightning: 'opensats@vlt.ge' },
+            'hrf': { name: 'Human Rights Foundation', lightning: 'hrf@btcpay.hrf.org' },
+            'bitcoin-beach': { name: 'Bitcoin Beach', lightning: 'growbitcoinbeach@geyser.fund' },
+            'bitcoin-bay': { name: 'Bitcoin Bay', lightning: 'bitcoinbayfoundation@geyser.fund' },
+            'bitcoin-ekasi': { name: 'Bitcoin Ekasi', lightning: 'bitcoinekasi@geyser.fund' },
+            'bitcoin-isla': { name: 'Bitcoin Isla', lightning: 'btcisla@geyser.fund' },
+            'bitcoin-valley': { name: 'Bitcoin Valley', lightning: 'bitcoinvalleycirculareconomy@geyser.fund' },
+            'bitcoin-district': { name: 'Bitcoin District', lightning: 'bitcoindc@geyser.fund' },
+            'bitcoin-yucatan': { name: 'Bitcoin Yucatan', lightning: 'bitcoinyucatancommunity@geyser.fund' },
+            'bitcoin-veterans': { name: 'Bitcoin Veterans', lightning: 'operationbitcoin@geyser.fund' }
+        };
+
         // State
         let allRaces = [];
         let currentFilter = 'all';
+
+        // Cache configuration
+        const EVENTS_CACHE_KEY = 'runstr_events_cache';
+        const EVENTS_CACHE_TTL = 2 * 60 * 1000; // 2 minutes
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
@@ -538,10 +554,48 @@
             setupSearch();
         });
 
+        // Cache helper functions
+        function getCachedEvents() {
+            try {
+                const cached = localStorage.getItem(EVENTS_CACHE_KEY);
+                if (!cached) return null;
+
+                const data = JSON.parse(cached);
+                if (Date.now() - data.timestamp > EVENTS_CACHE_TTL) {
+                    return null; // Cache expired
+                }
+                return data;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function cacheEvents(events) {
+            try {
+                localStorage.setItem(EVENTS_CACHE_KEY, JSON.stringify({
+                    events: events,
+                    timestamp: Date.now()
+                }));
+            } catch (e) {
+                console.error('Failed to cache events:', e);
+            }
+        }
+
         // Load races from Nostr (Kind 31923 Calendar Events)
+        // Optimized: Cache-first strategy with background refresh
         async function loadRaces() {
             const grid = document.getElementById('races-grid');
 
+            // Step 1: Try to show cached events immediately
+            const cached = getCachedEvents();
+            if (cached && cached.events.length > 0) {
+                console.log('Showing cached events...');
+                allRaces = cached.events;
+                renderRaces(allRaces);
+                updateStats(allRaces);
+            }
+
+            // Step 2: Fetch fresh data (in background if cache was shown)
             try {
                 const pool = new NostrTools.SimplePool();
 
@@ -554,13 +608,11 @@
 
                 console.log('Querying relays for RUNSTR events...');
 
-                // Set up timeout for relay query
-                const timeoutPromise = new Promise((resolve) => {
-                    setTimeout(() => resolve([]), 10000); // 10 second timeout
-                });
-
-                const queryPromise = pool.querySync(RELAYS, filter);
-                const events = await Promise.race([queryPromise, timeoutPromise]);
+                // 10 second timeout for relay query
+                const events = await Promise.race([
+                    pool.querySync(RELAYS, filter),
+                    new Promise(resolve => setTimeout(() => resolve([]), 10000))
+                ]);
 
                 console.log(`Found ${events.length} calendar events`);
 
@@ -575,59 +627,73 @@
                     })
                     .sort((a, b) => a.startTimestamp - b.startTimestamp); // Sort by start date
 
-                allRaces = races;
-                renderRaces(allRaces);
-                updateStats(allRaces);
+                // Cache the results
+                cacheEvents(races);
+
+                // Only re-render if data changed or no cache was shown
+                if (!cached || JSON.stringify(races.map(r => r.id)) !== JSON.stringify(cached.events.map(r => r.id))) {
+                    allRaces = races;
+                    renderRaces(allRaces);
+                    updateStats(allRaces);
+                }
 
             } catch (error) {
-                console.error('Error loading races:', error);
-                grid.innerHTML = `
-                    <div class="empty-state" style="grid-column: 1 / -1;">
-                        <h3>Unable to load races</h3>
-                        <p>Please check your connection and try again.</p>
-                        <a href="create-race.html" class="create-race-btn" style="margin-top: 1rem;">Create a Race</a>
-                    </div>
-                `;
+                console.error('Error loading events:', error);
+                // Only show error if no cached data was displayed
+                if (!cached) {
+                    grid.innerHTML = `
+                        <div class="empty-state" style="grid-column: 1 / -1;">
+                            <h3>Unable to load events</h3>
+                            <p>Please check your connection and try again.</p>
+                            <a href="create-race.html" class="create-race-btn" style="margin-top: 1rem;">Create an Event</a>
+                        </div>
+                    `;
+                }
             }
         }
 
-        // Render races to grid
+        // Render events to grid
         function renderRaces(races) {
             const grid = document.getElementById('races-grid');
 
             if (races.length === 0) {
                 grid.innerHTML = `
                     <div class="empty-state" style="grid-column: 1 / -1;">
-                        <h3>No races found</h3>
-                        <p>Be the first to create a race!</p>
-                        <a href="create-race.html" class="create-race-btn" style="margin-top: 1rem;">Create a Race</a>
+                        <h3>No events found</h3>
+                        <p>Be the first to create an event!</p>
+                        <a href="create-race.html" class="create-race-btn" style="margin-top: 1rem;">Create an Event</a>
                     </div>
                 `;
                 return;
             }
 
-            grid.innerHTML = races.map(race => `
+            grid.innerHTML = races.map(race => {
+                const totalPrizePool = race.prize1st + race.prize2nd + race.prize3rd;
+                const hasPrizes = totalPrizePool > 0;
+
+                return `
                 <article class="race-card">
                     <div class="race-image">
                         ${race.image ? `<img src="${race.image}" alt="${race.name}">` : getDistanceIcon(race.distance)}
                     </div>
                     <div class="race-content">
                         <span class="race-distance-badge">${race.distanceLabel}</span>
+                        ${hasPrizes ? `<span class="race-distance-badge" style="background: var(--orange); color: var(--black); margin-left: 0.5rem;">Prize Pool</span>` : ''}
                         <h3 class="race-title">${race.name}</h3>
                         <p class="race-date">${formatDate(race.date)} at ${race.time}</p>
                         <p class="race-location">${race.location}</p>
                         <div class="race-footer">
                             <div>
-                                <span class="race-price ${race.entryFee === 0 ? 'free' : ''}">
-                                    ${race.entryFee === 0 ? 'FREE' : `⚡ ${race.entryFee.toLocaleString()} sats`}
+                                <span class="race-price" style="font-size: 0.95rem;">
+                                    ${hasPrizes ? `⚡ ${totalPrizePool.toLocaleString()} sats` : `Supporting ${race.charityName}`}
                                 </span>
-                                <p class="race-participants">${race.participants} / ${race.maxParticipants} registered</p>
+                                <p class="race-participants">${hasPrizes ? race.charityName : 'Open participation'}</p>
                             </div>
                             <a href="race.html?id=${race.id}" class="view-race-btn">View</a>
                         </div>
                     </div>
                 </article>
-            `).join('');
+            `}).join('');
         }
 
         // Get icon for distance (text-based)
@@ -655,8 +721,9 @@
         // Update stats
         function updateStats(races) {
             document.getElementById('total-races').textContent = races.length;
-            const totalParticipants = races.reduce((sum, r) => sum + r.participants, 0);
-            document.getElementById('total-participants').textContent = totalParticipants;
+            // Count unique charities from events
+            const uniqueCharities = new Set(races.map(r => r.charityKey).filter(Boolean));
+            document.getElementById('total-charities').textContent = uniqueCharities.size || Object.keys(CHARITIES).length;
         }
 
         // Setup filter buttons
@@ -732,10 +799,9 @@
             // Get distance from RUNSTR custom tag
             const distance = getTag('distance') || '5k';
 
-            // Count participants from p-tags (role = 'participant')
-            const participants = event.tags.filter(t =>
-                t[0] === 'p' && t[3] === 'participant'
-            ).length;
+            // Get charity info
+            const charityKey = getTag('charity') || 'opensats';
+            const charityInfo = CHARITIES[charityKey] || CHARITIES['opensats'];
 
             return {
                 id: getTag('d'),                    // d-tag is unique identifier
@@ -749,9 +815,18 @@
                 distance: distance,
                 distanceLabel: getDistanceLabel(distance),
                 distanceMeters: parseInt(getTag('distance_meters') || '5000'),
+                // Charity info
+                charityKey: charityKey,
+                charityName: getTag('charity_name') || charityInfo.name,
+                charityLightning: getTag('charity_lightning') || charityInfo.lightning,
+                donationAmount: parseInt(getTag('donation_amount') || '500'),
+                // Prize pool
+                prize1st: parseInt(getTag('prize_1st') || '0'),
+                prize2nd: parseInt(getTag('prize_2nd') || '0'),
+                prize3rd: parseInt(getTag('prize_3rd') || '0'),
+                // Legacy support
                 entryFee: parseInt(getTag('entry_fee') || '0'),
                 maxParticipants: parseInt(getTag('max_participants') || '100'),
-                participants: participants,
                 organizer: event.pubkey,
                 organizerLightning: getTag('lightning'),
                 image: getTag('image'),
