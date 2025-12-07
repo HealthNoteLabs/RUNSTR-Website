@@ -793,7 +793,7 @@
 
             // Convert timestamps to date/time strings
             const startDate = new Date(startTimestamp * 1000);
-            const dateStr = startDate.toISOString().split('T')[0];
+            const dateStr = startDate.toLocaleDateString('en-CA');  // Local timezone YYYY-MM-DD
             const timeStr = startDate.toTimeString().substring(0, 5);
 
             // Get distance from RUNSTR custom tag

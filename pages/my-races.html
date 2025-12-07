@@ -1000,7 +1000,7 @@
             if (!title || !startTimestamp) return null;
 
             const startDate = new Date(startTimestamp * 1000);
-            const dateStr = startDate.toISOString().split('T')[0];
+            const dateStr = startDate.toLocaleDateString('en-CA');  // Local timezone YYYY-MM-DD
             const distance = getTag('distance') || '5k';
 
             // Get participants from p-tags

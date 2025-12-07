@@ -1072,6 +1072,8 @@
                 charityName: getTag('charity_name') || charityInfo.name,
                 charityLightning: getTag('charity_lightning') || charityInfo.lightning,
                 donationAmount: parseInt(getTag('donation_amount') || '500'),
+                // Activity type for filtering workouts
+                activityTypes: getActivityTypes(getTag('activity_type')),
                 // Prize pool
                 prize1st: parseInt(getTag('prize_1st') || '0'),
                 prize2nd: parseInt(getTag('prize_2nd') || '0'),
@@ -1085,7 +1087,7 @@
                 organizerLightning: getTag('lightning'),
                 image: getTag('image'),
                 description: getTag('summary') || event.content || 'Virtual race - run anywhere during the event window!',
-                deadline: getTag('deadline') ? new Date(parseInt(getTag('deadline')) * 1000).toISOString().split('T')[0] : dateStr,
+                deadline: getTag('deadline') ? new Date(parseInt(getTag('deadline')) * 1000).toLocaleDateString('en-CA') : dateStr,
                 mapUrl: '#',
                 status: endTimestamp > Math.floor(Date.now() / 1000) ? 'open' : 'closed'
             };
@@ -1673,14 +1675,34 @@
 
                 console.log(`Found ${workouts.length} total workouts in time window`);
 
-                // Step 2: Filter workouts by split count
+                // Step 2: Filter workouts by activity type, then splits or distance
                 const requiredSplits = getRequiredSplits(race.distance);
+                const requiredDistanceKm = getRequiredDistanceKm(race.distance);
+                const allowedTypes = race.activityTypes;
+
                 const eligibleWorkouts = workouts.filter(w => {
+                    // First: check activity type matches (skip if 'any'/null)
+                    if (allowedTypes !== null && !matchesActivityType(w, allowedTypes)) {
+                        return false;
+                    }
+
+                    // Second: check splits (preferred method)
                     const splits = w.tags.filter(t => t[0] === 'split');
-                    return splits.length >= requiredSplits;
+                    if (splits.length >= requiredSplits) {
+                        return true;
+                    }
+
+                    // Fallback: accept if distance tag >= required distance
+                    const distanceTag = w.tags.find(t => t[0] === 'distance');
+                    if (distanceTag) {
+                        const workoutDistanceKm = parseDistanceToKm(distanceTag[1], distanceTag[2]);
+                        return workoutDistanceKm >= requiredDistanceKm;
+                    }
+
+                    return false;
                 });
 
-                console.log(`${eligibleWorkouts.length} workouts meet split requirements (${requiredSplits}+ splits)`);
+                console.log(`${eligibleWorkouts.length} workouts meet activity type and distance/split requirements`);
 
                 if (eligibleWorkouts.length === 0) {
                     renderLeaderboard([], leaderboardContent, race);
@@ -1754,22 +1776,81 @@
             return splits[distance] || 5;
         }
 
+        // Get required distance in km for fallback validation (when no splits)
+        function getRequiredDistanceKm(distance) {
+            const distanceMap = {
+                '5k': 5,
+                '10k': 10,
+                'half': 21.097,
+                'marathon': 42.195
+            };
+            return distanceMap[distance] || 5;
+        }
+
+        // Check if workout activity type matches allowed types
+        function matchesActivityType(workout, allowedTypes) {
+            const exerciseTag = workout.tags.find(t => t[0] === 'exercise');
+            if (!exerciseTag) return false;
+            const activity = exerciseTag[1].toLowerCase();
+            return allowedTypes.some(type => activity.includes(type.toLowerCase()));
+        }
+
+        // Parse distance tag to km (handles different units)
+        function parseDistanceToKm(value, unit) {
+            const distance = parseFloat(value);
+            if (!unit || unit === 'km') return distance;
+            if (unit === 'm') return distance / 1000;
+            if (unit === 'mi') return distance * 1.60934;
+            return distance;
+        }
+
+        // Get allowed activity types from event tag
+        function getActivityTypes(activityType) {
+            const typeMap = {
+                'running': ['run', 'running', 'trail run', 'treadmill'],
+                'walking': ['walk', 'walking', 'hike', 'hiking'],
+                'cycling': ['cycle', 'cycling', 'bike', 'biking'],
+                'any': null  // null means accept any activity
+            };
+            return typeMap[activityType] || typeMap['running'];
+        }
+
         // Calculate rankings from workouts (now sync - profiles are pre-fetched)
         function calculateRankings(workouts, distance, profileMap) {
             const requiredSplits = getRequiredSplits(distance);
             const participantBestTimes = {};
 
+            const requiredDistanceKm = getRequiredDistanceKm(distance);
+
             workouts.forEach(workout => {
                 const pubkey = workout.pubkey;
 
-                // Find the split at target distance
+                // Try to find split at target distance first
                 const targetSplit = workout.tags.find(t =>
                     t[0] === 'split' && t[1] === requiredSplits.toString()
                 );
 
-                if (!targetSplit) return;
+                let timeSeconds;
+                if (targetSplit) {
+                    // Has split data - use split time
+                    timeSeconds = parseDuration(targetSplit[2]);
+                } else {
+                    // No splits - use total duration if distance meets threshold
+                    const durationTag = workout.tags.find(t => t[0] === 'duration');
+                    const distanceTag = workout.tags.find(t => t[0] === 'distance');
 
-                const timeSeconds = parseDuration(targetSplit[2]);
+                    if (durationTag && distanceTag) {
+                        const workoutDistanceKm = parseDistanceToKm(distanceTag[1], distanceTag[2]);
+                        // Only accept if distance >= required (must be over, not under)
+                        if (workoutDistanceKm >= requiredDistanceKm) {
+                            timeSeconds = parseDuration(durationTag[1]);
+                        } else {
+                            return; // Distance under threshold
+                        }
+                    } else {
+                        return; // Can't determine time
+                    }
+                }
 
                 // Extract runner's charity from workout tags
                 // Format: ["charity", "id", "name", "lightning"]

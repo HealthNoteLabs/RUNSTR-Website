@@ -1,0 +1,1595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Season 2 - RUNSTR</title>
+    <meta name="description" content="RUNSTR Season 2 - Compete in fitness challenges and support Bitcoin charities. 400,000 sats to the winning charity!">
+
+    <!-- Nostr Tools -->
+    <script src="https://unpkg.com/nostr-tools@2.7.2/lib/nostr.bundle.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #0a0a0a;
+            --dark-gray: #1a1a1a;
+            --medium-gray: #2a2a2a;
+            --light-gray: #888;
+            --white: #ffffff;
+            --accent: #f0f0f0;
+            --orange: #F5A356;
+            --bitcoin-orange: #F7931A;
+            --green: #44ff44;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--black);
+            color: var(--light-gray);
+            line-height: 1.6;
+        }
+
+        /* Navigation Header */
+        .nav-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--medium-gray);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--orange);
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-link {
+            padding: 0.75rem 1.5rem;
+            color: var(--light-gray);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 2px solid transparent;
+        }
+
+        .nav-link:hover {
+            color: var(--orange);
+            border-color: var(--orange);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 6rem 2rem 2rem;
+        }
+
+        /* Hero Section */
+        .season-hero {
+            text-align: center;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .season-hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            letter-spacing: -2px;
+            background: linear-gradient(135deg, var(--orange) 0%, #FFB76B 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .season-dates {
+            font-size: 1.2rem;
+            color: var(--light-gray);
+            margin-bottom: 2rem;
+        }
+
+        .countdown-container {
+            margin-top: 1.5rem;
+        }
+
+        .countdown-label {
+            font-size: 0.9rem;
+            color: var(--light-gray);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .countdown-timer {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .countdown-item {
+            text-align: center;
+            min-width: 70px;
+        }
+
+        .countdown-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--orange);
+            line-height: 1;
+        }
+
+        .countdown-unit {
+            font-size: 0.75rem;
+            color: var(--light-gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .season-complete {
+            font-size: 1.5rem;
+            color: var(--orange);
+            font-weight: 700;
+        }
+
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .info-card {
+            background: var(--dark-gray);
+            border: 1px solid var(--medium-gray);
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .info-card:hover {
+            border-color: var(--orange);
+        }
+
+        .info-card h3 {
+            color: var(--light-gray);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-card .value {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--orange);
+        }
+
+        .info-card .subtitle {
+            font-size: 0.85rem;
+            color: var(--light-gray);
+            margin-top: 0.5rem;
+        }
+
+        .info-card.highlight {
+            border-color: var(--orange);
+            background: linear-gradient(135deg, rgba(245, 163, 86, 0.1) 0%, transparent 100%);
+        }
+
+        /* Registration Button */
+        .register-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--orange);
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 700;
+            border: 2px solid var(--orange);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+            margin-top: 1rem;
+        }
+
+        .register-btn:hover {
+            background: transparent;
+            color: var(--orange);
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--white);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title .icon {
+            font-size: 1.2rem;
+        }
+
+        /* Tab Navigation */
+        .tab-navigation {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--medium-gray);
+            padding-bottom: 0.5rem;
+        }
+
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: none;
+            color: var(--light-gray);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+        }
+
+        .tab-btn:hover {
+            color: var(--orange);
+        }
+
+        .tab-btn.active {
+            color: var(--orange);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -0.5rem;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--orange);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Leaderboard Table */
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .leaderboard-table th {
+            padding: 1rem;
+            text-align: left;
+            color: var(--light-gray);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .leaderboard-table th:first-child {
+            text-align: center;
+            width: 60px;
+        }
+
+        .leaderboard-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .leaderboard-table td:first-child {
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .leaderboard-row.merch-qualifier {
+            background: rgba(245, 163, 86, 0.1);
+        }
+
+        .leaderboard-row.merch-qualifier td:first-child {
+            color: var(--orange);
+        }
+
+        .athlete-cell {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .athlete-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: var(--medium-gray);
+        }
+
+        .athlete-avatar-fallback {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--medium-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--light-gray);
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .merch-badge {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            background: var(--orange);
+            color: var(--black);
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-left: 0.5rem;
+        }
+
+        /* Charity Cards */
+        .charity-prize-banner {
+            background: linear-gradient(135deg, var(--bitcoin-orange) 0%, var(--orange) 100%);
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .charity-prize-banner .prize-icon {
+            font-size: 1.5rem;
+        }
+
+        .charity-prize-banner .prize-text {
+            color: var(--black);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .charity-card {
+            background: var(--dark-gray);
+            border: 1px solid var(--medium-gray);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .charity-card:hover {
+            border-color: var(--orange);
+        }
+
+        .charity-card.winner {
+            border: 2px solid var(--orange);
+            position: relative;
+        }
+
+        .charity-card.winner::before {
+            content: 'LEADING';
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: var(--orange);
+            color: var(--black);
+            padding: 0.25rem 0.75rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .charity-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .charity-rank {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--orange);
+            min-width: 50px;
+        }
+
+        .charity-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--white);
+            flex: 1;
+        }
+
+        .charity-contributors {
+            font-size: 0.85rem;
+            color: var(--light-gray);
+        }
+
+        .charity-progress {
+            background: var(--medium-gray);
+            height: 24px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .charity-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--bitcoin-orange), var(--orange));
+            transition: width 0.5s ease;
+            border-radius: 12px;
+        }
+
+        .charity-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .charity-distance {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--orange);
+        }
+
+        .charity-top-contributors {
+            border-top: 1px solid var(--medium-gray);
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        .charity-top-contributors h4 {
+            font-size: 0.85rem;
+            color: var(--light-gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.75rem;
+        }
+
+        .charity-top-contributors ul {
+            list-style: none;
+        }
+
+        .charity-top-contributors li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        .contributor-rank {
+            color: var(--light-gray);
+            min-width: 24px;
+        }
+
+        .contributor-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .contributor-name {
+            flex: 1;
+            color: var(--white);
+        }
+
+        .contributor-distance {
+            color: var(--orange);
+            font-weight: 600;
+        }
+
+        /* Merch Qualifiers Grid */
+        .qualifiers-section {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--medium-gray);
+        }
+
+        .qualifiers-subtitle {
+            color: var(--light-gray);
+            margin-bottom: 2rem;
+        }
+
+        .qualifiers-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .qualifier-category {
+            background: var(--dark-gray);
+            border: 1px solid var(--medium-gray);
+            padding: 1.5rem;
+        }
+
+        .qualifier-category h3 {
+            color: var(--orange);
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .qualifiers-list {
+            list-style: none;
+        }
+
+        .qualifier-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .qualifier-item:last-child {
+            border-bottom: none;
+        }
+
+        .qualifier-rank {
+            font-weight: 900;
+            color: var(--orange);
+            min-width: 24px;
+        }
+
+        .qualifier-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: var(--medium-gray);
+        }
+
+        .qualifier-avatar-fallback {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--medium-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--light-gray);
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+
+        .qualifier-name {
+            flex: 1;
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        .qualifier-distance {
+            color: var(--light-gray);
+            font-size: 0.85rem;
+        }
+
+        .no-qualifiers {
+            color: var(--light-gray);
+            font-style: italic;
+            padding: 1rem 0;
+        }
+
+        /* Loading & Error States */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--medium-gray);
+            border-top-color: var(--orange);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--light-gray);
+        }
+
+        .retry-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--orange);
+            color: var(--black);
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            margin-top: 1rem;
+            transition: all 0.3s;
+        }
+
+        .retry-btn:hover {
+            background: var(--bitcoin-orange);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--light-gray);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 2rem;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--dark-gray);
+            border: 1px solid var(--medium-gray);
+            padding: 2rem;
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--light-gray);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: var(--orange);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--white);
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-content ol {
+            margin: 1rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .modal-content li {
+            margin-bottom: 0.75rem;
+            color: var(--accent);
+        }
+
+        .modal-content code {
+            background: var(--black);
+            padding: 0.25rem 0.5rem;
+            color: var(--orange);
+            font-family: monospace;
+        }
+
+        .modal-content h3 {
+            color: var(--white);
+            margin: 1.5rem 0 0.75rem;
+        }
+
+        .modal-content ul {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .close-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--orange);
+            color: var(--black);
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            margin-top: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .close-btn:hover {
+            background: var(--bitcoin-orange);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 4rem;
+            padding: 2rem;
+            border-top: 1px solid var(--medium-gray);
+            text-align: center;
+            color: var(--light-gray);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--orange);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .info-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .qualifiers-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tab-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.8rem;
+            }
+
+            .charity-header {
+                flex-wrap: wrap;
+            }
+
+            .countdown-timer {
+                gap: 1rem;
+            }
+
+            .countdown-value {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="nav-header">
+        <a href="../index.html" class="nav-logo">RUNSTR</a>
+        <nav class="nav-links">
+            <a href="races.html" class="nav-link">Events</a>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="season-hero">
+            <h1>RUNSTR SEASON 2</h1>
+            <p class="season-dates">January 1 - February 28, 2026</p>
+            <div id="countdown" class="countdown-container">
+                <!-- Countdown timer will be inserted here -->
+            </div>
+        </section>
+
+        <!-- Info Grid -->
+        <div class="info-grid">
+            <div class="info-card highlight">
+                <h3>Charity Prize</h3>
+                <div class="value">400,000 sats</div>
+                <div class="subtitle">To the winning charity</div>
+            </div>
+            <div class="info-card">
+                <h3>Entry Fee</h3>
+                <div class="value">20,000 sats</div>
+                <button class="register-btn" onclick="showRegistrationInfo()">How to Register</button>
+            </div>
+            <div class="info-card">
+                <h3>Registered</h3>
+                <div class="value" id="participant-count">0</div>
+                <div class="subtitle">Athletes competing</div>
+            </div>
+            <div class="info-card">
+                <h3>Merch Rewards</h3>
+                <div class="value">Top 9</div>
+                <div class="subtitle">Top 3 per category</div>
+            </div>
+        </div>
+
+        <!-- Leaderboards Section -->
+        <section class="leaderboards-section">
+            <h2 class="section-title"><span class="icon">🏆</span> Leaderboards</h2>
+
+            <div class="tab-navigation">
+                <button class="tab-btn active" data-tab="charity">Charity Race</button>
+                <button class="tab-btn" data-tab="running">Running</button>
+                <button class="tab-btn" data-tab="walking">Walking</button>
+                <button class="tab-btn" data-tab="cycling">Cycling</button>
+            </div>
+
+            <!-- Charity Leaderboard -->
+            <div class="tab-content active" id="charity-tab">
+                <div id="charity-leaderboard">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <p>Loading charity leaderboard...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Running Leaderboard -->
+            <div class="tab-content" id="running-tab">
+                <div id="running-leaderboard">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <p>Loading running leaderboard...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Walking Leaderboard -->
+            <div class="tab-content" id="walking-tab">
+                <div id="walking-leaderboard">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <p>Loading walking leaderboard...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cycling Leaderboard -->
+            <div class="tab-content" id="cycling-tab">
+                <div id="cycling-leaderboard">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <p>Loading cycling leaderboard...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Merch Qualifiers Section -->
+        <section class="qualifiers-section">
+            <h2 class="section-title"><span class="icon">👕</span> Merch Qualifiers</h2>
+            <p class="qualifiers-subtitle">Top 3 in each category receive RUNSTR merch!</p>
+            <div id="merch-qualifiers" class="qualifiers-grid">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Registration Modal -->
+    <div class="modal-overlay" id="registration-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <h2 class="modal-title">Season 2 Registration</h2>
+            <p style="margin-bottom: 1rem; color: var(--accent);">Entry Fee: <strong style="color: var(--orange);">20,000 sats</strong></p>
+
+            <h3>How to Register</h3>
+            <ol>
+                <li>Send 20,000 sats to: <code>runstr@getalby.com</code></li>
+                <li>Include your npub in the payment memo</li>
+                <li>DM <code>@RUNSTR</code> on Nostr with your payment confirmation</li>
+                <li>You'll be added to the participant list within 24 hours</li>
+            </ol>
+
+            <h3>What You Get</h3>
+            <ul>
+                <li>Compete for top 3 in Running, Walking, or Cycling</li>
+                <li>Support your chosen Bitcoin charity with every workout</li>
+                <li>Top 3 in each category receive RUNSTR merch</li>
+                <li>Winning charity receives 400,000 sats</li>
+            </ul>
+
+            <h3>How It Works</h3>
+            <ul>
+                <li>Log workouts using the RUNSTR app (Kind 1301 events)</li>
+                <li>Tag each workout with your chosen charity</li>
+                <li>Your distance is aggregated to both individual and charity leaderboards</li>
+                <li>The charity with the most collective distance wins!</li>
+            </ul>
+
+            <button class="close-btn" onclick="closeModal()">Got It</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>Powered by Nostr & Lightning | <a href="../index.html">RUNSTR</a></p>
+    </footer>
+
+    <script>
+        // ==========================================
+        // CONFIGURATION
+        // ==========================================
+
+        const RELAYS = [
+            'wss://relay.damus.io',
+            'wss://nos.lol',
+            'wss://relay.nostr.band',
+            'wss://relay.primal.net'
+        ];
+
+        const WORKOUT_KIND = 1301;
+
+        // Season 2 dates (January 1 - February 28, 2026)
+        const SEASON_START = 1735689600; // Jan 1, 2026 00:00:00 UTC
+        const SEASON_END = 1740787199;   // Feb 28, 2026 23:59:59 UTC
+
+        // Admin-managed participant list (add hex pubkeys after payment verification)
+        const REGISTERED_PUBKEYS = [
+            // Example: 'a1b2c3d4e5f6789...' (hex pubkey)
+            // Add participants here after they pay 20k sats
+        ];
+
+        // Charity definitions
+        const CHARITIES = {
+            'opensats': { name: 'OpenSats', lightning: 'opensats@vlt.ge' },
+            'hrf': { name: 'Human Rights Foundation', lightning: 'hrf@btcpay.hrf.org' },
+            'bitcoin-beach': { name: 'Bitcoin Beach', lightning: 'growbitcoinbeach@geyser.fund' },
+            'bitcoin-bay': { name: 'Bitcoin Bay', lightning: 'bitcoinbayfoundation@geyser.fund' },
+            'bitcoin-ekasi': { name: 'Bitcoin Ekasi', lightning: 'bitcoinekasi@geyser.fund' },
+            'bitcoin-isla': { name: 'Bitcoin Isla', lightning: 'btcisla@geyser.fund' },
+            'bitcoin-valley': { name: 'Bitcoin Valley', lightning: 'bitcoinvalleycirculareconomy@geyser.fund' },
+            'bitcoin-district': { name: 'Bitcoin District', lightning: 'bitcoindc@geyser.fund' },
+            'bitcoin-yucatan': { name: 'Bitcoin Yucatan', lightning: 'bitcoinyucatancommunity@geyser.fund' },
+            'bitcoin-veterans': { name: 'Bitcoin Veterans', lightning: 'operationbitcoin@geyser.fund' }
+        };
+
+        // Cache configuration
+        const CACHE_KEY = 'runstr_season2_data';
+        const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+        // ==========================================
+        // STATE
+        // ==========================================
+
+        let seasonData = null;
+        let profileMap = {};
+
+        // ==========================================
+        // INITIALIZATION
+        // ==========================================
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+
+            setupTabNavigation();
+            updateParticipantCount();
+            loadSeasonData();
+
+            // Auto-refresh every 5 minutes
+            setInterval(loadSeasonData, 5 * 60 * 1000);
+
+            // Refresh when tab becomes visible
+            document.addEventListener('visibilitychange', () => {
+                if (!document.hidden) loadSeasonData();
+            });
+        });
+
+        // ==========================================
+        // COUNTDOWN TIMER
+        // ==========================================
+
+        function updateCountdown() {
+            const now = Date.now();
+            const start = SEASON_START * 1000;
+            const end = SEASON_END * 1000;
+            const container = document.getElementById('countdown');
+
+            let targetDate, label;
+
+            if (now < start) {
+                targetDate = start;
+                label = 'SEASON STARTS IN';
+            } else if (now < end) {
+                targetDate = end;
+                label = 'SEASON ENDS IN';
+            } else {
+                container.innerHTML = '<p class="season-complete">SEASON COMPLETE</p>';
+                return;
+            }
+
+            const diff = targetDate - now;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+            container.innerHTML = `
+                <p class="countdown-label">${label}</p>
+                <div class="countdown-timer">
+                    <div class="countdown-item">
+                        <span class="countdown-value">${days}</span>
+                        <span class="countdown-unit">Days</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-value">${hours}</span>
+                        <span class="countdown-unit">Hours</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-value">${mins}</span>
+                        <span class="countdown-unit">Mins</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-value">${secs}</span>
+                        <span class="countdown-unit">Secs</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ==========================================
+        // TAB NAVIGATION
+        // ==========================================
+
+        function setupTabNavigation() {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tab = btn.dataset.tab;
+
+                    // Update active tab button
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    // Update active tab content
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    document.getElementById(`${tab}-tab`).classList.add('active');
+                });
+            });
+        }
+
+        // ==========================================
+        // DATA LOADING
+        // ==========================================
+
+        function updateParticipantCount() {
+            document.getElementById('participant-count').textContent = REGISTERED_PUBKEYS.length;
+        }
+
+        async function loadSeasonData() {
+            // Check cache first
+            const cached = getCachedData();
+            if (cached) {
+                seasonData = cached;
+                profileMap = cached.profileMap || {};
+                renderAllLeaderboards();
+                // Continue to fetch fresh data in background
+            }
+
+            // If no registered participants yet, show empty state
+            if (REGISTERED_PUBKEYS.length === 0) {
+                renderEmptyState();
+                return;
+            }
+
+            try {
+                const pool = new NostrTools.SimplePool();
+
+                // Query workouts from registered participants
+                const filter = {
+                    kinds: [WORKOUT_KIND],
+                    authors: REGISTERED_PUBKEYS,
+                    since: SEASON_START,
+                    until: SEASON_END
+                };
+
+                console.log('Querying Season 2 workouts...');
+
+                const workouts = await Promise.race([
+                    pool.querySync(RELAYS, filter),
+                    new Promise(resolve => setTimeout(() => resolve([]), 15000))
+                ]);
+
+                console.log(`Found ${workouts.length} workouts`);
+
+                // Fetch profiles for all registered participants
+                const profiles = await Promise.race([
+                    pool.querySync(RELAYS, { kinds: [0], authors: REGISTERED_PUBKEYS }),
+                    new Promise(resolve => setTimeout(() => resolve([]), 5000))
+                ]);
+
+                profileMap = {};
+                profiles.forEach(p => {
+                    try {
+                        const content = JSON.parse(p.content);
+                        profileMap[p.pubkey] = {
+                            name: content.display_name || content.name || null,
+                            nip05: content.nip05 || null,
+                            picture: content.picture || null
+                        };
+                    } catch (e) {}
+                });
+
+                // Process workouts
+                seasonData = processWorkouts(workouts);
+                seasonData.profileMap = profileMap;
+
+                // Cache the data
+                cacheData(seasonData);
+
+                // Render all leaderboards
+                renderAllLeaderboards();
+
+            } catch (error) {
+                console.error('Error loading season data:', error);
+                if (!cached) {
+                    renderError();
+                }
+            }
+        }
+
+        // ==========================================
+        // DATA PROCESSING
+        // ==========================================
+
+        function processWorkouts(workouts) {
+            const participantStats = {};
+            const charityStats = {};
+
+            // Initialize all registered participants with zero stats
+            REGISTERED_PUBKEYS.forEach(pubkey => {
+                participantStats[pubkey] = {
+                    pubkey,
+                    running: { distance: 0, workouts: 0 },
+                    walking: { distance: 0, workouts: 0 },
+                    cycling: { distance: 0, workouts: 0 }
+                };
+            });
+
+            workouts.forEach(workout => {
+                const pubkey = workout.pubkey;
+
+                // Skip if not a registered participant
+                if (!REGISTERED_PUBKEYS.includes(pubkey)) return;
+
+                const exercise = getTagValue(workout, 'exercise');
+                const distanceTag = workout.tags.find(t => t[0] === 'distance');
+                const charityTag = workout.tags.find(t => t[0] === 'charity');
+
+                // Parse distance
+                const distanceKm = parseDistance(distanceTag);
+
+                // Add to activity totals
+                const activityType = normalizeActivity(exercise);
+                if (activityType && participantStats[pubkey][activityType]) {
+                    participantStats[pubkey][activityType].distance += distanceKm;
+                    participantStats[pubkey][activityType].workouts += 1;
+                }
+
+                // Aggregate charity distances (per-workout, not per-user)
+                if (charityTag && charityTag.length >= 2) {
+                    const charityId = charityTag[1].toLowerCase();
+                    if (!charityStats[charityId]) {
+                        charityStats[charityId] = {
+                            id: charityId,
+                            name: charityTag[2] || CHARITIES[charityId]?.name || charityId,
+                            lightning: charityTag[3] || CHARITIES[charityId]?.lightning || null,
+                            totalDistance: 0,
+                            contributors: new Set(),
+                            contributorDistances: {}
+                        };
+                    }
+                    charityStats[charityId].totalDistance += distanceKm;
+                    charityStats[charityId].contributors.add(pubkey);
+                    charityStats[charityId].contributorDistances[pubkey] =
+                        (charityStats[charityId].contributorDistances[pubkey] || 0) + distanceKm;
+                }
+            });
+
+            return {
+                participants: Object.values(participantStats),
+                charities: Object.values(charityStats),
+                lastUpdated: Date.now()
+            };
+        }
+
+        // ==========================================
+        // HELPER FUNCTIONS
+        // ==========================================
+
+        function getTagValue(event, tagName) {
+            const tag = event.tags.find(t => t[0] === tagName);
+            return tag ? tag[1] : null;
+        }
+
+        function parseDistance(distanceTag) {
+            if (!distanceTag || !distanceTag[1]) return 0;
+            const value = parseFloat(distanceTag[1]);
+            if (isNaN(value)) return 0;
+            const unit = (distanceTag[2] || 'km').toLowerCase();
+            if (unit === 'mi' || unit === 'miles') {
+                return value * 1.60934;
+            }
+            if (unit === 'm' || unit === 'meters') {
+                return value / 1000;
+            }
+            return value; // assume km
+        }
+
+        function normalizeActivity(type) {
+            if (!type) return null;
+            const t = type.toLowerCase();
+            if (t.includes('run')) return 'running';
+            if (t.includes('walk')) return 'walking';
+            if (t.includes('cycl') || t.includes('bike') || t.includes('ride')) return 'cycling';
+            return null;
+        }
+
+        function getDisplayName(pubkey) {
+            const profile = profileMap[pubkey];
+            if (profile) {
+                if (profile.nip05) return profile.nip05;
+                if (profile.name) return profile.name;
+            }
+            return pubkey.substring(0, 8) + '...' + pubkey.substring(pubkey.length - 4);
+        }
+
+        function getAvatar(pubkey) {
+            const profile = profileMap[pubkey];
+            return profile?.picture || null;
+        }
+
+        // ==========================================
+        // CACHE FUNCTIONS
+        // ==========================================
+
+        function getCachedData() {
+            try {
+                const cached = localStorage.getItem(CACHE_KEY);
+                if (!cached) return null;
+
+                const data = JSON.parse(cached);
+                if (Date.now() - data.lastUpdated > CACHE_TTL) {
+                    return null; // Cache expired
+                }
+
+                // Restore Sets from arrays
+                if (data.charities) {
+                    data.charities.forEach(c => {
+                        c.contributors = new Set(c.contributorsArray || []);
+                    });
+                }
+
+                return data;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function cacheData(data) {
+            try {
+                // Convert Sets to arrays for JSON storage
+                const cacheable = {
+                    ...data,
+                    charities: data.charities.map(c => ({
+                        ...c,
+                        contributorsArray: Array.from(c.contributors),
+                        contributors: undefined
+                    }))
+                };
+                localStorage.setItem(CACHE_KEY, JSON.stringify(cacheable));
+            } catch (e) {
+                console.error('Failed to cache data:', e);
+            }
+        }
+
+        // ==========================================
+        // RENDERING
+        // ==========================================
+
+        function renderAllLeaderboards() {
+            if (!seasonData) return;
+
+            renderCharityLeaderboard();
+            renderIndividualLeaderboard('running');
+            renderIndividualLeaderboard('walking');
+            renderIndividualLeaderboard('cycling');
+            renderMerchQualifiers();
+        }
+
+        function renderEmptyState() {
+            const message = `
+                <div class="empty-state">
+                    <p>No participants registered yet.</p>
+                    <p>Be the first to join Season 2!</p>
+                </div>
+            `;
+            document.getElementById('charity-leaderboard').innerHTML = message;
+            document.getElementById('running-leaderboard').innerHTML = message;
+            document.getElementById('walking-leaderboard').innerHTML = message;
+            document.getElementById('cycling-leaderboard').innerHTML = message;
+            document.getElementById('merch-qualifiers').innerHTML = `
+                <div class="empty-state">
+                    <p>No qualifiers yet. Register and start logging workouts!</p>
+                </div>
+            `;
+        }
+
+        function renderError() {
+            const errorHTML = `
+                <div class="error-state">
+                    <p>Error loading leaderboard data.</p>
+                    <button class="retry-btn" onclick="loadSeasonData()">Retry</button>
+                </div>
+            `;
+            document.getElementById('charity-leaderboard').innerHTML = errorHTML;
+            document.getElementById('running-leaderboard').innerHTML = errorHTML;
+            document.getElementById('walking-leaderboard').innerHTML = errorHTML;
+            document.getElementById('cycling-leaderboard').innerHTML = errorHTML;
+        }
+
+        function renderIndividualLeaderboard(activityType) {
+            const container = document.getElementById(`${activityType}-leaderboard`);
+
+            const sorted = seasonData.participants
+                .filter(p => p[activityType].distance > 0)
+                .sort((a, b) => b[activityType].distance - a[activityType].distance);
+
+            if (sorted.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <p>No ${activityType} workouts yet.</p>
+                        <p>Log a workout using the RUNSTR app to appear on this leaderboard!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const rows = sorted.map((p, i) => {
+                const avatar = getAvatar(p.pubkey);
+                const name = getDisplayName(p.pubkey);
+                const isMerchQualifier = i < 3;
+
+                return `
+                    <tr class="leaderboard-row ${isMerchQualifier ? 'merch-qualifier' : ''}">
+                        <td>${i + 1}</td>
+                        <td>
+                            <div class="athlete-cell">
+                                ${avatar
+                                    ? `<img src="${avatar}" class="athlete-avatar" alt="" onerror="this.style.display='none'">`
+                                    : `<span class="athlete-avatar-fallback">${name[0].toUpperCase()}</span>`
+                                }
+                                <span>${name}</span>
+                                ${isMerchQualifier ? '<span class="merch-badge">MERCH</span>' : ''}
+                            </div>
+                        </td>
+                        <td>${p[activityType].distance.toFixed(2)} km</td>
+                        <td>${p[activityType].workouts}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            container.innerHTML = `
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Athlete</th>
+                            <th>Distance</th>
+                            <th>Workouts</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rows}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function renderCharityLeaderboard() {
+            const container = document.getElementById('charity-leaderboard');
+            const charities = seasonData.charities;
+
+            if (charities.length === 0) {
+                container.innerHTML = `
+                    <div class="charity-prize-banner">
+                        <span class="prize-icon">⚡</span>
+                        <span class="prize-text">400,000 sats to the winning charity!</span>
+                    </div>
+                    <div class="empty-state">
+                        <p>No charity contributions yet.</p>
+                        <p>Tag your workouts with a charity to support them!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const sorted = charities.sort((a, b) => b.totalDistance - a.totalDistance);
+            const maxDistance = sorted[0]?.totalDistance || 1;
+
+            const cards = sorted.map((charity, i) => {
+                const isWinner = i === 0;
+                const progressPercent = (charity.totalDistance / maxDistance * 100).toFixed(1);
+
+                // Get top 5 contributors for this charity
+                const topContributors = Object.entries(charity.contributorDistances)
+                    .sort(([, a], [, b]) => b - a)
+                    .slice(0, 5)
+                    .map(([pubkey, dist]) => ({
+                        pubkey,
+                        name: getDisplayName(pubkey),
+                        picture: getAvatar(pubkey),
+                        distance: dist
+                    }));
+
+                const contributorsList = topContributors.map((c, idx) => `
+                    <li>
+                        <span class="contributor-rank">${idx + 1}.</span>
+                        ${c.picture
+                            ? `<img src="${c.picture}" class="contributor-avatar" alt="" onerror="this.style.display='none'">`
+                            : ''
+                        }
+                        <span class="contributor-name">${c.name}</span>
+                        <span class="contributor-distance">${c.distance.toFixed(1)} km</span>
+                    </li>
+                `).join('');
+
+                return `
+                    <div class="charity-card ${isWinner ? 'winner' : ''}">
+                        <div class="charity-header">
+                            <span class="charity-rank">#${i + 1}</span>
+                            <h3 class="charity-name">${charity.name}</h3>
+                            <span class="charity-contributors">${charity.contributors.size} contributor${charity.contributors.size !== 1 ? 's' : ''}</span>
+                        </div>
+
+                        <div class="charity-progress">
+                            <div class="charity-progress-fill" style="width: ${progressPercent}%"></div>
+                        </div>
+
+                        <div class="charity-stats">
+                            <span class="charity-distance">${charity.totalDistance.toFixed(1)} km</span>
+                        </div>
+
+                        ${topContributors.length > 0 ? `
+                            <div class="charity-top-contributors">
+                                <h4>Top Contributors</h4>
+                                <ul>
+                                    ${contributorsList}
+                                </ul>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = `
+                <div class="charity-prize-banner">
+                    <span class="prize-icon">⚡</span>
+                    <span class="prize-text">400,000 sats to the winning charity!</span>
+                </div>
+                ${cards}
+            `;
+        }
+
+        function renderMerchQualifiers() {
+            const container = document.getElementById('merch-qualifiers');
+
+            const runningTop3 = seasonData.participants
+                .filter(p => p.running.distance > 0)
+                .sort((a, b) => b.running.distance - a.running.distance)
+                .slice(0, 3);
+
+            const walkingTop3 = seasonData.participants
+                .filter(p => p.walking.distance > 0)
+                .sort((a, b) => b.walking.distance - a.walking.distance)
+                .slice(0, 3);
+
+            const cyclingTop3 = seasonData.participants
+                .filter(p => p.cycling.distance > 0)
+                .sort((a, b) => b.cycling.distance - a.cycling.distance)
+                .slice(0, 3);
+
+            const renderCategory = (title, qualifiers, activityType) => {
+                if (qualifiers.length === 0) {
+                    return `
+                        <div class="qualifier-category">
+                            <h3>${title}</h3>
+                            <p class="no-qualifiers">No qualifiers yet</p>
+                        </div>
+                    `;
+                }
+
+                const items = qualifiers.map((q, i) => {
+                    const avatar = getAvatar(q.pubkey);
+                    const name = getDisplayName(q.pubkey);
+                    return `
+                        <li class="qualifier-item">
+                            <span class="qualifier-rank">${i + 1}</span>
+                            ${avatar
+                                ? `<img src="${avatar}" class="qualifier-avatar" alt="" onerror="this.outerHTML='<span class=\\'qualifier-avatar-fallback\\'>${name[0].toUpperCase()}</span>'">`
+                                : `<span class="qualifier-avatar-fallback">${name[0].toUpperCase()}</span>`
+                            }
+                            <span class="qualifier-name">${name}</span>
+                            <span class="qualifier-distance">${q[activityType].distance.toFixed(1)} km</span>
+                        </li>
+                    `;
+                }).join('');
+
+                return `
+                    <div class="qualifier-category">
+                        <h3>${title}</h3>
+                        <ul class="qualifiers-list">
+                            ${items}
+                        </ul>
+                    </div>
+                `;
+            };
+
+            container.innerHTML = `
+                ${renderCategory('Running', runningTop3, 'running')}
+                ${renderCategory('Walking', walkingTop3, 'walking')}
+                ${renderCategory('Cycling', cyclingTop3, 'cycling')}
+            `;
+        }
+
+        // ==========================================
+        // MODAL FUNCTIONS
+        // ==========================================
+
+        function showRegistrationInfo() {
+            document.getElementById('registration-modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('registration-modal').classList.remove('active');
+        }
+
+        // Close modal on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // Close modal on backdrop click
+        document.getElementById('registration-modal').addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal-overlay')) closeModal();
+        });
+    </script>
+</body>
+</html>

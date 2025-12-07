@@ -570,6 +570,17 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <label class="form-label">Activity Type <span class="required">*</span></label>
+                    <select class="form-select" id="activity-type" required>
+                        <option value="running" selected>Running</option>
+                        <option value="walking">Walking</option>
+                        <option value="cycling">Cycling</option>
+                        <option value="any">Any Activity</option>
+                    </select>
+                    <p class="form-hint">Only workouts matching this activity type will appear on the leaderboard.</p>
+                </div>
+
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">Date <span class="required">*</span></label>
@@ -880,6 +891,8 @@
                     charityName: charity.name,
                     charityLightning: charity.lightning,
                     donationAmount: parseInt(document.getElementById('donation-amount').value) || 500,
+                    // Activity type for filtering workouts
+                    activityType: document.getElementById('activity-type').value,
                     // Prize pool (optional)
                     prize1st: parseInt(document.getElementById('prize-1st').value) || 0,
                     prize2nd: parseInt(document.getElementById('prize-2nd').value) || 0,
@@ -942,6 +955,7 @@
                 ['charity_name', data.charityName],
                 ['charity_lightning', data.charityLightning],
                 ['donation_amount', data.donationAmount.toString()],
+                ['activity_type', data.activityType],
 
                 // Organizer
                 ['p', userPubkey, '', 'organizer']
