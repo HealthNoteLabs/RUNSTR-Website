@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Season 2 - RUNSTR</title>
-    <meta name="description" content="RUNSTR Season 2 - Compete in fitness challenges and support Bitcoin charities. 400,000 sats to the winning charity!">
+    <title>RUNSTR Premium - Track. Compete. Earn.</title>
+    <meta name="description" content="RUNSTR Premium - Earn up to 130k sats/year with weekly payouts, access Season 2 competition, and get free entry to all in-person RUNSTR events.">
 
     <!-- Nostr Tools -->
     <script src="https://unpkg.com/nostr-tools@2.7.2/lib/nostr.bundle.js"></script>
+    <!-- QRCode.js for Lightning invoice QR codes -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <style>
         * {
@@ -149,12 +151,6 @@
             color: var(--light-gray);
             text-transform: uppercase;
             letter-spacing: 1px;
-        }
-
-        .season-complete {
-            font-size: 1.5rem;
-            color: var(--orange);
-            font-weight: 700;
         }
 
         /* Info Grid */
@@ -318,14 +314,6 @@
             font-weight: 700;
         }
 
-        .leaderboard-row.merch-qualifier {
-            background: rgba(245, 163, 86, 0.1);
-        }
-
-        .leaderboard-row.merch-qualifier td:first-child {
-            color: var(--orange);
-        }
-
         .athlete-cell {
             display: flex;
             align-items: center;
@@ -351,18 +339,6 @@
             color: var(--light-gray);
             font-weight: 700;
             font-size: 0.9rem;
-        }
-
-        .merch-badge {
-            display: inline-block;
-            padding: 0.2rem 0.5rem;
-            background: var(--orange);
-            color: var(--black);
-            font-size: 0.65rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-left: 0.5rem;
         }
 
         /* Charity Cards */
@@ -516,100 +492,6 @@
         .contributor-distance {
             color: var(--orange);
             font-weight: 600;
-        }
-
-        /* Merch Qualifiers Grid */
-        .qualifiers-section {
-            margin-top: 3rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--medium-gray);
-        }
-
-        .qualifiers-subtitle {
-            color: var(--light-gray);
-            margin-bottom: 2rem;
-        }
-
-        .qualifiers-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-        }
-
-        .qualifier-category {
-            background: var(--dark-gray);
-            border: 1px solid var(--medium-gray);
-            padding: 1.5rem;
-        }
-
-        .qualifier-category h3 {
-            color: var(--orange);
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid var(--medium-gray);
-        }
-
-        .qualifiers-list {
-            list-style: none;
-        }
-
-        .qualifier-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid var(--medium-gray);
-        }
-
-        .qualifier-item:last-child {
-            border-bottom: none;
-        }
-
-        .qualifier-rank {
-            font-weight: 900;
-            color: var(--orange);
-            min-width: 24px;
-        }
-
-        .qualifier-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            object-fit: cover;
-            background: var(--medium-gray);
-        }
-
-        .qualifier-avatar-fallback {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: var(--medium-gray);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--light-gray);
-            font-weight: 700;
-            font-size: 0.8rem;
-        }
-
-        .qualifier-name {
-            flex: 1;
-            color: var(--white);
-            font-weight: 600;
-        }
-
-        .qualifier-distance {
-            color: var(--light-gray);
-            font-size: 0.85rem;
-        }
-
-        .no-qualifiers {
-            color: var(--light-gray);
-            font-style: italic;
-            padding: 1rem 0;
         }
 
         /* Loading & Error States */
@@ -770,14 +652,112 @@
             text-decoration: none;
         }
 
+        /* Registration Modal Steps */
+        .reg-step {
+            text-align: center;
+        }
+
+        .reg-step p {
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .reg-step input[type="text"] {
+            width: 100%;
+            padding: 0.75rem;
+            margin: 1rem 0;
+            background: var(--black);
+            border: 1px solid var(--medium-gray);
+            color: var(--white);
+            font-size: 1rem;
+        }
+
+        .reg-step input[type="text"]:focus {
+            outline: none;
+            border-color: var(--orange);
+        }
+
+        #qrcode-container {
+            display: flex;
+            justify-content: center;
+            margin: 1.5rem 0;
+            background: var(--white);
+            padding: 1rem;
+            border-radius: 8px;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .invoice-copy {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .invoice-copy input {
+            flex: 1;
+            padding: 0.5rem;
+            background: var(--black);
+            border: 1px solid var(--medium-gray);
+            color: var(--orange);
+            font-family: monospace;
+            font-size: 0.7rem;
+        }
+
+        .invoice-copy button {
+            padding: 0.5rem 1rem;
+            background: var(--orange);
+            color: var(--black);
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .invoice-copy button:hover {
+            background: var(--bitcoin-orange);
+        }
+
+        .memo-field {
+            margin: 1rem 0;
+            text-align: left;
+        }
+
+        .memo-field label {
+            display: block;
+            color: var(--light-gray);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .step-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--medium-gray);
+        }
+
+        .step-dot.active {
+            background: var(--orange);
+        }
+
+        .loading-invoice {
+            padding: 2rem;
+            text-align: center;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .info-grid {
                 grid-template-columns: 1fr 1fr;
-            }
-
-            .qualifiers-grid {
-                grid-template-columns: 1fr;
             }
 
             .tab-btn {
@@ -805,46 +785,150 @@
         <a href="../index.html" class="nav-logo">RUNSTR</a>
         <nav class="nav-links">
             <a href="races.html" class="nav-link">Events</a>
+            <a href="clubs.html" class="nav-link">Clubs</a>
         </nav>
     </header>
 
     <main class="main-content">
         <!-- Hero Section -->
         <section class="season-hero">
-            <h1>RUNSTR SEASON 2</h1>
+            <h1>RUNSTR PREMIUM</h1>
             <p class="season-dates">January 1 - February 28, 2026</p>
             <div id="countdown" class="countdown-container">
                 <!-- Countdown timer will be inserted here -->
             </div>
         </section>
 
+        <!-- Premium Benefits Section -->
+        <section class="benefits-section" style="margin-bottom: 3rem; padding: 0 1rem;">
+            <h2 class="section-title" style="margin-bottom: 2rem;">What You Get</h2>
+
+            <!-- RUNSTR Rewards Card -->
+            <div class="info-card highlight" style="margin-bottom: 1.5rem; text-align: left; padding: 2rem;">
+                <h3 style="color: var(--orange); font-size: 1.4rem; margin-bottom: 1rem;">RUNSTR Rewards - Weekly Payouts</h3>
+                <p style="margin-bottom: 1rem;">Purchase a Season Pass for 100,000 sats and earn sats back every week just for working out. The more consistent you are, the more you earn.</p>
+
+                <div style="background: var(--medium-gray); padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
+                    <h4 style="color: var(--white); margin-bottom: 1rem;">Weekly Payouts (Every Sunday)</h4>
+                    <ul style="list-style: none; margin: 0; padding: 0;">
+                        <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--dark-gray); display: flex; justify-content: space-between;">
+                            <span>1 workout day</span>
+                            <span style="color: var(--orange); font-weight: 700;">1,500 sats</span>
+                        </li>
+                        <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--dark-gray); display: flex; justify-content: space-between;">
+                            <span>2 workout days</span>
+                            <span style="color: var(--orange); font-weight: 700;">1,900 sats</span>
+                        </li>
+                        <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--dark-gray); display: flex; justify-content: space-between;">
+                            <span>3 workout days</span>
+                            <span style="color: var(--orange); font-weight: 700;">2,200 sats</span>
+                        </li>
+                        <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--dark-gray); display: flex; justify-content: space-between;">
+                            <span>4-5 workout days</span>
+                            <span style="color: var(--orange); font-weight: 700;">2,400 sats</span>
+                        </li>
+                        <li style="padding: 0.5rem 0; display: flex; justify-content: space-between;">
+                            <span>6-7 workout days</span>
+                            <span style="color: var(--orange); font-weight: 700;">2,500 sats</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
+                    <div style="background: var(--medium-gray); padding: 1rem; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 1.3rem; font-weight: 900; color: var(--white);">2x/week</div>
+                        <div style="color: var(--light-gray); font-size: 0.9rem;">Break Even</div>
+                    </div>
+                    <div style="background: var(--medium-gray); padding: 1rem; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 1.3rem; font-weight: 900; color: var(--orange);">3x/week</div>
+                        <div style="color: var(--light-gray); font-size: 0.9rem;">14% Return</div>
+                    </div>
+                    <div style="background: var(--medium-gray); padding: 1rem; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 1.3rem; font-weight: 900; color: var(--orange);">Daily</div>
+                        <div style="color: var(--light-gray); font-size: 0.9rem;">30% Return (130k sats)</div>
+                    </div>
+                </div>
+
+                <p style="margin-top: 1.5rem; font-size: 0.9rem; color: var(--light-gray);">
+                    <strong style="color: var(--white);">What counts:</strong> Any workout logged in RUNSTR that's at least 5 minutes long - running, walking, cycling, hiking, strength training, yoga, or meditation.
+                </p>
+            </div>
+
+            <!-- Other Benefits Grid -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+                <div class="info-card" style="text-align: left;">
+                    <h3 style="color: var(--orange); margin-bottom: 0.5rem;">Season 2 Competition</h3>
+                    <p style="color: var(--light-gray);">Access to compete in RUNSTR Season 2 with 1,000,000 sats charity prize pool. Support your favorite Bitcoin charity through your fitness!</p>
+                </div>
+                <div class="info-card" style="text-align: left;">
+                    <h3 style="color: var(--orange); margin-bottom: 0.5rem;">In-Person Events</h3>
+                    <p style="color: var(--light-gray);">Free entry to all RUNSTR in-person events for one full year. Races, meetups, and community gatherings included!</p>
+                </div>
+            </div>
+        </section>
+
         <!-- Info Grid -->
         <div class="info-grid">
             <div class="info-card highlight">
-                <h3>Charity Prize</h3>
-                <div class="value">400,000 sats</div>
-                <div class="subtitle">To the winning charity</div>
+                <h3>Charity Prize Pool</h3>
+                <div class="value">1,000,000 sats</div>
+                <div class="subtitle">Split across 3 winning charities</div>
             </div>
             <div class="info-card">
-                <h3>Entry Fee</h3>
-                <div class="value">20,000 sats</div>
-                <button class="register-btn" onclick="showRegistrationInfo()">How to Register</button>
+                <h3>Premium Price</h3>
+                <div class="value">100,000 sats</div>
+                <div class="subtitle">One-time payment for 1 year</div>
+                <button class="register-btn" onclick="openRegistrationModal()">Get Premium</button>
             </div>
             <div class="info-card">
                 <h3>Registered</h3>
                 <div class="value" id="participant-count">0</div>
                 <div class="subtitle">Athletes competing</div>
             </div>
-            <div class="info-card">
-                <h3>Merch Rewards</h3>
-                <div class="value">Top 9</div>
-                <div class="subtitle">Top 3 per category</div>
-            </div>
         </div>
+
+        <!-- Season 2 Competition Details -->
+        <section class="competition-details" style="margin: 2rem 0; padding: 0 1rem;">
+            <div class="info-card" style="text-align: left; padding: 2rem;">
+                <h3 style="color: var(--orange); font-size: 1.3rem; margin-bottom: 1rem;">How Season 2 Works</h3>
+
+                <p style="margin-bottom: 1.5rem;">All prize money goes directly to Bitcoin charities. In the RUNSTR app, you choose which charity your workouts support. The charity with the most distance in each category wins!</p>
+
+                <div style="background: var(--medium-gray); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                    <h4 style="color: var(--white); margin-bottom: 1rem;">Prize Distribution</h4>
+                    <ul style="list-style: none; margin: 0; padding: 0;">
+                        <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--dark-gray); display: flex; justify-content: space-between;">
+                            <span>Running</span>
+                            <span style="color: var(--orange); font-weight: 700;">333,333 sats</span>
+                        </li>
+                        <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--dark-gray); display: flex; justify-content: space-between;">
+                            <span>Walking</span>
+                            <span style="color: var(--orange); font-weight: 700;">333,333 sats</span>
+                        </li>
+                        <li style="padding: 0.5rem 0; display: flex; justify-content: space-between;">
+                            <span>Cycling</span>
+                            <span style="color: var(--orange); font-weight: 700;">333,334 sats</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div style="background: var(--medium-gray); padding: 1.5rem; border-radius: 8px;">
+                    <h4 style="color: var(--white); margin-bottom: 1rem;">Medals</h4>
+                    <ul style="list-style: none; margin: 0; padding: 0;">
+                        <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--dark-gray);">
+                            <span style="color: var(--orange);">Participation Medal</span> - All Season 2 participants can request one
+                        </li>
+                        <li style="padding: 0.5rem 0;">
+                            <span style="color: var(--orange);">Winners Medal</span> - Top 3 finishers in each category
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
 
         <!-- Leaderboards Section -->
         <section class="leaderboards-section">
-            <h2 class="section-title"><span class="icon">🏆</span> Leaderboards</h2>
+            <h2 class="section-title">Leaderboards</h2>
 
             <div class="tab-navigation">
                 <button class="tab-btn active" data-tab="charity">Charity Race</button>
@@ -893,49 +977,68 @@
                 </div>
             </div>
         </section>
-
-        <!-- Merch Qualifiers Section -->
-        <section class="qualifiers-section">
-            <h2 class="section-title"><span class="icon">👕</span> Merch Qualifiers</h2>
-            <p class="qualifiers-subtitle">Top 3 in each category receive RUNSTR merch!</p>
-            <div id="merch-qualifiers" class="qualifiers-grid">
-                <!-- Will be populated by JavaScript -->
-            </div>
-        </section>
     </main>
 
     <!-- Registration Modal -->
     <div class="modal-overlay" id="registration-modal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()">&times;</button>
-            <h2 class="modal-title">Season 2 Registration</h2>
-            <p style="margin-bottom: 1rem; color: var(--accent);">Entry Fee: <strong style="color: var(--orange);">20,000 sats</strong></p>
 
-            <h3>How to Register</h3>
-            <ol>
-                <li>Send 20,000 sats to: <code>runstr@getalby.com</code></li>
-                <li>Include your npub in the payment memo</li>
-                <li>DM <code>@RUNSTR</code> on Nostr with your payment confirmation</li>
-                <li>You'll be added to the participant list within 24 hours</li>
-            </ol>
+            <!-- Step Indicator -->
+            <div class="step-indicator">
+                <div class="step-dot active" id="step-dot-1"></div>
+                <div class="step-dot" id="step-dot-2"></div>
+            </div>
 
-            <h3>What You Get</h3>
-            <ul>
-                <li>Compete for top 3 in Running, Walking, or Cycling</li>
-                <li>Support your chosen Bitcoin charity with every workout</li>
-                <li>Top 3 in each category receive RUNSTR merch</li>
-                <li>Winning charity receives 400,000 sats</li>
-            </ul>
+            <!-- Step 1: Identity -->
+            <div id="reg-step-1" class="reg-step">
+                <h2 class="modal-title">Step 1: Your Identity</h2>
+                <p>Enter your Nostr identity or Lightning address:</p>
+                <input type="text" id="identity-input" placeholder="npub1..., user@domain.com, or lightning@address.com" />
+                <p style="font-size: 0.85rem; color: var(--light-gray);">
+                    Enter your npub, NIP-05 identifier, or Lightning address (for reward payouts).<br>
+                    If you have a Nostr extension (Alby, nos2x), your npub will be auto-filled.
+                </p>
+                <button class="register-btn" onclick="proceedToPayment()">Continue to Payment</button>
+            </div>
 
-            <h3>How It Works</h3>
-            <ul>
-                <li>Log workouts using the RUNSTR app (Kind 1301 events)</li>
-                <li>Tag each workout with your chosen charity</li>
-                <li>Your distance is aggregated to both individual and charity leaderboards</li>
-                <li>The charity with the most collective distance wins!</li>
-            </ul>
+            <!-- Step 2: Payment -->
+            <div id="reg-step-2" class="reg-step" style="display:none;">
+                <h2 class="modal-title">Step 2: Pay for Premium</h2>
+                <p>Premium Price: <strong style="color: var(--orange);">100,000 sats</strong> (1 year)</p>
 
-            <button class="close-btn" onclick="closeModal()">Got It</button>
+                <div id="invoice-loading" class="loading-invoice">
+                    <div class="loading-spinner"></div>
+                    <p>Generating invoice...</p>
+                </div>
+
+                <div id="invoice-content" style="display:none;">
+                    <div id="qrcode-container"></div>
+                    <div class="invoice-copy">
+                        <input type="text" id="invoice-text" readonly />
+                        <button onclick="copyInvoice()">Copy</button>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--light-gray); margin: 1rem 0;">Your identity is included in the payment memo for verification.</p>
+                    <button class="register-btn" onclick="showStep('success')">I've Paid</button>
+                </div>
+            </div>
+
+            <!-- Success State -->
+            <div id="reg-success" class="reg-step" style="display:none;">
+                <h2 class="modal-title">Welcome to RUNSTR Premium!</h2>
+                <p>Thank you for purchasing RUNSTR Premium!</p>
+                <p style="font-size: 0.85rem; color: var(--light-gray); margin-top: 1rem;">Your Premium access will be activated within 24 hours after payment verification.</p>
+                <div style="font-size: 0.85rem; color: var(--light-gray); margin-top: 0.5rem; text-align: left;">
+                    <p style="margin-bottom: 0.5rem;">You now have:</p>
+                    <ul style="padding-left: 1.5rem; margin: 0;">
+                        <li>Weekly reward payouts every Sunday</li>
+                        <li>Access to Season 2 competition</li>
+                        <li>Free entry to all in-person RUNSTR events</li>
+                    </ul>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--light-gray); margin-top: 1rem;">Your 12-month membership starts now. Log workouts in the RUNSTR app to start earning!</p>
+                <button class="register-btn" onclick="closeModal()">Close</button>
+            </div>
         </div>
     </div>
 
@@ -964,7 +1067,7 @@
         // Admin-managed participant list (add hex pubkeys after payment verification)
         const REGISTERED_PUBKEYS = [
             // Example: 'a1b2c3d4e5f6789...' (hex pubkey)
-            // Add participants here after they pay 20k sats
+            // Add participants here after they pay 100k sats for Premium
         ];
 
         // Charity definitions
@@ -985,12 +1088,21 @@
         const CACHE_KEY = 'runstr_season2_data';
         const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
+        // Registration configuration
+        const LIGHTNING_ADDRESS = 'hustle@getalby.com';
+        const ENTRY_FEE_SATS = 100000;
+
         // ==========================================
         // STATE
         // ==========================================
 
         let seasonData = null;
         let profileMap = {};
+
+        // Registration state
+        let currentInvoice = null;
+        let registrationPubkey = null;
+        let registrationIdentity = null;
 
         // ==========================================
         // INITIALIZATION
@@ -1032,7 +1144,8 @@
                 targetDate = end;
                 label = 'SEASON ENDS IN';
             } else {
-                container.innerHTML = '<p class="season-complete">SEASON COMPLETE</p>';
+                // Season ended - hide countdown
+                container.style.display = 'none';
                 return;
             }
 
@@ -1331,7 +1444,6 @@
             renderIndividualLeaderboard('running');
             renderIndividualLeaderboard('walking');
             renderIndividualLeaderboard('cycling');
-            renderMerchQualifiers();
         }
 
         function renderEmptyState() {
@@ -1345,11 +1457,6 @@
             document.getElementById('running-leaderboard').innerHTML = message;
             document.getElementById('walking-leaderboard').innerHTML = message;
             document.getElementById('cycling-leaderboard').innerHTML = message;
-            document.getElementById('merch-qualifiers').innerHTML = `
-                <div class="empty-state">
-                    <p>No qualifiers yet. Register and start logging workouts!</p>
-                </div>
-            `;
         }
 
         function renderError() {
@@ -1385,10 +1492,9 @@
             const rows = sorted.map((p, i) => {
                 const avatar = getAvatar(p.pubkey);
                 const name = getDisplayName(p.pubkey);
-                const isMerchQualifier = i < 3;
 
                 return `
-                    <tr class="leaderboard-row ${isMerchQualifier ? 'merch-qualifier' : ''}">
+                    <tr class="leaderboard-row">
                         <td>${i + 1}</td>
                         <td>
                             <div class="athlete-cell">
@@ -1397,7 +1503,6 @@
                                     : `<span class="athlete-avatar-fallback">${name[0].toUpperCase()}</span>`
                                 }
                                 <span>${name}</span>
-                                ${isMerchQualifier ? '<span class="merch-badge">MERCH</span>' : ''}
                             </div>
                         </td>
                         <td>${p[activityType].distance.toFixed(2)} km</td>
@@ -1508,77 +1613,176 @@
             `;
         }
 
-        function renderMerchQualifiers() {
-            const container = document.getElementById('merch-qualifiers');
+        // ==========================================
+        // REGISTRATION MODAL FUNCTIONS
+        // ==========================================
 
-            const runningTop3 = seasonData.participants
-                .filter(p => p.running.distance > 0)
-                .sort((a, b) => b.running.distance - a.running.distance)
-                .slice(0, 3);
+        async function openRegistrationModal() {
+            const modal = document.getElementById('registration-modal');
 
-            const walkingTop3 = seasonData.participants
-                .filter(p => p.walking.distance > 0)
-                .sort((a, b) => b.walking.distance - a.walking.distance)
-                .slice(0, 3);
+            // Reset state
+            currentInvoice = null;
+            registrationPubkey = null;
+            registrationIdentity = null;
 
-            const cyclingTop3 = seasonData.participants
-                .filter(p => p.cycling.distance > 0)
-                .sort((a, b) => b.cycling.distance - a.cycling.distance)
-                .slice(0, 3);
+            // Reset UI
+            document.getElementById('identity-input').value = '';
+            document.getElementById('qrcode-container').innerHTML = '';
+            document.getElementById('invoice-text').value = '';
 
-            const renderCategory = (title, qualifiers, activityType) => {
-                if (qualifiers.length === 0) {
-                    return `
-                        <div class="qualifier-category">
-                            <h3>${title}</h3>
-                            <p class="no-qualifiers">No qualifiers yet</p>
-                        </div>
-                    `;
+            // Check if logged in with Nostr extension
+            if (window.nostr) {
+                try {
+                    registrationPubkey = await window.nostr.getPublicKey();
+                    const npub = NostrTools.nip19.npubEncode(registrationPubkey);
+                    document.getElementById('identity-input').value = npub;
+                    registrationIdentity = npub;
+                } catch (e) {
+                    console.log('Could not get pubkey from Nostr extension');
                 }
+            }
 
-                const items = qualifiers.map((q, i) => {
-                    const avatar = getAvatar(q.pubkey);
-                    const name = getDisplayName(q.pubkey);
-                    return `
-                        <li class="qualifier-item">
-                            <span class="qualifier-rank">${i + 1}</span>
-                            ${avatar
-                                ? `<img src="${avatar}" class="qualifier-avatar" alt="" onerror="this.outerHTML='<span class=\\'qualifier-avatar-fallback\\'>${name[0].toUpperCase()}</span>'">`
-                                : `<span class="qualifier-avatar-fallback">${name[0].toUpperCase()}</span>`
-                            }
-                            <span class="qualifier-name">${name}</span>
-                            <span class="qualifier-distance">${q[activityType].distance.toFixed(1)} km</span>
-                        </li>
-                    `;
-                }).join('');
-
-                return `
-                    <div class="qualifier-category">
-                        <h3>${title}</h3>
-                        <ul class="qualifiers-list">
-                            ${items}
-                        </ul>
-                    </div>
-                `;
-            };
-
-            container.innerHTML = `
-                ${renderCategory('Running', runningTop3, 'running')}
-                ${renderCategory('Walking', walkingTop3, 'walking')}
-                ${renderCategory('Cycling', cyclingTop3, 'cycling')}
-            `;
+            // Show step 1
+            showStep(1);
+            modal.classList.add('active');
         }
 
-        // ==========================================
-        // MODAL FUNCTIONS
-        // ==========================================
+        function showStep(step) {
+            // Hide all steps
+            document.querySelectorAll('.reg-step').forEach(el => el.style.display = 'none');
 
-        function showRegistrationInfo() {
-            document.getElementById('registration-modal').classList.add('active');
+            // Update step dots
+            for (let i = 1; i <= 2; i++) {
+                const dot = document.getElementById(`step-dot-${i}`);
+                if (dot) {
+                    dot.classList.toggle('active', i <= step);
+                }
+            }
+
+            // Show current step
+            if (step === 'success') {
+                document.getElementById('reg-success').style.display = 'block';
+            } else {
+                document.getElementById(`reg-step-${step}`).style.display = 'block';
+            }
+        }
+
+        async function proceedToPayment() {
+            const identityInput = document.getElementById('identity-input').value.trim();
+            if (!identityInput) {
+                alert('Please enter your npub or NIP-05 identifier');
+                return;
+            }
+
+            registrationIdentity = identityInput;
+
+            // Parse identity to get pubkey if npub
+            if (identityInput.startsWith('npub1')) {
+                try {
+                    const decoded = NostrTools.nip19.decode(identityInput);
+                    registrationPubkey = decoded.data;
+                } catch (e) {
+                    alert('Invalid npub format');
+                    return;
+                }
+            }
+
+            // Show step 2 with loading state
+            showStep(2);
+            document.getElementById('invoice-loading').style.display = 'block';
+            document.getElementById('invoice-content').style.display = 'none';
+
+            try {
+                // Generate invoice with identity in comment
+                const comment = `RUNSTR Premium: ${identityInput}`;
+                currentInvoice = await fetchLightningInvoice(ENTRY_FEE_SATS, comment);
+
+                // Display QR code
+                const qrContainer = document.getElementById('qrcode-container');
+                qrContainer.innerHTML = '';
+                new QRCode(qrContainer, {
+                    text: currentInvoice,
+                    width: 200,
+                    height: 200,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.M
+                });
+
+                // Display invoice text
+                document.getElementById('invoice-text').value = currentInvoice;
+
+                // Show invoice content, hide loading
+                document.getElementById('invoice-loading').style.display = 'none';
+                document.getElementById('invoice-content').style.display = 'block';
+
+            } catch (error) {
+                console.error('Failed to generate invoice:', error);
+                alert('Failed to generate Lightning invoice. Please try again.');
+                showStep(1);
+            }
         }
 
         function closeModal() {
             document.getElementById('registration-modal').classList.remove('active');
+            // Reset to step 1 for next time
+            showStep(1);
+        }
+
+        function copyInvoice() {
+            if (currentInvoice) {
+                navigator.clipboard.writeText(currentInvoice).then(() => {
+                    const btn = event.target;
+                    const originalText = btn.textContent;
+                    btn.textContent = 'Copied!';
+                    setTimeout(() => btn.textContent = originalText, 2000);
+                }).catch(() => {
+                    // Fallback for older browsers
+                    const input = document.getElementById('invoice-text');
+                    input.select();
+                    document.execCommand('copy');
+                    alert('Invoice copied to clipboard!');
+                });
+            }
+        }
+
+        // ==========================================
+        // LIGHTNING INVOICE GENERATION
+        // ==========================================
+
+        async function fetchLightningInvoice(amountSats, comment) {
+            const [username, domain] = LIGHTNING_ADDRESS.split('@');
+            const lnurlEndpoint = `https://${domain}/.well-known/lnurlp/${username}`;
+
+            // Fetch LNURL-pay metadata
+            const metadataRes = await fetch(lnurlEndpoint);
+            if (!metadataRes.ok) {
+                throw new Error('Failed to fetch LNURL metadata');
+            }
+            const metadata = await metadataRes.json();
+
+            // Build callback URL with amount (millisats) and optional comment
+            const amountMsat = amountSats * 1000;
+            let callbackUrl = `${metadata.callback}?amount=${amountMsat}`;
+
+            // Add comment if allowed
+            if (comment && metadata.commentAllowed && metadata.commentAllowed > 0) {
+                const truncatedComment = comment.substring(0, metadata.commentAllowed);
+                callbackUrl += `&comment=${encodeURIComponent(truncatedComment)}`;
+            }
+
+            // Fetch invoice
+            const invoiceRes = await fetch(callbackUrl);
+            if (!invoiceRes.ok) {
+                throw new Error('Failed to fetch invoice');
+            }
+            const invoiceData = await invoiceRes.json();
+
+            if (invoiceData.status === 'ERROR') {
+                throw new Error(invoiceData.reason || 'Invoice generation failed');
+            }
+
+            return invoiceData.pr; // BOLT11 invoice
         }
 
         // Close modal on escape key

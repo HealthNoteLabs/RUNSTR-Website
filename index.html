@@ -1028,9 +1028,9 @@
     <header class="nav-header">
         <a href="index.html" class="nav-logo">RUNSTR</a>
         <nav class="nav-links">
-            <a href="pages/season2.html" class="nav-link">Season 2</a>
+            <a href="pages/season2.html" class="nav-link">RUNSTR Premium</a>
             <a href="pages/races.html" class="nav-link">Events</a>
-            <!-- <a href="pages/dashboard.html" class="nav-dashboard-btn">Dashboard</a> -->
+            <a href="pages/clubs.html" class="nav-link">Clubs</a>
         </nav>
     </header>
 
@@ -1148,7 +1148,7 @@
                     Top runners, walkers, and cyclists earned real Bitcoin.<br>
                     <span style="color: var(--orange);">Get zapped on leaderboards</span> — supporters can send you sats directly through your profile.
                 </p>
-                <a href="pages/season2.html" style="display: inline-block; margin-top: 1.5rem; padding: 0.75rem 1.5rem; background: var(--orange); color: var(--black); text-decoration: none; font-weight: 700; border: 2px solid var(--orange); transition: all 0.3s;">View Season 2</a>
+                <a href="pages/season2.html" style="display: inline-block; margin-top: 1.5rem; padding: 0.75rem 1.5rem; background: var(--orange); color: var(--black); text-decoration: none; font-weight: 700; border: 2px solid var(--orange); transition: all 0.3s;">Get RUNSTR Premium</a>
             </div>
             <div style="flex: 0 0 auto;">
                 <img src="images/season-1.png" alt="RUNSTR Season 1 Leaderboard" style="max-width: 280px; border-radius: 20px; box-shadow: 0 20px 60px rgba(245, 163, 86, 0.2);">
@@ -1162,20 +1162,68 @@
             <div class="monetization-card">
                 <h2 class="monetization-title">RUNSTR PREMIUM - COMING SOON</h2>
 
-                <p style="color: var(--orange); margin-bottom: 2rem; font-size: 1.2rem; font-weight: 600;">Launching January 2026</p>
+                <p style="color: var(--orange); margin-bottom: 1.5rem; font-size: 1.2rem; font-weight: 600;">Launching January 2026</p>
 
+                <!-- Price Display -->
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <div style="font-size: 3rem; font-weight: 900; color: var(--orange);">100,000 sats</div>
+                    <div style="color: var(--light-gray);">One-time payment for 1 year</div>
+                </div>
+
+                <!-- Weekly Rewards -->
+                <div style="background: var(--medium-gray); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                    <h3 style="color: var(--orange); margin-bottom: 1rem; font-size: 1.1rem;">Weekly Reward Payouts</h3>
+                    <p style="margin-bottom: 1rem; color: var(--light-gray); font-size: 0.95rem;">Every Sunday, get paid based on how many days you worked out:</p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 0.5rem;">
+                        <div style="display: flex; justify-content: space-between; padding: 0.5rem; border-bottom: 1px solid var(--dark-gray);">
+                            <span>1 day</span>
+                            <span style="color: var(--orange); font-weight: 700;">1,500 sats</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 0.5rem; border-bottom: 1px solid var(--dark-gray);">
+                            <span>2 days</span>
+                            <span style="color: var(--orange); font-weight: 700;">1,900 sats</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 0.5rem; border-bottom: 1px solid var(--dark-gray);">
+                            <span>3 days</span>
+                            <span style="color: var(--orange); font-weight: 700;">2,200 sats</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 0.5rem; border-bottom: 1px solid var(--dark-gray);">
+                            <span>4-5 days</span>
+                            <span style="color: var(--orange); font-weight: 700;">2,400 sats</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 0.5rem;">
+                            <span>6-7 days</span>
+                            <span style="color: var(--orange); font-weight: 700;">2,500 sats</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ROI Stats -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                    <div style="background: var(--medium-gray); padding: 1rem; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 1.2rem; font-weight: 900; color: var(--white);">2x/week</div>
+                        <div style="color: var(--light-gray); font-size: 0.85rem;">Break Even</div>
+                    </div>
+                    <div style="background: var(--medium-gray); padding: 1rem; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 1.2rem; font-weight: 900; color: var(--orange);">3x/week</div>
+                        <div style="color: var(--light-gray); font-size: 0.85rem;">14% Return</div>
+                    </div>
+                    <div style="background: var(--medium-gray); padding: 1rem; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 1.2rem; font-weight: 900; color: var(--orange);">Daily</div>
+                        <div style="color: var(--light-gray); font-size: 0.85rem;">30% Return</div>
+                    </div>
+                </div>
+
+                <!-- What's Included -->
                 <ul class="monetization-features">
-                    <li>Access to RUNSTR Season 2</li>
-                    <li>BMI, VO2 Max, Fitness Age</li>
-                    <li>Goal and Habit Tracking</li>
-                    <li>COACH RUNSTR - AI insights via your own API key</li>
-                    <li>RUNSTR Fitness Test</li>
-                    <li>NOSTR Health Sync - sync Nostr workouts locally</li>
+                    <li>RUNSTR Rewards - Weekly sats payouts for working out</li>
+                    <li>Season 2 Competition - 1,000,000 sats charity prize pool</li>
+                    <li>Free entry to all in-person RUNSTR events for the year</li>
                 </ul>
 
                 <div class="charity-section">
-                    <div class="charity-title">SUPPORT OPEN-SOURCE & FREEDOM</div>
-                    <p style="margin-bottom: 1rem;">Anon can designate which charity they want to support and display the charity donation button beneath their profile on leaderboards</p>
+                    <div class="charity-title">COMPETE FOR YOUR CHARITY</div>
+                    <p style="margin-bottom: 1rem;">In Season 2, your workouts contribute to your chosen charity's distance total. The charity with the most distance in each category (running, walking, cycling) wins 333,333 sats!</p>
                     <div class="charity-grid" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem;">
                         <div class="charity-item" style="padding: 0.75rem;">
                             <div class="charity-name">OpenSats</div>
@@ -1209,6 +1257,9 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- CTA Button -->
+                <a href="pages/season2.html" style="display: inline-block; margin-top: 2rem; padding: 1rem 2rem; background: var(--orange); color: var(--black); text-decoration: none; font-weight: 700; font-size: 1.1rem; border-radius: 4px; transition: all 0.3s;">Learn More About Premium</a>
             </div>
         </div>
     </section>
