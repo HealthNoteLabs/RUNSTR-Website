@@ -519,8 +519,8 @@
     <header class="nav-header">
         <a href="../index.html" class="nav-logo">RUNSTR</a>
         <nav class="nav-links">
-            <a href="races.html" class="nav-link">Races</a>
-            <!-- <a href="dashboard.html" class="nav-dashboard-btn">Dashboard</a> -->
+            <a href="races.html" class="nav-link">Events</a>
+            <a href="clubs.html" class="nav-link">Clubs</a>
         </nav>
     </header>
 
@@ -579,6 +579,15 @@
                         <option value="any">Any Activity</option>
                     </select>
                     <p class="form-hint">Only workouts matching this activity type will appear on the leaderboard.</p>
+                </div>
+
+                <div class="form-group" id="team-select-group" style="display: none;">
+                    <label class="form-label">Assign to Team</label>
+                    <select class="form-select" id="team-select">
+                        <option value="">Open Event (Anyone can participate)</option>
+                        <!-- Teams will be populated dynamically -->
+                    </select>
+                    <p class="form-hint">Limit the leaderboard to team members only. Leave as "Open Event" for public participation.</p>
                 </div>
 
                 <div class="form-row">
@@ -739,6 +748,10 @@
         let userPubkey = null;
         let selectedDistance = null;
         let createdRaceId = null;
+        let userTeams = [];
+
+        // Nostr event kinds
+        const TEAM_METADATA_KIND = 33404;
 
         // Nostr relay configuration
         const RELAYS = [
@@ -831,11 +844,107 @@
         function showForm() {
             document.getElementById('login-required').style.display = 'none';
             document.getElementById('create-form').style.display = 'block';
+            loadUserTeams();
+            checkUrlParams();
         }
 
         function showLoginRequired() {
             document.getElementById('login-required').style.display = 'block';
             document.getElementById('create-form').style.display = 'none';
+        }
+
+        // Check URL parameters for pre-selected team
+        function checkUrlParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const preselectedTeamId = urlParams.get('team');
+            const preselectedCaptain = urlParams.get('captain');
+
+            if (preselectedTeamId && preselectedCaptain) {
+                // Wait for teams to load then select
+                setTimeout(() => {
+                    const teamSelect = document.getElementById('team-select');
+                    const teamValue = `${preselectedCaptain}:${preselectedTeamId}`;
+                    for (let option of teamSelect.options) {
+                        if (option.value === teamValue) {
+                            teamSelect.value = teamValue;
+                            break;
+                        }
+                    }
+                }, 1500);
+            }
+        }
+
+        // Load user's teams (where they are captain)
+        async function loadUserTeams() {
+            try {
+                const pool = new NostrTools.SimplePool();
+
+                // Query teams where user is captain
+                const filter = {
+                    kinds: [TEAM_METADATA_KIND],
+                    '#captain': [userPubkey],
+                    limit: 50
+                };
+
+                const events = await Promise.race([
+                    pool.querySync(RELAYS, filter),
+                    new Promise(resolve => setTimeout(() => resolve([]), 5000))
+                ]);
+
+                // Also query teams authored by user (in case captain tag is missing)
+                const authorFilter = {
+                    kinds: [TEAM_METADATA_KIND],
+                    authors: [userPubkey],
+                    limit: 50
+                };
+
+                const authorEvents = await Promise.race([
+                    pool.querySync(RELAYS, authorFilter),
+                    new Promise(resolve => setTimeout(() => resolve([]), 5000))
+                ]);
+
+                // Combine and deduplicate
+                const allEvents = [...events, ...authorEvents];
+                const teamMap = new Map();
+
+                allEvents.forEach(event => {
+                    const getTag = (name) => {
+                        const tag = event.tags.find(t => t[0] === name);
+                        return tag ? tag[1] : null;
+                    };
+
+                    const teamId = getTag('d');
+                    const name = getTag('name');
+
+                    if (teamId && name && !teamMap.has(teamId)) {
+                        teamMap.set(teamId, {
+                            id: teamId,
+                            name: name,
+                            captainPubkey: event.pubkey
+                        });
+                    }
+                });
+
+                userTeams = Array.from(teamMap.values());
+
+                // Populate dropdown
+                const teamSelect = document.getElementById('team-select');
+                const teamGroup = document.getElementById('team-select-group');
+
+                if (userTeams.length > 0) {
+                    teamGroup.style.display = 'block';
+
+                    userTeams.forEach(team => {
+                        const option = document.createElement('option');
+                        option.value = `${team.captainPubkey}:${team.id}`;
+                        option.textContent = team.name;
+                        teamSelect.appendChild(option);
+                    });
+                }
+
+            } catch (error) {
+                console.error('Error loading teams:', error);
+            }
         }
 
         // Setup distance selector
@@ -879,6 +988,20 @@
             try {
                 // Gather form data
                 const charity = CHARITIES[charityKey];
+                // Get team selection
+                const teamSelectValue = document.getElementById('team-select').value;
+                let teamId = null;
+                let teamCaptain = null;
+                let teamName = null;
+
+                if (teamSelectValue) {
+                    const [captain, id] = teamSelectValue.split(':');
+                    teamCaptain = captain;
+                    teamId = id;
+                    const team = userTeams.find(t => t.id === id);
+                    teamName = team ? team.name : null;
+                }
+
                 const raceData = {
                     name: document.getElementById('race-name').value,
                     distance: selectedDistance,
@@ -893,6 +1016,10 @@
                     donationAmount: parseInt(document.getElementById('donation-amount').value) || 500,
                     // Activity type for filtering workouts
                     activityType: document.getElementById('activity-type').value,
+                    // Team (optional)
+                    teamId: teamId,
+                    teamCaptain: teamCaptain,
+                    teamName: teamName,
                     // Prize pool (optional)
                     prize1st: parseInt(document.getElementById('prize-1st').value) || 0,
                     prize2nd: parseInt(document.getElementById('prize-2nd').value) || 0,
@@ -919,13 +1046,12 @@
             // Generate unique ID
             const raceId = generateId();
 
-            // Calculate timestamps - parse components to use local timezone
+            // Calculate timestamps - use full calendar day (midnight to midnight)
             const [year, month, day] = data.date.split('-').map(Number);
-            const [hours, minutes] = data.time.split(':').map(Number);
-            const localDate = new Date(year, month - 1, day, hours, minutes, 0);
-            const startTimestamp = Math.floor(localDate.getTime() / 1000);
-            // Virtual events: 24-hour window from start time
-            const endTimestamp = startTimestamp + (24 * 60 * 60);
+            const startOfDay = new Date(year, month - 1, day, 0, 0, 0);
+            const endOfDay = new Date(year, month - 1, day, 23, 59, 59);
+            const startTimestamp = Math.floor(startOfDay.getTime() / 1000);
+            const endTimestamp = Math.floor(endOfDay.getTime() / 1000);
 
             // Get distance in meters for leaderboard matching
             const distanceMeters = getDistanceMeters(data.distance);
@@ -970,6 +1096,17 @@
             }
             if (data.prize3rd > 0) {
                 tags.push(['prize_3rd', data.prize3rd.toString()]);
+            }
+
+            // Add team tags if a team is selected
+            if (data.teamId && data.teamCaptain) {
+                tags.push(['team', data.teamId]);
+                tags.push(['team_captain', data.teamCaptain]);
+                if (data.teamName) {
+                    tags.push(['team_name', data.teamName]);
+                }
+                // Reference to member list for filtering
+                tags.push(['a', `30000:${data.teamCaptain}:${data.teamId}`]);
             }
 
             // Create unsigned event (Kind 31923 = NIP-52 Time-Based Calendar Event)

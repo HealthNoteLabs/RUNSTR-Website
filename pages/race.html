@@ -844,7 +844,7 @@
         <a href="../index.html" class="nav-logo">RUNSTR</a>
         <nav class="nav-links">
             <a href="races.html" class="nav-link">Events</a>
-            <!-- <a href="dashboard.html" class="nav-dashboard-btn">Dashboard</a> -->
+            <a href="clubs.html" class="nav-link">Clubs</a>
         </nav>
     </header>
 
@@ -1074,6 +1074,10 @@
                 donationAmount: parseInt(getTag('donation_amount') || '500'),
                 // Activity type for filtering workouts
                 activityTypes: getActivityTypes(getTag('activity_type')),
+                // Team filtering
+                teamId: getTag('team'),
+                teamCaptain: getTag('team_captain'),
+                teamName: getTag('team_name'),
                 // Prize pool
                 prize1st: parseInt(getTag('prize_1st') || '0'),
                 prize2nd: parseInt(getTag('prize_2nd') || '0'),
@@ -1187,8 +1191,10 @@
                         ${getDistanceIcon(race.distance)}
                     </div>
                     <span class="race-distance-badge">${race.distanceLabel}</span>
+                    ${race.teamId ? `<span class="race-distance-badge" style="background: var(--medium-gray); margin-left: 0.5rem;">Team Event</span>` : ''}
                     <h1 class="race-title">${race.name}</h1>
                     <p class="race-organizer">Hosted by <a href="#" id="organizer-name">Loading...</a></p>
+                    ${race.teamId ? `<p class="race-organizer" style="margin-top: 0.5rem;">Team: <a href="club.html?captain=${race.teamCaptain}&team=${race.teamId}" style="color: var(--orange);">${race.teamName || 'View Team'}</a></p>` : ''}
                 </div>
 
                 <div class="race-info-grid">
@@ -1675,12 +1681,58 @@
 
                 console.log(`Found ${workouts.length} total workouts in time window`);
 
+                // Step 1.5: Validate workout_start_time is within event window
+                // (Nostr query uses created_at, but we need actual workout time)
+                const timeValidatedWorkouts = workouts.filter(w => {
+                    const workoutStartTag = w.tags.find(t => t[0] === 'workout_start_time');
+                    const workoutStartTime = workoutStartTag ? parseInt(workoutStartTag[1]) : w.created_at;
+                    return workoutStartTime >= race.startTimestamp && workoutStartTime <= race.endTimestamp;
+                });
+                console.log(`${timeValidatedWorkouts.length} workouts with valid workout_start_time`);
+
+                // Step 1.6: If team race, filter to team members only
+                let teamMemberPubkeys = null;
+                if (race.teamId && race.teamCaptain) {
+                    console.log(`Team race detected: ${race.teamName || race.teamId}`);
+                    try {
+                        const memberFilter = {
+                            kinds: [30000],
+                            authors: [race.teamCaptain],
+                            '#d': [race.teamId]
+                        };
+                        const memberLists = await Promise.race([
+                            pool.querySync(RELAYS, memberFilter),
+                            new Promise(resolve => setTimeout(() => resolve([]), 5000))
+                        ]);
+
+                        if (memberLists.length > 0) {
+                            // Get most recent member list
+                            const latestList = memberLists.sort((a, b) => b.created_at - a.created_at)[0];
+                            teamMemberPubkeys = new Set(
+                                latestList.tags
+                                    .filter(t => t[0] === 'p')
+                                    .map(t => t[1])
+                            );
+                            console.log(`Team has ${teamMemberPubkeys.size} members`);
+                        }
+                    } catch (e) {
+                        console.error('Error fetching team members:', e);
+                    }
+                }
+
+                // Filter workouts to team members if applicable
+                let teamFilteredWorkouts = timeValidatedWorkouts;
+                if (teamMemberPubkeys) {
+                    teamFilteredWorkouts = timeValidatedWorkouts.filter(w => teamMemberPubkeys.has(w.pubkey));
+                    console.log(`${teamFilteredWorkouts.length} workouts from team members`);
+                }
+
                 // Step 2: Filter workouts by activity type, then splits or distance
                 const requiredSplits = getRequiredSplits(race.distance);
                 const requiredDistanceKm = getRequiredDistanceKm(race.distance);
                 const allowedTypes = race.activityTypes;
 
-                const eligibleWorkouts = workouts.filter(w => {
+                const eligibleWorkouts = teamFilteredWorkouts.filter(w => {
                     // First: check activity type matches (skip if 'any'/null)
                     if (allowedTypes !== null && !matchesActivityType(w, allowedTypes)) {
                         return false;
