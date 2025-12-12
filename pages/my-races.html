@@ -619,6 +619,26 @@
         </div>
     </main>
 
+    <!-- Edit Image Modal -->
+    <div id="edit-image-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center;">
+        <div style="background: var(--dark-gray); border: 1px solid var(--medium-gray); padding: 2rem; max-width: 500px; width: 90%; border-radius: 8px;">
+            <h3 style="margin-bottom: 1rem; color: var(--orange);">Edit Event Image</h3>
+            <input type="hidden" id="edit-image-race-id">
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; margin-bottom: 0.5rem; color: var(--light-gray);">Image URL</label>
+                <input type="url" id="edit-image-url" placeholder="https://nostr.build/i/your-image.jpg" style="width: 100%; padding: 0.75rem; background: var(--black); border: 1px solid var(--medium-gray); color: var(--white); border-radius: 4px;">
+                <p style="font-size: 0.8rem; color: var(--light-gray); margin-top: 0.5rem;">Use <a href="https://nostr.build" target="_blank" style="color: var(--orange);">nostr.build</a> for free image hosting. Leave blank to remove image.</p>
+            </div>
+            <div id="edit-image-preview" style="display: none; margin-bottom: 1rem;">
+                <img id="edit-preview-img" src="" alt="Preview" style="max-width: 100%; max-height: 150px; border-radius: 4px; border: 1px solid var(--medium-gray);">
+            </div>
+            <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                <button onclick="closeEditImageModal()" style="padding: 0.75rem 1.5rem; background: var(--medium-gray); border: 1px solid var(--light-gray); color: var(--white); cursor: pointer; border-radius: 4px;">Cancel</button>
+                <button onclick="saveEventImage()" id="save-image-btn" style="padding: 0.75rem 1.5rem; background: var(--orange); border: none; color: var(--black); font-weight: 600; cursor: pointer; border-radius: 4px;">Save</button>
+            </div>
+        </div>
+    </div>
+
     <footer>
         <p>Powered by Nostr & Lightning | <a href="../index.html">RUNSTR</a></p>
     </footer>
@@ -1016,6 +1036,7 @@
                 location: getTag('location') || 'Virtual',
                 distance: distance,
                 distanceLabel: getDistanceLabel(distance),
+                image: getTag('image'),
                 entryFee: parseInt(getTag('entry_fee') || '0'),
                 maxParticipants: parseInt(getTag('max_participants') || '100'),
                 participants: participantTags.length,
@@ -1023,6 +1044,7 @@
                 revenue: participantTags.length * parseInt(getTag('entry_fee') || '0'),
                 registrations: participantTags.length,
                 organizer: truncatePubkey(event.pubkey),
+                organizerPubkey: event.pubkey,
                 status: endTimestamp > Math.floor(Date.now() / 1000) ? 'open' : 'completed'
             };
         }
@@ -1057,7 +1079,9 @@
 
             container.innerHTML = races.map(race => `
                 <div class="race-card">
-                    <div class="race-image">${getDistanceIcon(race.distance)}</div>
+                    <div class="race-image" ${race.image ? `style="padding: 0; overflow: hidden;"` : ''}>
+                        ${race.image ? `<img src="${race.image}" alt="${race.name}" style="width: 100%; height: 100%; object-fit: cover;">` : getDistanceIcon(race.distance)}
+                    </div>
                     <div class="race-info">
                         <div class="race-header">
                             <h3 class="race-name">${race.name}</h3>
@@ -1082,6 +1106,7 @@
                     <div class="race-actions">
                         <a href="race.html?id=${race.id}" class="race-action-btn">View</a>
                         <button class="race-action-btn" onclick="shareRace('${race.id}')">Share</button>
+                        <button class="race-action-btn" onclick="openEditImageModal('${race.id}', '${race.image || ''}')">${race.image ? 'Edit' : 'Add'} Image</button>
                     </div>
                 </div>
             `).join('');
@@ -1135,6 +1160,107 @@
             navigator.clipboard.writeText(link).then(() => {
                 alert('Link copied to clipboard!');
             });
+        }
+
+        // Edit Image Modal functions
+        function openEditImageModal(raceId, currentImage) {
+            const modal = document.getElementById('edit-image-modal');
+            const urlInput = document.getElementById('edit-image-url');
+            const raceIdInput = document.getElementById('edit-image-race-id');
+            const previewContainer = document.getElementById('edit-image-preview');
+            const previewImg = document.getElementById('edit-preview-img');
+
+            raceIdInput.value = raceId;
+            urlInput.value = currentImage || '';
+
+            // Show preview if image exists
+            if (currentImage) {
+                previewImg.src = currentImage;
+                previewContainer.style.display = 'block';
+            } else {
+                previewContainer.style.display = 'none';
+            }
+
+            // Setup preview listener
+            urlInput.oninput = () => {
+                const url = urlInput.value.trim();
+                if (url) {
+                    previewImg.src = url;
+                    previewImg.onload = () => previewContainer.style.display = 'block';
+                    previewImg.onerror = () => previewContainer.style.display = 'none';
+                } else {
+                    previewContainer.style.display = 'none';
+                }
+            };
+
+            modal.style.display = 'flex';
+        }
+
+        function closeEditImageModal() {
+            document.getElementById('edit-image-modal').style.display = 'none';
+        }
+
+        async function saveEventImage() {
+            const raceId = document.getElementById('edit-image-race-id').value;
+            const newImageUrl = document.getElementById('edit-image-url').value.trim();
+            const saveBtn = document.getElementById('save-image-btn');
+
+            try {
+                saveBtn.disabled = true;
+                saveBtn.textContent = 'Saving...';
+
+                // Check for Nostr extension
+                if (!window.nostr) {
+                    throw new Error('Nostr extension not found');
+                }
+
+                // Fetch current event
+                const pool = new NostrTools.SimplePool();
+                const filter = {
+                    kinds: [CALENDAR_EVENT_KIND],
+                    authors: [userPubkey],
+                    '#d': [raceId]
+                };
+
+                const events = await pool.querySync(RELAYS, filter);
+                if (events.length === 0) {
+                    throw new Error('Event not found');
+                }
+
+                const currentEvent = events.sort((a, b) => b.created_at - a.created_at)[0];
+
+                // Update tags - remove old image tag, add new one if provided
+                const updatedTags = currentEvent.tags.filter(t => t[0] !== 'image');
+                if (newImageUrl) {
+                    updatedTags.push(['image', newImageUrl]);
+                }
+
+                // Create new event (same d-tag replaces old one)
+                const updatedEvent = {
+                    kind: CALENDAR_EVENT_KIND,
+                    created_at: Math.floor(Date.now() / 1000),
+                    tags: updatedTags,
+                    content: currentEvent.content
+                };
+
+                // Sign and publish
+                console.log('Updating event image:', updatedEvent);
+                const signedEvent = await window.nostr.signEvent(updatedEvent);
+                await publishToRelays(signedEvent);
+
+                console.log('Image updated successfully!');
+                closeEditImageModal();
+
+                // Reload data to show updated image
+                setTimeout(loadData, 1000);
+
+            } catch (error) {
+                console.error('Error updating image:', error);
+                alert('Error updating image: ' + error.message);
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'Save';
+            }
         }
 
         // Utility functions

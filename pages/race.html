@@ -1188,7 +1188,7 @@
 
                 <div class="race-header">
                     <div class="race-banner">
-                        ${getDistanceIcon(race.distance)}
+                        ${race.image ? `<img src="${race.image}" alt="${race.name}" onerror="this.parentElement.innerHTML='${getDistanceIcon(race.distance)}'">` : getDistanceIcon(race.distance)}
                     </div>
                     <span class="race-distance-badge">${race.distanceLabel}</span>
                     ${race.teamId ? `<span class="race-distance-badge" style="background: var(--medium-gray); margin-left: 0.5rem;">Team Event</span>` : ''}
