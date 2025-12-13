@@ -1200,7 +1200,11 @@
                 <div class="race-info-grid">
                     <div class="info-card">
                         <div class="info-label">Event Window</div>
-                        <div class="info-value">${formatDate(race.date)}<br>${race.time} (24 hours)</div>
+                        <div class="info-value">
+                            ${new Date(race.startTimestamp * 1000).toLocaleDateString()} - ${new Date(race.endTimestamp * 1000).toLocaleDateString()}<br>
+                            ${new Date(race.startTimestamp * 1000).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})} - ${new Date(race.endTimestamp * 1000).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}
+                            <br><small style="color: var(--light-gray);">(Your local time)</small>
+                        </div>
                     </div>
                     <div class="info-card">
                         <div class="info-label">Type</div>
@@ -1664,14 +1668,22 @@
                 const pool = new NostrTools.SimplePool();
 
                 // Step 1: Query ALL Kind 1301 workouts within the event time window
+                // Add 7-day buffer to catch workouts published after the event ends (delayed syncs)
+                const queryBuffer = 7 * 24 * 60 * 60; // 7 days in seconds
                 const workoutFilter = {
                     kinds: [WORKOUT_KIND],
                     since: race.startTimestamp,
-                    until: race.endTimestamp
+                    until: race.endTimestamp + queryBuffer
                 };
 
                 console.log('Querying workouts for leaderboard...');
-                console.log(`Time window: ${new Date(race.startTimestamp * 1000).toISOString()} to ${new Date(race.endTimestamp * 1000).toISOString()}`);
+                console.log('Event window:', {
+                    start: new Date(race.startTimestamp * 1000).toISOString(),
+                    end: new Date(race.endTimestamp * 1000).toISOString(),
+                    startLocal: new Date(race.startTimestamp * 1000).toLocaleString(),
+                    endLocal: new Date(race.endTimestamp * 1000).toLocaleString(),
+                    queryUntil: new Date((race.endTimestamp + queryBuffer) * 1000).toISOString()
+                });
 
                 // Reduced timeout from 15s to 8s
                 const workouts = await Promise.race([
@@ -1681,14 +1693,48 @@
 
                 console.log(`Found ${workouts.length} total workouts in time window`);
 
-                // Step 1.5: Validate workout_start_time is within event window
-                // (Nostr query uses created_at, but we need actual workout time)
+                // Step 1.5: Validate workout time is within event window
+                // Priority: workout_start_time tag > d-tag date > created_at
                 const timeValidatedWorkouts = workouts.filter(w => {
+                    // Try workout_start_time tag first (most accurate)
                     const workoutStartTag = w.tags.find(t => t[0] === 'workout_start_time');
-                    const workoutStartTime = workoutStartTag ? parseInt(workoutStartTag[1]) : w.created_at;
-                    return workoutStartTime >= race.startTimestamp && workoutStartTime <= race.endTimestamp;
+                    if (workoutStartTag) {
+                        const workoutStartTime = parseInt(workoutStartTag[1]);
+                        return workoutStartTime >= race.startTimestamp && workoutStartTime <= race.endTimestamp;
+                    }
+
+                    // Fallback: Parse date from d-tag (format: "workout_2025-01-15_083000")
+                    const dTag = w.tags.find(t => t[0] === 'd');
+                    if (dTag && dTag[1]) {
+                        const match = dTag[1].match(/workout_(\d{4})-(\d{2})-(\d{2})/);
+                        if (match) {
+                            // Create date at noon UTC to avoid timezone boundary issues
+                            const workoutDateUTC = Date.UTC(
+                                parseInt(match[1]),
+                                parseInt(match[2]) - 1,
+                                parseInt(match[3]),
+                                12, 0, 0 // noon UTC
+                            );
+                            const workoutTimestamp = Math.floor(workoutDateUTC / 1000);
+
+                            // Get event start/end dates (at midnight/end of day)
+                            const eventStartDate = new Date(race.startTimestamp * 1000);
+                            eventStartDate.setHours(0, 0, 0, 0);
+                            const eventEndDate = new Date(race.endTimestamp * 1000);
+                            eventEndDate.setHours(23, 59, 59, 999);
+
+                            const eventStartTimestamp = Math.floor(eventStartDate.getTime() / 1000);
+                            const eventEndTimestamp = Math.floor(eventEndDate.getTime() / 1000);
+
+                            return workoutTimestamp >= eventStartTimestamp && workoutTimestamp <= eventEndTimestamp;
+                        }
+                    }
+
+                    // Last fallback: use created_at
+                    console.warn('Workout missing time info, using created_at:', w.id);
+                    return w.created_at >= race.startTimestamp && w.created_at <= race.endTimestamp;
                 });
-                console.log(`${timeValidatedWorkouts.length} workouts with valid workout_start_time`);
+                console.log(`${timeValidatedWorkouts.length} workouts with valid workout time`);
 
                 // Step 1.6: If team race, filter to team members only
                 let teamMemberPubkeys = null;
@@ -1754,7 +1800,13 @@
                     return false;
                 });
 
-                console.log(`${eligibleWorkouts.length} workouts meet activity type and distance/split requirements`);
+                // Summary log for debugging
+                console.log('Workout filtering results:', {
+                    totalFromRelay: workouts.length,
+                    afterTimeValidation: timeValidatedWorkouts.length,
+                    afterTeamFilter: teamFilteredWorkouts.length,
+                    afterActivityAndDistanceFilter: eligibleWorkouts.length
+                });
 
                 if (eligibleWorkouts.length === 0) {
                     renderLeaderboard([], leaderboardContent, race);

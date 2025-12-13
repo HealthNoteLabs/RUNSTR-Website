@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RUNSTR Premium - Track. Compete. Earn.</title>
-    <meta name="description" content="RUNSTR Premium - Earn up to 130k sats/year with weekly payouts, access Season 2 competition, and get free entry to all in-person RUNSTR events.">
+    <title>RUNSTR Season 2 - Track. Compete. Earn.</title>
+    <meta name="description" content="RUNSTR Season 2 - Earn sats with weekly payouts, compete in the Season 2 charity event, and get discounts on in-person RUNSTR events.">
 
     <!-- Nostr Tools -->
     <script src="https://unpkg.com/nostr-tools@2.7.2/lib/nostr.bundle.js"></script>
@@ -257,6 +257,7 @@
             flex-wrap: wrap;
             border-bottom: 1px solid var(--medium-gray);
             padding-bottom: 0.5rem;
+            justify-content: center;
         }
 
         .tab-btn {
@@ -1190,20 +1191,18 @@
     <main class="main-content">
         <!-- Hero Section -->
         <section class="season-hero">
-            <h1>RUNSTR PREMIUM</h1>
+            <h1>RUNSTR SEASON 2</h1>
+            <p class="season-dates">January 1 - February 28, 2026</p>
             <button class="register-btn" onclick="openRegistrationModal()" style="font-size: 1.1rem; padding: 0.75rem 2rem; margin-top: 1rem;">
-                Get RUNSTR Premium
+                Join RUNSTR Season 2
             </button>
             <div id="countdown" class="countdown-container">
                 <!-- Countdown timer will be inserted here -->
             </div>
         </section>
 
-        <!-- RUNSTR Season 2 Section -->
+        <!-- Leaderboards Section -->
         <section class="leaderboards-section">
-            <h2 class="section-title season2-title">RUNSTR SEASON 2</h2>
-            <p class="season2-dates">January 1 - February 28, 2026</p>
-
             <div class="tab-navigation">
                 <button class="tab-btn active" data-tab="charity">Charity Race</button>
                 <button class="tab-btn" data-tab="running">Running</button>
@@ -1252,29 +1251,6 @@
             </div>
         </section>
 
-        <!-- How RUNSTR Premium Works Section -->
-        <section class="premium-benefits-section">
-            <h2 class="section-title">How RUNSTR Premium Works</h2>
-
-            <div class="benefits-grid">
-                <div class="benefit-card">
-                    <div class="benefit-number">1</div>
-                    <h3>RUNSTR Season Pass</h3>
-                    <p>Entry into the RUNSTR Season Charity Event. Compete to help your chosen charity win from a 1,000,000 sat prize pool.</p>
-                </div>
-                <div class="benefit-card">
-                    <div class="benefit-number">2</div>
-                    <h3>RUNSTR Rewards</h3>
-                    <p>Earn sats every week just for working out. Payouts range from 1,500 to 2,500 sats based on workout frequency.</p>
-                </div>
-                <div class="benefit-card">
-                    <div class="benefit-number">3</div>
-                    <h3>RUNSTR Event Discount</h3>
-                    <p>25% discount on all in-person RUNSTR race events. From local 5Ks to destination races.</p>
-                </div>
-            </div>
-        </section>
-
         <!-- Competition Details Section -->
         <section class="competition-section">
             <h2 class="section-title">How Season 2 Works</h2>
@@ -1288,69 +1264,16 @@
                 <div class="rule-card">
                     <div class="rule-number">2</div>
                     <h3>Compete by Category</h3>
-                    <p>Each activity type (running, walking, cycling) has its own leaderboard. The charity with the most distance in each category wins 333,333 sats.</p>
+                    <p>Each activity type (running, walking, cycling) has its own leaderboard. The charity with the most distance in each category wins ~166,666 sats.</p>
                 </div>
                 <div class="rule-card">
                     <div class="rule-number">3</div>
-                    <h3>Earn Medals</h3>
-                    <p>All participants earn a participation medal. Top contributors in each category earn winner medals displayed on their profile.</p>
+                    <h3>Win the Lottery</h3>
+                    <p>One random participant who signed up for Season 2 will win 500,000 sats at the end of the season!</p>
                 </div>
             </div>
         </section>
 
-        <!-- RUNSTR Rewards Section -->
-        <section class="rewards-section">
-            <h2 class="section-title">RUNSTR Rewards</h2>
-            <p class="section-subtitle">Earn sats every week just for working out</p>
-
-            <div class="rewards-card">
-                <h3>Weekly Payout Structure</h3>
-                <p style="color: var(--light-gray); margin-bottom: 1rem;">Payouts sent every Sunday based on workout days that week</p>
-
-                <table class="rewards-table">
-                    <thead>
-                        <tr>
-                            <th>Workout Days</th>
-                            <th>Weekly Payout</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1 day</td>
-                            <td>1,500 sats</td>
-                        </tr>
-                        <tr>
-                            <td>2 days</td>
-                            <td>1,900 sats</td>
-                        </tr>
-                        <tr>
-                            <td>3 days</td>
-                            <td>2,200 sats</td>
-                        </tr>
-                        <tr>
-                            <td>4-5 days</td>
-                            <td>2,400 sats</td>
-                        </tr>
-                        <tr>
-                            <td>6-7 days</td>
-                            <td>2,500 sats</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <!-- In-Person Events Section -->
-        <section class="events-section">
-            <h2 class="section-title">In-Person Race Discount</h2>
-
-            <div class="events-card">
-                <div class="discount-badge">25% OFF</div>
-                <h3>All In-Person RUNSTR Races</h3>
-                <p>Premium members receive a 25% discount on all in-person RUNSTR race events. From local 5Ks to destination races, your Premium membership saves you money while you compete with the community.</p>
-                <p style="color: var(--light-gray); margin-top: 1rem; font-size: 0.9rem;">Stay tuned for upcoming race announcements!</p>
-            </div>
-        </section>
     </main>
 
     <!-- Registration Modal -->
@@ -1378,8 +1301,8 @@
 
             <!-- Step 2: Payment -->
             <div id="reg-step-2" class="reg-step" style="display:none;">
-                <h2 class="modal-title">Step 2: Pay for Premium</h2>
-                <p>Premium Price: <strong style="color: var(--orange);">100,000 sats</strong> (1 year)</p>
+                <h2 class="modal-title">Step 2: Pay for Season 2</h2>
+                <p>Season 2 Price: <strong style="color: var(--orange);">24,000 sats</strong></p>
 
                 <div id="invoice-loading" class="loading-invoice">
                     <div class="loading-spinner"></div>
@@ -1399,18 +1322,17 @@
 
             <!-- Success State -->
             <div id="reg-success" class="reg-step" style="display:none;">
-                <h2 class="modal-title">Welcome to RUNSTR Premium!</h2>
-                <p>Thank you for purchasing RUNSTR Premium!</p>
-                <p style="font-size: 0.85rem; color: var(--light-gray); margin-top: 1rem;">Your Premium access will be activated within 24 hours after payment verification.</p>
+                <h2 class="modal-title">Welcome to RUNSTR Season 2!</h2>
+                <p>Thank you for joining RUNSTR Season 2!</p>
+                <p style="font-size: 0.85rem; color: var(--light-gray); margin-top: 1rem;">Your Season 2 access will be activated within 24 hours after payment verification.</p>
                 <div style="font-size: 0.85rem; color: var(--light-gray); margin-top: 0.5rem; text-align: left;">
                     <p style="margin-bottom: 0.5rem;">You now have:</p>
                     <ul style="padding-left: 1.5rem; margin: 0;">
-                        <li>Weekly reward payouts every Sunday</li>
-                        <li>Access to Season 2 competition</li>
-                        <li>25% discount on all in-person RUNSTR races</li>
+                        <li>Entry into the Season 2 charity competition</li>
+                        <li>Chance to win the 500,000 sats lottery</li>
                     </ul>
                 </div>
-                <p style="font-size: 0.85rem; color: var(--light-gray); margin-top: 1rem;">Your 12-month membership starts now. Log workouts in the RUNSTR app to start earning!</p>
+                <p style="font-size: 0.85rem; color: var(--light-gray); margin-top: 1rem;">Log workouts in the RUNSTR app to help your chosen charity win!</p>
                 <button class="register-btn" onclick="closeModal()">Close</button>
             </div>
         </div>
@@ -1464,7 +1386,7 @@
 
         // Registration configuration
         const LIGHTNING_ADDRESS = 'hustle@getalby.com';
-        const ENTRY_FEE_SATS = 100000;
+        const ENTRY_FEE_SATS = 24000;
 
         // ==========================================
         // STATE
@@ -1926,7 +1848,7 @@
             if (charities.length === 0) {
                 container.innerHTML = `
                     <div class="charity-prize-banner">
-                        <span class="prize-text">1,000,000 sats split across 3 winning charities!</span>
+                        <span class="prize-text">500,000 sats to charity + 500,000 sats lottery for one lucky participant!</span>
                     </div>
                     <div class="empty-state">
                         <p>No charity contributions yet.</p>
@@ -1946,11 +1868,11 @@
 
             container.innerHTML = `
                 <div class="charity-prize-banner">
-                    <span class="prize-text">1,000,000 sats split across 3 winning charities!</span>
+                    <span class="prize-text">500,000 sats to charity + 500,000 sats lottery for one lucky participant!</span>
                 </div>
-                ${renderCategorySection('Running', '333,333', runningRanked, 'running')}
-                ${renderCategorySection('Walking', '333,333', walkingRanked, 'walking')}
-                ${renderCategorySection('Cycling', '333,334', cyclingRanked, 'cycling')}
+                ${renderCategorySection('Running', '166,666', runningRanked, 'running')}
+                ${renderCategorySection('Walking', '166,666', walkingRanked, 'walking')}
+                ${renderCategorySection('Cycling', '166,668', cyclingRanked, 'cycling')}
             `;
         }
 
@@ -2080,7 +2002,7 @@
 
             try {
                 // Generate invoice with identity in comment
-                const comment = `RUNSTR Premium: ${identityInput}`;
+                const comment = `RUNSTR Season 2: ${identityInput}`;
                 currentInvoice = await fetchLightningInvoice(ENTRY_FEE_SATS, comment);
 
                 // Display QR code
