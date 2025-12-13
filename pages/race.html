@@ -1835,23 +1835,21 @@
                                 nip05: content.nip05 || null,
                                 picture: content.picture || null
                             };
-                            // Track NIP-05 verified users for spam prevention
-                            if (content.nip05) {
-                                verifiedPubkeys.add(p.pubkey);
-                            }
+                            // Add all users with profiles (removed NIP-05 requirement)
+                            verifiedPubkeys.add(p.pubkey);
                         } catch (e) {}
                     });
 
-                    console.log(`${verifiedPubkeys.size} NIP-05 verified users found`);
+                    console.log(`${verifiedPubkeys.size} users with profiles found`);
                 } catch (e) {
                     console.error('Error fetching profiles:', e);
                     // Graceful degradation: allow all workouts if profile fetch fails
                     eligibleWorkouts.forEach(w => verifiedPubkeys.add(w.pubkey));
                 }
 
-                // Step 4: Filter to verified users only
+                // Step 4: Filter to users with profiles (no NIP-05 requirement)
                 const verifiedWorkouts = eligibleWorkouts.filter(w => verifiedPubkeys.has(w.pubkey));
-                console.log(`${verifiedWorkouts.length} workouts from NIP-05 verified users`);
+                console.log(`${verifiedWorkouts.length} workouts from users with profiles`);
 
                 // Step 5: Calculate rankings using pre-fetched profiles (no additional fetch needed)
                 const rankings = calculateRankings(verifiedWorkouts, race.distance, profileMap);
