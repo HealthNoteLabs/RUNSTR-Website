@@ -337,9 +337,15 @@
             max-width: 1200px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 3rem;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
             padding-top: 3rem;
+        }
+
+        @media (max-width: 900px) {
+            .products-container {
+                grid-template-columns: 1fr;
+            }
         }
 
         .product-card {
@@ -959,10 +965,6 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            .products-container {
-                grid-template-columns: 1fr;
-            }
-
             h1 {
                 font-size: 3rem;
             }
@@ -1028,7 +1030,7 @@
     <header class="nav-header">
         <a href="index.html" class="nav-logo">RUNSTR</a>
         <nav class="nav-links">
-            <a href="pages/season2.html" class="nav-link">Season 2</a>
+            <a href="pages/season2.html" class="nav-link">Season II</a>
             <a href="pages/races.html" class="nav-link">Events</a>
             <a href="pages/clubs.html" class="nav-link">Clubs</a>
         </nav>
@@ -1094,40 +1096,39 @@
     <!-- Core Pillars Section -->
     <section class="products">
         <div class="products-container">
+            <!-- Bitcoin Rewards Card -->
+            <div class="product-card">
+                <h2 class="product-title">BITCOIN REWARDS</h2>
+                <p class="product-subtitle" style="text-transform: none; font-size: 1rem; line-height: 1.6;">Earn 21 sats daily just for working out. Compete in Season II for a chance to earn additional rewards.</p>
+                <ul class="product-features">
+                    <li>Daily workout rewards</li>
+                    <li>User created competitions</li>
+                    <li>RUNSTR created competitions</li>
+                    <li>Zaps</li>
+                </ul>
+            </div>
+
+            <!-- Non-Custodial Card -->
+            <div class="product-card">
+                <h2 class="product-title">NON-CUSTODIAL</h2>
+                <p class="product-subtitle" style="text-transform: none; font-size: 1rem; line-height: 1.6;">We don't custody your rewards. We don't custody your fitness data.</p>
+                <ul class="product-features">
+                    <li>P2P Lightning payments</li>
+                    <li>No centralized server</li>
+                    <li>Your fitness data stays local</li>
+                    <li>No middlemen</li>
+                </ul>
+            </div>
+
             <!-- Anonymous Card -->
             <div class="product-card">
                 <h2 class="product-title">ANONYMOUS</h2>
-                <p class="product-subtitle" style="text-transform: none; font-size: 1rem; line-height: 1.6;">No email, no phone number, no account creation. Use Nostr keys for identity—your fitness data stays yours.</p>
+                <p class="product-subtitle" style="text-transform: none; font-size: 1rem; line-height: 1.6;">No name, no email, no phone number. Just click Start.</p>
                 <ul class="product-features">
-                    <li>No personal data collection</li>
                     <li>Nostr-based identity</li>
-                    <li>No tracking or analytics</li>
-                    <li>Privacy by default</li>
-                </ul>
-            </div>
-
-            <!-- Local First Card -->
-            <div class="product-card">
-                <h2 class="product-title">LOCAL FIRST</h2>
-                <p class="product-subtitle" style="text-transform: none; font-size: 1rem; line-height: 1.6;">Your workout data lives on your device. Import from Apple HealthKit, sync to Nostr only when you choose.</p>
-                <ul class="product-features">
-                    <li>Data stored on your device</li>
-                    <li>Works offline</li>
-                    <li>You control what gets published</li>
-                    <li>No cloud dependency</li>
-                </ul>
-            </div>
-
-            <!-- Open Source Card -->
-            <div class="product-card">
-                <h2 class="product-title">OPEN SOURCE</h2>
-                <p class="product-subtitle" style="text-transform: none; font-size: 1rem; line-height: 1.6;">Fully transparent codebase. Verify what the app does, contribute improvements, or fork it for your own use.</p>
-                <ul class="product-features">
-                    <li>100% open source code</li>
-                    <li>Community-driven development</li>
-                    <li>Auditable and transparent</li>
-                    <li>Built on open protocols</li>
-                    <li>Post workouts to social media</li>
+                    <li>No signup</li>
+                    <li>Local by default</li>
+                    <li>No central database</li>
                 </ul>
             </div>
         </div>
@@ -1148,7 +1149,7 @@
                     Top runners, walkers, and cyclists earned real Bitcoin.<br>
                     <span style="color: var(--orange);">Get zapped on leaderboards</span> — supporters can send you sats directly through your profile.
                 </p>
-                <a href="pages/season2.html" style="display: inline-block; margin-top: 1.5rem; padding: 0.75rem 1.5rem; background: var(--orange); color: var(--black); text-decoration: none; font-weight: 700; border: 2px solid var(--orange); transition: all 0.3s;">Get RUNSTR Premium</a>
+                <a href="pages/season2.html" style="display: inline-block; margin-top: 1.5rem; padding: 0.75rem 1.5rem; background: var(--orange); color: var(--black); text-decoration: none; font-weight: 700; border: 2px solid var(--orange); transition: all 0.3s;">Join Season II</a>
             </div>
             <div style="flex: 0 0 auto;">
                 <img src="images/season-1.png" alt="RUNSTR Season 1 Leaderboard" style="max-width: 280px; border-radius: 20px; box-shadow: 0 20px 60px rgba(245, 163, 86, 0.2);">
@@ -1160,14 +1161,14 @@
     <section class="monetization">
         <div class="monetization-container">
             <div class="monetization-card">
-                <h2 class="monetization-title">RUNSTR PREMIUM</h2>
+                <h2 class="monetization-title">RUNSTR SEASON II</h2>
 
                 <p style="color: var(--orange); margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 700;">Coming Soon</p>
 
                 <p style="color: var(--light-gray); margin-bottom: 2rem; font-size: 1.1rem;">Launching January 2026</p>
 
                 <!-- CTA Button -->
-                <a href="pages/season2.html" style="display: inline-block; padding: 1rem 2rem; background: var(--orange); color: var(--black); text-decoration: none; font-weight: 700; font-size: 1.1rem; border-radius: 4px; transition: all 0.3s;">Learn More About Premium</a>
+                <a href="pages/season2.html" style="display: inline-block; padding: 1rem 2rem; background: var(--orange); color: var(--black); text-decoration: none; font-weight: 700; font-size: 1.1rem; border-radius: 4px; transition: all 0.3s;">Learn More</a>
             </div>
         </div>
     </section>
@@ -1229,7 +1230,7 @@
         <div class="footer-content">
             <div class="subscription-info">
                 <p style="font-size: 0.95rem; color: var(--light-gray);">
-                    Free to use. RUNSTR Premium coming January 2026.
+                    Free to use. RUNSTR Season II coming January 2026.
                 </p>
             </div>
 

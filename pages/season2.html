@@ -1290,11 +1290,10 @@
             <!-- Step 1: Identity -->
             <div id="reg-step-1" class="reg-step">
                 <h2 class="modal-title">Step 1: Your Identity</h2>
-                <p>Enter your Nostr identity or Lightning address:</p>
-                <input type="text" id="identity-input" placeholder="npub1..., user@domain.com, or lightning@address.com" />
+                <p>Enter your NIP-05:</p>
+                <input type="text" id="identity-input" placeholder="user@domain.com" />
                 <p style="font-size: 0.85rem; color: var(--light-gray);">
-                    Enter your npub, NIP-05 identifier, or Lightning address (for reward payouts).<br>
-                    If you have a Nostr extension (Alby, nos2x), your npub will be auto-filled.
+                    Your NIP-05 will be included in the payment memo for verification.
                 </p>
                 <button class="register-btn" onclick="proceedToPayment()">Continue to Payment</button>
             </div>
