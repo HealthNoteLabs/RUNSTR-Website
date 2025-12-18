@@ -61,29 +61,6 @@
             letter-spacing: -1px;
         }
 
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .nav-link {
-            padding: 0.75rem 1.5rem;
-            color: var(--light-gray);
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border: 2px solid transparent;
-        }
-
-        .nav-link:hover {
-            color: var(--orange);
-            border-color: var(--orange);
-        }
-
         /* Main Content */
         .main-content {
             max-width: 1100px;
@@ -1119,44 +1096,6 @@
             font-size: 1.1rem;
         }
 
-        /* Events Section */
-        .events-section {
-            margin-top: 3rem;
-            padding: 0 1rem;
-            margin-bottom: 3rem;
-        }
-
-        .events-card {
-            background: var(--dark-gray);
-            padding: 2rem;
-            border-radius: 8px;
-            max-width: 600px;
-            margin: 0 auto;
-            text-align: center;
-            position: relative;
-        }
-
-        .discount-badge {
-            position: absolute;
-            top: -10px;
-            right: 20px;
-            background: var(--orange);
-            color: var(--black);
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        .events-card h3 {
-            color: var(--orange);
-            margin-bottom: 1rem;
-        }
-
-        .events-card p {
-            color: var(--light-gray);
-        }
-
         @media (max-width: 768px) {
             .benefits-grid {
                 grid-template-columns: 1fr;
@@ -1182,10 +1121,6 @@
     <!-- Navigation Header -->
     <header class="nav-header">
         <a href="../index.html" class="nav-logo">RUNSTR</a>
-        <nav class="nav-links">
-            <a href="races.html" class="nav-link">Events</a>
-            <a href="clubs.html" class="nav-link">Clubs</a>
-        </nav>
     </header>
 
     <main class="main-content">
