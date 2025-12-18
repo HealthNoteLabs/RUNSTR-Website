@@ -1354,16 +1354,15 @@
         ];
 
         const WORKOUT_KIND = 1301;
+        const PARTICIPANT_LIST_KIND = 30000;
+
+        // RUNSTR's public key for querying participant list
+        const RUNSTR_PUBKEY = '611021eaaa2692741b1236bbcea54c6aa9f20ba30cace316c3a93d45089a7d0f';
+        const PARTICIPANT_LIST_D_TAG = 'runstr-season-2-participants';
 
         // Season 2 dates (January 1 - February 28, 2026)
         const SEASON_START = 1735689600; // Jan 1, 2026 00:00:00 UTC
         const SEASON_END = 1740787199;   // Feb 28, 2026 23:59:59 UTC
-
-        // Admin-managed participant list (add hex pubkeys after payment verification)
-        const REGISTERED_PUBKEYS = [
-            // Example: 'a1b2c3d4e5f6789...' (hex pubkey)
-            // Add participants here after they pay 100k sats for Premium
-        ];
 
         // Charity definitions
         const CHARITIES = {
@@ -1506,19 +1505,44 @@
                 // Continue to fetch fresh data in background
             }
 
-            // If no registered participants yet, show empty state
-            if (REGISTERED_PUBKEYS.length === 0) {
-                renderEmptyState();
-                return;
-            }
-
             try {
                 const pool = new NostrTools.SimplePool();
+
+                // Query the participant list from Nostr (kind 30000)
+                console.log('Querying Season 2 participant list...');
+                const participantListFilter = {
+                    kinds: [PARTICIPANT_LIST_KIND],
+                    authors: [RUNSTR_PUBKEY],
+                    '#d': [PARTICIPANT_LIST_D_TAG]
+                };
+
+                const participantListEvents = await Promise.race([
+                    pool.querySync(RELAYS, participantListFilter),
+                    new Promise(resolve => setTimeout(() => resolve([]), 10000))
+                ]);
+
+                // Extract participant pubkeys from p-tags
+                let registeredPubkeys = [];
+                if (participantListEvents.length > 0) {
+                    const listEvent = participantListEvents[0];
+                    registeredPubkeys = listEvent.tags
+                        .filter(tag => tag[0] === 'p' && tag[1])
+                        .map(tag => tag[1]);
+                    console.log(`Found ${registeredPubkeys.length} registered participants`);
+                } else {
+                    console.log('No participant list event found');
+                }
+
+                // If no registered participants yet, show empty state
+                if (registeredPubkeys.length === 0) {
+                    renderEmptyState();
+                    return;
+                }
 
                 // Query workouts from registered participants
                 const filter = {
                     kinds: [WORKOUT_KIND],
-                    authors: REGISTERED_PUBKEYS,
+                    authors: registeredPubkeys,
                     since: SEASON_START,
                     until: SEASON_END
                 };
@@ -1534,7 +1558,7 @@
 
                 // Fetch profiles for all registered participants
                 const profiles = await Promise.race([
-                    pool.querySync(RELAYS, { kinds: [0], authors: REGISTERED_PUBKEYS }),
+                    pool.querySync(RELAYS, { kinds: [0], authors: registeredPubkeys }),
                     new Promise(resolve => setTimeout(() => resolve([]), 5000))
                 ]);
 
@@ -1551,7 +1575,7 @@
                 });
 
                 // Process workouts
-                seasonData = processWorkouts(workouts);
+                seasonData = processWorkouts(workouts, registeredPubkeys);
                 seasonData.profileMap = profileMap;
 
                 // Cache the data
@@ -1572,12 +1596,12 @@
         // DATA PROCESSING
         // ==========================================
 
-        function processWorkouts(workouts) {
+        function processWorkouts(workouts, registeredPubkeys) {
             const participantStats = {};
             const charityStats = {};
 
             // Initialize all registered participants with zero stats
-            REGISTERED_PUBKEYS.forEach(pubkey => {
+            registeredPubkeys.forEach(pubkey => {
                 participantStats[pubkey] = {
                     pubkey,
                     running: { distance: 0, workouts: 0 },
@@ -1590,7 +1614,7 @@
                 const pubkey = workout.pubkey;
 
                 // Skip if not a registered participant
-                if (!REGISTERED_PUBKEYS.includes(pubkey)) return;
+                if (!registeredPubkeys.includes(pubkey)) return;
 
                 const exercise = getTagValue(workout, 'exercise');
                 const distanceTag = workout.tags.find(t => t[0] === 'distance');
