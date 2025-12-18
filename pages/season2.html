@@ -226,363 +226,92 @@
             margin-bottom: 2rem;
         }
 
-        /* Tab Navigation */
-        .tab-navigation {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-            border-bottom: 1px solid var(--medium-gray);
-            padding-bottom: 0.5rem;
+        /* Participants Section */
+        .participants-section {
+            margin-bottom: 3rem;
+        }
+
+        .participants-section .section-title {
             justify-content: center;
-        }
-
-        .tab-btn {
-            padding: 0.75rem 1.5rem;
-            background: transparent;
-            border: none;
-            color: var(--light-gray);
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 600;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            position: relative;
-        }
-
-        .tab-btn:hover {
-            color: var(--orange);
-        }
-
-        .tab-btn.active {
-            color: var(--orange);
-        }
-
-        .tab-btn.active::after {
-            content: '';
-            position: absolute;
-            bottom: -0.5rem;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: var(--orange);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* Leaderboard Table */
-        .leaderboard-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .leaderboard-table th {
-            padding: 1rem;
-            text-align: left;
-            color: var(--light-gray);
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-bottom: 1px solid var(--medium-gray);
-        }
-
-        .leaderboard-table th:first-child {
             text-align: center;
-            width: 60px;
         }
 
-        .leaderboard-table td {
-            padding: 1rem;
-            border-bottom: 1px solid var(--medium-gray);
+        .participants-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
         }
 
-        .leaderboard-table td:first-child {
-            text-align: center;
-            font-weight: 700;
-        }
-
-        .athlete-cell {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .athlete-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            object-fit: cover;
-            background: var(--medium-gray);
-        }
-
-        .athlete-avatar-fallback {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: var(--medium-gray);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--light-gray);
-            font-weight: 700;
-            font-size: 0.9rem;
-        }
-
-        /* Charity Cards */
-        .charity-prize-banner {
-            background: linear-gradient(135deg, var(--bitcoin-orange) 0%, var(--orange) 100%);
-            padding: 1rem 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .charity-prize-banner .prize-icon {
-            font-size: 1.5rem;
-        }
-
-        .charity-prize-banner .prize-text {
-            color: var(--black);
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        .charity-card {
+        .participant-card {
             background: var(--dark-gray);
             border: 1px solid var(--medium-gray);
-            padding: 1.5rem;
-            margin-bottom: 1rem;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
             transition: all 0.3s;
         }
 
-        .charity-card:hover {
+        .participant-card:hover {
             border-color: var(--orange);
         }
 
-        .charity-card.winner {
-            border: 2px solid var(--orange);
-            position: relative;
-        }
-
-        .charity-card.winner::before {
-            content: 'LEADING';
-            position: absolute;
-            top: -10px;
-            right: 20px;
-            background: var(--orange);
-            color: var(--black);
-            padding: 0.25rem 0.75rem;
-            font-size: 0.7rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
-
-        .charity-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .charity-rank {
-            font-size: 1.5rem;
-            font-weight: 900;
-            color: var(--orange);
-            min-width: 50px;
-        }
-
-        .charity-name {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--white);
-            flex: 1;
-        }
-
-        .charity-contributors {
-            font-size: 0.85rem;
-            color: var(--light-gray);
-        }
-
-        .charity-progress {
-            background: var(--medium-gray);
-            height: 24px;
-            border-radius: 12px;
-            overflow: hidden;
-            margin: 1rem 0;
-        }
-
-        .charity-progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--bitcoin-orange), var(--orange));
-            transition: width 0.5s ease;
-            border-radius: 12px;
-        }
-
-        .charity-stats {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .charity-distance {
-            font-size: 1.5rem;
-            font-weight: 900;
-            color: var(--orange);
-        }
-
-        .charity-top-contributors {
-            border-top: 1px solid var(--medium-gray);
-            padding-top: 1rem;
-            margin-top: 1rem;
-        }
-
-        .charity-top-contributors h4 {
-            font-size: 0.85rem;
-            color: var(--light-gray);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 0.75rem;
-        }
-
-        .charity-top-contributors ul {
-            list-style: none;
-        }
-
-        .charity-top-contributors li {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 0;
-            font-size: 0.9rem;
-        }
-
-        .contributor-rank {
-            color: var(--light-gray);
-            min-width: 24px;
-        }
-
-        .contributor-avatar {
-            width: 24px;
-            height: 24px;
+        .participant-avatar {
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
+            background: var(--medium-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--orange);
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .participant-avatar img {
+            width: 100%;
+            height: 100%;
             object-fit: cover;
         }
 
-        .contributor-name {
-            flex: 1;
-            color: var(--white);
-        }
-
-        .contributor-distance {
-            color: var(--orange);
-            font-weight: 600;
-        }
-
-        /* Category Sections for Charity Leaderboard */
-        .category-section {
-            margin-bottom: 2rem;
-            padding: 1.5rem;
-            background: var(--medium-gray);
-            border-radius: 8px;
-        }
-
-        .category-title {
-            color: var(--orange);
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-            font-weight: 700;
-        }
-
-        .charity-ranking {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .charity-row {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 0.75rem 1rem;
-            background: var(--dark-gray);
-            border-radius: 4px;
-        }
-
-        .charity-row.leader {
-            border: 2px solid var(--orange);
-            background: rgba(245, 163, 86, 0.1);
-        }
-
-        .charity-row .rank {
-            font-weight: 900;
-            color: var(--orange);
-            min-width: 1.5rem;
-            font-size: 1.1rem;
-        }
-
-        .charity-row .charity-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .charity-row .charity-name {
-            font-weight: 600;
-            font-size: 1rem;
-            display: block;
-            margin-bottom: 0.25rem;
-        }
-
-        .charity-progress-mini {
-            height: 4px;
-            background: var(--medium-gray);
-            border-radius: 2px;
+        .participant-info {
             overflow: hidden;
         }
 
-        .charity-row .distance {
-            color: var(--orange);
-            font-weight: 700;
+        .participant-name {
+            font-weight: 600;
+            color: var(--white);
             white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        .charity-row .contributors {
+        .participant-nip05 {
+            font-size: 0.8rem;
             color: var(--light-gray);
-            font-size: 0.85rem;
             white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        @media (max-width: 600px) {
-            .charity-row {
-                flex-wrap: wrap;
-                gap: 0.5rem;
-            }
+        .participant-count {
+            text-align: center;
+            color: var(--orange);
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
 
-            .charity-row .charity-info {
-                flex: 1 1 100%;
-                order: 2;
-            }
+        .empty-participants {
+            text-align: center;
+            padding: 3rem;
+            color: var(--light-gray);
+        }
 
-            .charity-row .rank {
-                order: 1;
-            }
-
-            .charity-row .distance {
-                order: 3;
-            }
-
-            .charity-row .contributors {
-                order: 4;
-            }
+        .empty-participants p {
+            margin-bottom: 1rem;
         }
 
         /* Loading & Error States */
@@ -1136,52 +865,13 @@
             </div>
         </section>
 
-        <!-- Leaderboards Section -->
-        <section class="leaderboards-section">
-            <div class="tab-navigation">
-                <button class="tab-btn active" data-tab="charity">Charity Race</button>
-                <button class="tab-btn" data-tab="running">Running</button>
-                <button class="tab-btn" data-tab="walking">Walking</button>
-                <button class="tab-btn" data-tab="cycling">Cycling</button>
-            </div>
-
-            <!-- Charity Leaderboard -->
-            <div class="tab-content active" id="charity-tab">
-                <div id="charity-leaderboard">
-                    <div class="loading">
-                        <div class="loading-spinner"></div>
-                        <p>Loading charity leaderboard...</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Running Leaderboard -->
-            <div class="tab-content" id="running-tab">
-                <div id="running-leaderboard">
-                    <div class="loading">
-                        <div class="loading-spinner"></div>
-                        <p>Loading running leaderboard...</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Walking Leaderboard -->
-            <div class="tab-content" id="walking-tab">
-                <div id="walking-leaderboard">
-                    <div class="loading">
-                        <div class="loading-spinner"></div>
-                        <p>Loading walking leaderboard...</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Cycling Leaderboard -->
-            <div class="tab-content" id="cycling-tab">
-                <div id="cycling-leaderboard">
-                    <div class="loading">
-                        <div class="loading-spinner"></div>
-                        <p>Loading cycling leaderboard...</p>
-                    </div>
+        <!-- Participants Section -->
+        <section class="participants-section">
+            <h2 class="section-title">Registered Participants</h2>
+            <div id="participants-container">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading participants...</p>
                 </div>
             </div>
         </section>
@@ -1288,7 +978,6 @@
             'wss://relay.primal.net'
         ];
 
-        const WORKOUT_KIND = 1301;
         const PARTICIPANT_LIST_KIND = 30000;
 
         // RUNSTR's public key for querying participant list
@@ -1299,24 +988,6 @@
         const SEASON_START = 1735689600; // Jan 1, 2026 00:00:00 UTC
         const SEASON_END = 1740787199;   // Feb 28, 2026 23:59:59 UTC
 
-        // Charity definitions
-        const CHARITIES = {
-            'opensats': { name: 'OpenSats', lightning: 'opensats@vlt.ge' },
-            'hrf': { name: 'Human Rights Foundation', lightning: 'hrf@btcpay.hrf.org' },
-            'bitcoin-beach': { name: 'Bitcoin Beach', lightning: 'growbitcoinbeach@geyser.fund' },
-            'bitcoin-bay': { name: 'Bitcoin Bay', lightning: 'bitcoinbayfoundation@geyser.fund' },
-            'bitcoin-ekasi': { name: 'Bitcoin Ekasi', lightning: 'bitcoinekasi@geyser.fund' },
-            'bitcoin-isla': { name: 'Bitcoin Isla', lightning: 'btcisla@geyser.fund' },
-            'bitcoin-valley': { name: 'Bitcoin Valley', lightning: 'bitcoinvalleycirculareconomy@geyser.fund' },
-            'bitcoin-district': { name: 'Bitcoin District', lightning: 'bitcoindc@geyser.fund' },
-            'bitcoin-yucatan': { name: 'Bitcoin Yucatan', lightning: 'bitcoinyucatancommunity@geyser.fund' },
-            'bitcoin-veterans': { name: 'Bitcoin Veterans', lightning: 'operationbitcoin@geyser.fund' }
-        };
-
-        // Cache configuration
-        const CACHE_KEY = 'runstr_season2_data';
-        const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
-
         // Registration configuration
         const LIGHTNING_ADDRESS = 'thewildhustle@strike.me';
         const ENTRY_FEE_SATS = 24000;
@@ -1325,7 +996,6 @@
         // STATE
         // ==========================================
 
-        let seasonData = null;
         let profileMap = {};
 
         // Registration state
@@ -1341,7 +1011,6 @@
             updateCountdown();
             setInterval(updateCountdown, 1000);
 
-            setupTabNavigation();
             loadSeasonData();
 
             // Auto-refresh every 5 minutes
@@ -1407,39 +1076,10 @@
         }
 
         // ==========================================
-        // TAB NAVIGATION
-        // ==========================================
-
-        function setupTabNavigation() {
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const tab = btn.dataset.tab;
-
-                    // Update active tab button
-                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-
-                    // Update active tab content
-                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                    document.getElementById(`${tab}-tab`).classList.add('active');
-                });
-            });
-        }
-
-        // ==========================================
         // DATA LOADING
         // ==========================================
 
         async function loadSeasonData() {
-            // Check cache first
-            const cached = getCachedData();
-            if (cached) {
-                seasonData = cached;
-                profileMap = cached.profileMap || {};
-                renderAllLeaderboards();
-                // Continue to fetch fresh data in background
-            }
-
             try {
                 const pool = new NostrTools.SimplePool();
 
@@ -1474,23 +1114,6 @@
                     return;
                 }
 
-                // Query workouts from registered participants
-                const filter = {
-                    kinds: [WORKOUT_KIND],
-                    authors: registeredPubkeys,
-                    since: SEASON_START,
-                    until: SEASON_END
-                };
-
-                console.log('Querying Season 2 workouts...');
-
-                const workouts = await Promise.race([
-                    pool.querySync(RELAYS, filter),
-                    new Promise(resolve => setTimeout(() => resolve([]), 15000))
-                ]);
-
-                console.log(`Found ${workouts.length} workouts`);
-
                 // Fetch profiles for all registered participants
                 const profiles = await Promise.race([
                     pool.querySync(RELAYS, { kinds: [0], authors: registeredPubkeys }),
@@ -1509,198 +1132,12 @@
                     } catch (e) {}
                 });
 
-                // Process workouts
-                seasonData = processWorkouts(workouts, registeredPubkeys);
-                seasonData.profileMap = profileMap;
-
-                // Cache the data
-                cacheData(seasonData);
-
-                // Render all leaderboards
-                renderAllLeaderboards();
+                // Render participants
+                renderParticipants(registeredPubkeys);
 
             } catch (error) {
                 console.error('Error loading season data:', error);
-                if (!cached) {
-                    renderError();
-                }
-            }
-        }
-
-        // ==========================================
-        // DATA PROCESSING
-        // ==========================================
-
-        function processWorkouts(workouts, registeredPubkeys) {
-            const participantStats = {};
-            const charityStats = {};
-
-            // Initialize all registered participants with zero stats
-            registeredPubkeys.forEach(pubkey => {
-                participantStats[pubkey] = {
-                    pubkey,
-                    running: { distance: 0, workouts: 0 },
-                    walking: { distance: 0, workouts: 0 },
-                    cycling: { distance: 0, workouts: 0 }
-                };
-            });
-
-            workouts.forEach(workout => {
-                const pubkey = workout.pubkey;
-
-                // Skip if not a registered participant
-                if (!registeredPubkeys.includes(pubkey)) return;
-
-                const exercise = getTagValue(workout, 'exercise');
-                const distanceTag = workout.tags.find(t => t[0] === 'distance');
-                const charityTag = workout.tags.find(t => t[0] === 'charity');
-
-                // Parse distance
-                const distanceKm = parseDistance(distanceTag);
-
-                // Add to activity totals
-                const activityType = normalizeActivity(exercise);
-                if (activityType && participantStats[pubkey][activityType]) {
-                    participantStats[pubkey][activityType].distance += distanceKm;
-                    participantStats[pubkey][activityType].workouts += 1;
-                }
-
-                // Aggregate charity distances per category (per-workout, not per-user)
-                if (charityTag && charityTag.length >= 2) {
-                    const charityId = charityTag[1].toLowerCase();
-                    if (!charityStats[charityId]) {
-                        charityStats[charityId] = {
-                            id: charityId,
-                            name: charityTag[2] || CHARITIES[charityId]?.name || charityId,
-                            lightning: charityTag[3] || CHARITIES[charityId]?.lightning || null,
-                            running: { distance: 0, contributors: new Set() },
-                            walking: { distance: 0, contributors: new Set() },
-                            cycling: { distance: 0, contributors: new Set() },
-                            totalDistance: 0,
-                            contributors: new Set()
-                        };
-                    }
-                    // Add to category-specific stats
-                    if (activityType && charityStats[charityId][activityType]) {
-                        charityStats[charityId][activityType].distance += distanceKm;
-                        charityStats[charityId][activityType].contributors.add(pubkey);
-                    }
-                    charityStats[charityId].totalDistance += distanceKm;
-                    charityStats[charityId].contributors.add(pubkey);
-                }
-            });
-
-            return {
-                participants: Object.values(participantStats),
-                charities: Object.values(charityStats),
-                lastUpdated: Date.now()
-            };
-        }
-
-        // ==========================================
-        // HELPER FUNCTIONS
-        // ==========================================
-
-        function getTagValue(event, tagName) {
-            const tag = event.tags.find(t => t[0] === tagName);
-            return tag ? tag[1] : null;
-        }
-
-        function parseDistance(distanceTag) {
-            if (!distanceTag || !distanceTag[1]) return 0;
-            const value = parseFloat(distanceTag[1]);
-            if (isNaN(value)) return 0;
-            const unit = (distanceTag[2] || 'km').toLowerCase();
-            if (unit === 'mi' || unit === 'miles') {
-                return value * 1.60934;
-            }
-            if (unit === 'm' || unit === 'meters') {
-                return value / 1000;
-            }
-            return value; // assume km
-        }
-
-        function normalizeActivity(type) {
-            if (!type) return null;
-            const t = type.toLowerCase();
-            if (t.includes('run')) return 'running';
-            if (t.includes('walk')) return 'walking';
-            if (t.includes('cycl') || t.includes('bike') || t.includes('ride')) return 'cycling';
-            return null;
-        }
-
-        function getDisplayName(pubkey) {
-            const profile = profileMap[pubkey];
-            if (profile) {
-                if (profile.nip05) return profile.nip05;
-                if (profile.name) return profile.name;
-            }
-            return pubkey.substring(0, 8) + '...' + pubkey.substring(pubkey.length - 4);
-        }
-
-        function getAvatar(pubkey) {
-            const profile = profileMap[pubkey];
-            return profile?.picture || null;
-        }
-
-        // ==========================================
-        // CACHE FUNCTIONS
-        // ==========================================
-
-        function getCachedData() {
-            try {
-                const cached = localStorage.getItem(CACHE_KEY);
-                if (!cached) return null;
-
-                const data = JSON.parse(cached);
-                if (Date.now() - data.lastUpdated > CACHE_TTL) {
-                    return null; // Cache expired
-                }
-
-                // Restore Sets from arrays for charities
-                if (data.charities) {
-                    data.charities.forEach(c => {
-                        c.contributors = new Set(c.contributorsArray || []);
-                        // Restore per-category contributors Sets
-                        if (c.running) c.running.contributors = new Set(c.running.contributorsArray || []);
-                        if (c.walking) c.walking.contributors = new Set(c.walking.contributorsArray || []);
-                        if (c.cycling) c.cycling.contributors = new Set(c.cycling.contributorsArray || []);
-                    });
-                }
-
-                return data;
-            } catch (e) {
-                return null;
-            }
-        }
-
-        function cacheData(data) {
-            try {
-                // Convert Sets to arrays for JSON storage
-                const cacheable = {
-                    ...data,
-                    charities: data.charities.map(c => ({
-                        ...c,
-                        contributorsArray: Array.from(c.contributors || []),
-                        contributors: undefined,
-                        // Serialize per-category data
-                        running: c.running ? {
-                            distance: c.running.distance,
-                            contributorsArray: Array.from(c.running.contributors || [])
-                        } : undefined,
-                        walking: c.walking ? {
-                            distance: c.walking.distance,
-                            contributorsArray: Array.from(c.walking.contributors || [])
-                        } : undefined,
-                        cycling: c.cycling ? {
-                            distance: c.cycling.distance,
-                            contributorsArray: Array.from(c.cycling.contributors || [])
-                        } : undefined
-                    }))
-                };
-                localStorage.setItem(CACHE_KEY, JSON.stringify(cacheable));
-            } catch (e) {
-                console.error('Failed to cache data:', e);
+                renderError();
             }
         }
 
@@ -1708,175 +1145,63 @@
         // RENDERING
         // ==========================================
 
-        function renderAllLeaderboards() {
-            if (!seasonData) return;
+        function renderParticipants(pubkeys) {
+            const container = document.getElementById('participants-container');
 
-            renderCharityLeaderboard();
-            renderIndividualLeaderboard('running');
-            renderIndividualLeaderboard('walking');
-            renderIndividualLeaderboard('cycling');
+            let html = `<p class="participant-count">${pubkeys.length} participant${pubkeys.length !== 1 ? 's' : ''} registered</p>`;
+            html += '<div class="participants-grid">';
+
+            pubkeys.forEach(pubkey => {
+                const profile = profileMap[pubkey] || {};
+                const name = profile.name || shortenPubkey(pubkey);
+                const nip05 = profile.nip05 || '';
+                const picture = profile.picture || '';
+
+                html += `
+                    <div class="participant-card">
+                        <div class="participant-avatar">
+                            ${picture ? `<img src="${picture}" alt="${name}" onerror="this.parentElement.innerHTML='👤'">` : '👤'}
+                        </div>
+                        <div class="participant-info">
+                            <div class="participant-name">${escapeHtml(name)}</div>
+                            ${nip05 ? `<div class="participant-nip05">${escapeHtml(nip05)}</div>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            container.innerHTML = html;
         }
 
         function renderEmptyState() {
-            const message = `
-                <div class="empty-state">
+            const container = document.getElementById('participants-container');
+            container.innerHTML = `
+                <div class="empty-participants">
                     <p>No participants registered yet.</p>
                     <p>Be the first to join Season 2!</p>
                 </div>
             `;
-            document.getElementById('charity-leaderboard').innerHTML = message;
-            document.getElementById('running-leaderboard').innerHTML = message;
-            document.getElementById('walking-leaderboard').innerHTML = message;
-            document.getElementById('cycling-leaderboard').innerHTML = message;
         }
 
         function renderError() {
-            const errorHTML = `
+            const container = document.getElementById('participants-container');
+            container.innerHTML = `
                 <div class="error-state">
-                    <p>Error loading leaderboard data.</p>
+                    <p>Error loading participant data.</p>
                     <button class="retry-btn" onclick="loadSeasonData()">Retry</button>
                 </div>
             `;
-            document.getElementById('charity-leaderboard').innerHTML = errorHTML;
-            document.getElementById('running-leaderboard').innerHTML = errorHTML;
-            document.getElementById('walking-leaderboard').innerHTML = errorHTML;
-            document.getElementById('cycling-leaderboard').innerHTML = errorHTML;
         }
 
-        function renderIndividualLeaderboard(activityType) {
-            const container = document.getElementById(`${activityType}-leaderboard`);
-
-            const sorted = seasonData.participants
-                .filter(p => p[activityType].distance > 0)
-                .sort((a, b) => b[activityType].distance - a[activityType].distance);
-
-            if (sorted.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <p>No ${activityType} workouts yet.</p>
-                        <p>Log a workout using the RUNSTR app to appear on this leaderboard!</p>
-                    </div>
-                `;
-                return;
-            }
-
-            const rows = sorted.map((p, i) => {
-                const avatar = getAvatar(p.pubkey);
-                const name = getDisplayName(p.pubkey);
-
-                return `
-                    <tr class="leaderboard-row">
-                        <td>${i + 1}</td>
-                        <td>
-                            <div class="athlete-cell">
-                                ${avatar
-                                    ? `<img src="${avatar}" class="athlete-avatar" alt="" onerror="this.style.display='none'">`
-                                    : `<span class="athlete-avatar-fallback">${name[0].toUpperCase()}</span>`
-                                }
-                                <span>${name}</span>
-                            </div>
-                        </td>
-                        <td>${p[activityType].distance.toFixed(2)} km</td>
-                        <td>${p[activityType].workouts}</td>
-                    </tr>
-                `;
-            }).join('');
-
-            container.innerHTML = `
-                <table class="leaderboard-table">
-                    <thead>
-                        <tr>
-                            <th>Rank</th>
-                            <th>Athlete</th>
-                            <th>Distance</th>
-                            <th>Workouts</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${rows}
-                    </tbody>
-                </table>
-            `;
+        function shortenPubkey(pubkey) {
+            return pubkey.slice(0, 8) + '...' + pubkey.slice(-4);
         }
 
-        function renderCharityLeaderboard() {
-            const container = document.getElementById('charity-leaderboard');
-            const charities = seasonData?.charities || [];
-
-            if (charities.length === 0) {
-                container.innerHTML = `
-                    <div class="charity-prize-banner">
-                        <span class="prize-text">500,000 sats to charity + 500,000 sats lottery for one lucky participant!</span>
-                    </div>
-                    <div class="empty-state">
-                        <p>No charity contributions yet.</p>
-                        <p>Tag your workouts with a charity to support them!</p>
-                    </div>
-                `;
-                return;
-            }
-
-            // Sort charities by each category
-            const runningRanked = [...charities].sort((a, b) =>
-                (b.running?.distance || 0) - (a.running?.distance || 0));
-            const walkingRanked = [...charities].sort((a, b) =>
-                (b.walking?.distance || 0) - (a.walking?.distance || 0));
-            const cyclingRanked = [...charities].sort((a, b) =>
-                (b.cycling?.distance || 0) - (a.cycling?.distance || 0));
-
-            container.innerHTML = `
-                <div class="charity-prize-banner">
-                    <span class="prize-text">500,000 sats to charity + 500,000 sats lottery for one lucky participant!</span>
-                </div>
-                ${renderCategorySection('Running', '166,666', runningRanked, 'running')}
-                ${renderCategorySection('Walking', '166,666', walkingRanked, 'walking')}
-                ${renderCategorySection('Cycling', '166,668', cyclingRanked, 'cycling')}
-            `;
-        }
-
-        function renderCategorySection(title, prize, charities, category) {
-            const charitiesWithDistance = charities.filter(c => c[category]?.distance > 0);
-
-            if (charitiesWithDistance.length === 0) {
-                return `
-                    <div class="category-section">
-                        <h3 class="category-title">${title} - ${prize} sats</h3>
-                        <p class="empty-state">No ${title.toLowerCase()} distance logged yet</p>
-                    </div>
-                `;
-            }
-
-            const top5 = charitiesWithDistance.slice(0, 5);
-            const maxDistance = top5[0]?.[category]?.distance || 1;
-
-            const rows = top5.map((c, i) => {
-                const distance = c[category]?.distance || 0;
-                const contributors = c[category]?.contributors?.size || 0;
-                const progressPercent = (distance / maxDistance * 100).toFixed(1);
-
-                return `
-                    <div class="charity-row ${i === 0 ? 'leader' : ''}">
-                        <span class="rank">${i + 1}</span>
-                        <div class="charity-info">
-                            <span class="charity-name">${c.name}</span>
-                            <div class="charity-progress-mini">
-                                <div class="charity-progress-fill" style="width: ${progressPercent}%"></div>
-                            </div>
-                        </div>
-                        <span class="distance">${distance.toFixed(1)} km</span>
-                        <span class="contributors">${contributors} athlete${contributors !== 1 ? 's' : ''}</span>
-                    </div>
-                `;
-            }).join('');
-
-            return `
-                <div class="category-section">
-                    <h3 class="category-title">${title} - ${prize} sats</h3>
-                    <div class="charity-ranking">
-                        ${rows}
-                    </div>
-                </div>
-            `;
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
         // ==========================================
