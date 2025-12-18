@@ -16,7 +16,7 @@
         }
 
         :root {
-            --black: #0a0a0a;
+            --black: #000000;
             --dark-gray: #1a1a1a;
             --medium-gray: #2a2a2a;
             --light-gray: #888;
@@ -1031,15 +1031,13 @@
         <a href="index.html" class="nav-logo">RUNSTR</a>
         <nav class="nav-links">
             <a href="pages/season2.html" class="nav-link">Season II</a>
-            <a href="pages/races.html" class="nav-link">Events</a>
-            <a href="pages/clubs.html" class="nav-link">Clubs</a>
         </nav>
     </header>
 
     <!-- Splash Section -->
     <section class="splash">
         <img src="images/New Logo RUNSTR.png" alt="RUNSTR Logo" class="splash-logo">
-        <p class="splash-tagline">The Anonymous Fitness Tracker</p>
+        <p class="splash-tagline">The Bitcoin Powered Fitness App</p>
 
         <div class="splash-buttons">
             <a href="https://apps.apple.com/us/app/runstr-teams/id6753015130" target="_blank" rel="noopener noreferrer" class="splash-btn">
@@ -1071,7 +1069,7 @@
     <section class="hero">
         <div class="hero-content">
             <h1>THE APP IN ACTION</h1>
-            <p class="hero-subtitle">No email, no phone number, no personal data harvesting—just pure fitness tracking with local first privacy.</p>
+            <p class="hero-subtitle">No email, no phone number, no personal data harvesting—just pure fitness tracking with bitcoin rewards.</p>
 
             <div class="app-screenshots">
                 <div class="screenshot-container">
@@ -1184,11 +1182,11 @@
             <div class="faq-list">
                 <div class="faq-item">
                     <div class="faq-question">
-                        What is the difference between saving a run and posting a run?
+                        What is the difference between the post vs the public button on the post workout summary?
                     </div>
                     <div class="faq-answer">
-                        <span class="faq-highlight">Saving a run</span> will add it to your Nostr workout record (kind 1301), creating a permanent record of your fitness activity.
-                        <span class="faq-highlight">Posting a run</span> will create a social media post on Nostr with a short summary of your run, sharing your achievement with your followers.
+                        Clicking the <span class="faq-highlight">post button</span> sends your workout summary to social media.
+                        Clicking the <span class="faq-highlight">Public button</span> enters your workout into public competitions and adds the workout to your nostr workout history.
                     </div>
                 </div>
 
@@ -1197,8 +1195,9 @@
                         How does this app use Bitcoin?
                     </div>
                     <div class="faq-answer">
-                        We leverage the <span class="faq-highlight">Lightning Network</span> and <span class="faq-highlight">Nostr Wallet Connect (NWC)</span> for instant Bitcoin payments.
-                        Teams can receive payments via NWC connection strings, and users can pay event entry fees or zap teammates using any Lightning-enabled wallet including Cash App, Strike, or Alby.
+                        Users can <span class="faq-highlight">zap each other on leaderboards</span>.
+                        Users can create <span class="faq-highlight">fitness events that include bitcoin prize pools</span>.
+                        Users receive <span class="faq-highlight">bitcoin rewards for activity streaks</span>.
                     </div>
                 </div>
 
@@ -1207,9 +1206,10 @@
                         Is this app private?
                     </div>
                     <div class="faq-answer">
-                        Yes! We have <span class="faq-highlight">no user accounts</span> and don't hold your money or data.
-                        The workout data in this app is stored locally on your device until it is broadcasted as a public workout to earn sats.
-                        You maintain complete control over your data and funds.
+                        <span class="faq-highlight">Yes!</span> All workout data is stored locally unless published to social media or participating in public competitions.
+                        The app has <span class="faq-highlight">no central server or database</span>.
+                        Users can create <span class="faq-highlight">anonymous accounts</span> without giving incriminating information.
+                        The project is <span class="faq-highlight">open source and non-custodial</span>.
                     </div>
                 </div>
             </div>
