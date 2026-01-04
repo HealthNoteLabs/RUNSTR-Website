@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RUNSTR Anti-Cheat Verification Service</title>
+    <meta name="description" content="RUNSTR Anti-Cheat Service - Manual investigation of suspected cheaters in fitness competitions. 5,000 sats per investigation.">
+
+    <!-- QRCode.js for Lightning invoice QR codes -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #0a0a0a;
+            --dark-gray: #1a1a1a;
+            --medium-gray: #2a2a2a;
+            --light-gray: #888;
+            --white: #ffffff;
+            --accent: #f0f0f0;
+            --orange: #F5A356;
+            --bitcoin-orange: #F7931A;
+            --green: #44ff44;
+            --red: #ff4444;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--black);
+            color: var(--light-gray);
+            line-height: 1.6;
+        }
+
+        /* Navigation Header */
+        .nav-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--medium-gray);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--orange);
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 6rem 2rem 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 900;
+            letter-spacing: -2px;
+            background: linear-gradient(135deg, var(--orange) 0%, #FFB76B 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--light-gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .price-badge {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: rgba(245, 163, 86, 0.15);
+            border: 2px solid var(--orange);
+            color: var(--orange);
+            font-weight: 700;
+            font-size: 1.3rem;
+            border-radius: 4px;
+        }
+
+        /* Section Styling */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--white);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title .icon {
+            font-size: 1.2rem;
+        }
+
+        /* Steps Grid */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .step-card {
+            background: var(--dark-gray);
+            border: 1px solid var(--medium-gray);
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .step-card:hover {
+            border-color: var(--orange);
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--orange);
+            color: var(--black);
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+
+        .step-card h3 {
+            color: var(--white);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .step-card p {
+            color: var(--light-gray);
+            font-size: 0.9rem;
+        }
+
+        /* Check Items */
+        .check-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .check-item {
+            background: var(--dark-gray);
+            border: 1px solid var(--medium-gray);
+            padding: 1.25rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .check-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .check-item h4 {
+            color: var(--white);
+            margin-bottom: 0.25rem;
+        }
+
+        .check-item p {
+            font-size: 0.9rem;
+            color: var(--light-gray);
+        }
+
+        /* Payment Section */
+        .payment-section {
+            background: var(--dark-gray);
+            border: 2px solid var(--orange);
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .payment-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+        }
+
+        .payment-amount {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--orange);
+            margin-bottom: 1.5rem;
+        }
+
+        .pay-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--orange);
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 700;
+            border: 2px solid var(--orange);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+        }
+
+        .pay-btn:hover {
+            background: transparent;
+            color: var(--orange);
+        }
+
+        #qrcode-container {
+            display: none;
+            justify-content: center;
+            margin: 1.5rem 0;
+            background: var(--white);
+            padding: 1rem;
+            border-radius: 8px;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #qrcode-container.active {
+            display: flex;
+        }
+
+        .invoice-copy {
+            display: none;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .invoice-copy.active {
+            display: flex;
+        }
+
+        .invoice-copy input {
+            flex: 1;
+            padding: 0.5rem;
+            background: var(--black);
+            border: 1px solid var(--medium-gray);
+            color: var(--orange);
+            font-family: monospace;
+            font-size: 0.7rem;
+        }
+
+        .invoice-copy button {
+            padding: 0.5rem 1rem;
+            background: var(--orange);
+            color: var(--black);
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .invoice-copy button:hover {
+            background: var(--bitcoin-orange);
+        }
+
+        .lightning-address {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--light-gray);
+        }
+
+        .lightning-address code {
+            background: var(--black);
+            padding: 0.25rem 0.5rem;
+            color: var(--orange);
+            font-family: monospace;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--medium-gray);
+            border-top-color: var(--orange);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 1rem auto;
+            display: none;
+        }
+
+        .loading-spinner.active {
+            display: block;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Results Section */
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .result-item {
+            background: var(--dark-gray);
+            border: 1px solid var(--medium-gray);
+            padding: 1.25rem;
+        }
+
+        .result-item h4 {
+            color: var(--orange);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .result-item p {
+            font-size: 0.9rem;
+            color: var(--light-gray);
+        }
+
+        /* Disclaimers */
+        .disclaimers {
+            background: var(--dark-gray);
+            border: 1px solid var(--medium-gray);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .disclaimers h3 {
+            color: var(--white);
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .disclaimers ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .disclaimers li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            font-size: 0.9rem;
+        }
+
+        .disclaimers li::before {
+            content: "•";
+            color: var(--orange);
+            position: absolute;
+            left: 0;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 4rem;
+            padding: 2rem;
+            border-top: 1px solid var(--medium-gray);
+            text-align: center;
+            color: var(--light-gray);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--orange);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .steps-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .check-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .payment-section {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="nav-header">
+        <a href="../index.html" class="nav-logo">RUNSTR</a>
+    </header>
+
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Anti-Cheat Verification</h1>
+            <p class="hero-subtitle">Manual investigation of suspected cheaters in RUNSTR competitions</p>
+            <div class="price-badge">5,000 sats</div>
+        </section>
+
+        <!-- How It Works -->
+        <section class="section">
+            <h2 class="section-title"><span class="icon">📋</span> How It Works</h2>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>Submit Request</h3>
+                    <p>Use the RUNSTR app to submit a cheater report with details</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>Pay 5,000 sats</h3>
+                    <p>Complete payment on this page via Lightning</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>We Investigate</h3>
+                    <p>Our team manually reviews within 24-48 hours</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3>Get Results</h3>
+                    <p>Receive findings via your contact method</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- What We Check -->
+        <section class="section">
+            <h2 class="section-title"><span class="icon">🔍</span> What We Check</h2>
+            <div class="check-grid">
+                <div class="check-item">
+                    <span class="check-icon">✅</span>
+                    <div>
+                        <h4>Authenticity</h4>
+                        <p>Verifying workout data matches expected patterns for the claimed activity</p>
+                    </div>
+                </div>
+                <div class="check-item">
+                    <span class="check-icon">🔄</span>
+                    <div>
+                        <h4>Duplicates</h4>
+                        <p>Checking for duplicate posts across multiple relays or accounts</p>
+                    </div>
+                </div>
+                <div class="check-item">
+                    <span class="check-icon">⚠️</span>
+                    <div>
+                        <h4>Anomalies</h4>
+                        <p>Identifying scripted activity, fake GPS data, or impossible stats</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Payment Section -->
+        <section class="payment-section">
+            <h2 class="payment-title">Pay for Investigation</h2>
+            <div class="payment-amount">5,000 sats</div>
+
+            <button class="pay-btn" id="pay-button" onclick="generateInvoice()">
+                Generate Lightning Invoice
+            </button>
+
+            <div class="loading-spinner" id="loading"></div>
+
+            <div id="qrcode-container"></div>
+
+            <div class="invoice-copy" id="invoice-copy">
+                <input type="text" id="invoice-text" readonly />
+                <button onclick="copyInvoice()">Copy</button>
+            </div>
+
+            <p class="lightning-address">
+                Or pay directly to: <code>thewildhustle@strike.me</code>
+            </p>
+        </section>
+
+        <!-- What Happens After -->
+        <section class="section">
+            <h2 class="section-title"><span class="icon">📊</span> What Happens After</h2>
+            <div class="results-grid">
+                <div class="result-item">
+                    <h4>📝 Evidence Report</h4>
+                    <p>You'll receive a detailed report of our findings and the evidence we collected</p>
+                </div>
+                <div class="result-item">
+                    <h4>🚫 Removal Request</h4>
+                    <p>If cheating is confirmed, you can request removal from the competition</p>
+                </div>
+                <div class="result-item">
+                    <h4>🚩 Flagging</h4>
+                    <p>Confirmed cheaters are flagged for monitoring in future competitions</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Disclaimers -->
+        <section class="disclaimers">
+            <h3>Important Information</h3>
+            <ul>
+                <li>Investigations are completed within 24-48 hours of payment confirmation</li>
+                <li>No refunds once investigation has begun</li>
+                <li>Results are advisory - enforcement actions require competition captain approval</li>
+                <li>All investigations are conducted manually by our team</li>
+                <li>Include your contact method in the app submission to receive results</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>Powered by Nostr & Lightning | <a href="../index.html">RUNSTR</a></p>
+    </footer>
+
+    <script>
+        // ==========================================
+        // CONFIGURATION
+        // ==========================================
+
+        const LIGHTNING_ADDRESS = 'thewildhustle@strike.me';
+        const AMOUNT_SATS = 5000;
+
+        // ==========================================
+        // STATE
+        // ==========================================
+
+        let currentInvoice = null;
+
+        // ==========================================
+        // INVOICE GENERATION
+        // ==========================================
+
+        async function generateInvoice() {
+            const payButton = document.getElementById('pay-button');
+            const loading = document.getElementById('loading');
+            const qrContainer = document.getElementById('qrcode-container');
+            const invoiceCopy = document.getElementById('invoice-copy');
+
+            // Show loading
+            payButton.style.display = 'none';
+            loading.classList.add('active');
+
+            try {
+                const comment = 'RUNSTR Anti-Cheat Investigation';
+                currentInvoice = await fetchLightningInvoice(AMOUNT_SATS, comment);
+
+                // Clear previous QR
+                qrContainer.innerHTML = '';
+
+                // Generate QR code
+                new QRCode(qrContainer, {
+                    text: currentInvoice,
+                    width: 200,
+                    height: 200,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.M
+                });
+
+                // Show invoice
+                document.getElementById('invoice-text').value = currentInvoice;
+                qrContainer.classList.add('active');
+                invoiceCopy.classList.add('active');
+                loading.classList.remove('active');
+
+            } catch (error) {
+                console.error('Failed to generate invoice:', error);
+                alert('Failed to generate Lightning invoice. Please try again or pay directly to ' + LIGHTNING_ADDRESS);
+                payButton.style.display = 'inline-block';
+                loading.classList.remove('active');
+            }
+        }
+
+        async function fetchLightningInvoice(amountSats, comment) {
+            const [username, domain] = LIGHTNING_ADDRESS.split('@');
+            const lnurlEndpoint = `https://${domain}/.well-known/lnurlp/${username}`;
+
+            // Fetch LNURL-pay metadata
+            const metadataRes = await fetch(lnurlEndpoint);
+            if (!metadataRes.ok) {
+                throw new Error('Failed to fetch LNURL metadata');
+            }
+            const metadata = await metadataRes.json();
+
+            // Build callback URL with amount (millisats) and optional comment
+            const amountMsat = amountSats * 1000;
+            let callbackUrl = `${metadata.callback}?amount=${amountMsat}`;
+
+            // Add comment if allowed
+            if (comment && metadata.commentAllowed && metadata.commentAllowed > 0) {
+                const truncatedComment = comment.substring(0, metadata.commentAllowed);
+                callbackUrl += `&comment=${encodeURIComponent(truncatedComment)}`;
+            }
+
+            // Fetch invoice
+            const invoiceRes = await fetch(callbackUrl);
+            if (!invoiceRes.ok) {
+                throw new Error('Failed to fetch invoice');
+            }
+            const invoiceData = await invoiceRes.json();
+
+            if (invoiceData.status === 'ERROR') {
+                throw new Error(invoiceData.reason || 'Invoice generation failed');
+            }
+
+            return invoiceData.pr; // BOLT11 invoice
+        }
+
+        function copyInvoice() {
+            if (currentInvoice) {
+                navigator.clipboard.writeText(currentInvoice).then(() => {
+                    const btn = event.target;
+                    const originalText = btn.textContent;
+                    btn.textContent = 'Copied!';
+                    setTimeout(() => btn.textContent = originalText, 2000);
+                }).catch(() => {
+                    // Fallback for older browsers
+                    const input = document.getElementById('invoice-text');
+                    input.select();
+                    document.execCommand('copy');
+                    alert('Invoice copied to clipboard!');
+                });
+            }
+        }
+    </script>
+</body>
+</html>

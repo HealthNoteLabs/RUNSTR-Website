@@ -8,8 +8,6 @@
 
     <!-- Nostr Tools -->
     <script src="https://unpkg.com/nostr-tools@2.7.2/lib/nostr.bundle.js"></script>
-    <!-- QRCode.js for Lightning invoice QR codes -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <style>
         * {
@@ -574,6 +572,22 @@
             text-align: center;
         }
 
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-top: 1rem;
+            border-radius: 4px;
+        }
+
+        .status-badge.in-progress {
+            background: rgba(68, 255, 68, 0.15);
+            color: var(--green);
+            border: 2px solid var(--green);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .info-grid {
@@ -857,9 +871,9 @@
         <section class="season-hero">
             <h1>RUNSTR SEASON 2</h1>
             <p class="season-dates">January 1 - February 28, 2026</p>
-            <button class="register-btn" onclick="openRegistrationModal()" style="font-size: 1.1rem; padding: 0.75rem 2rem; margin-top: 1rem;">
-                Join RUNSTR Season 2
-            </button>
+            <div class="status-badge in-progress">
+                Season II In Progress
+            </div>
             <div id="countdown" class="countdown-container">
                 <!-- Countdown timer will be inserted here -->
             </div>
@@ -867,7 +881,7 @@
 
         <!-- Participants Section -->
         <section class="participants-section">
-            <h2 class="section-title">Registered Participants</h2>
+            <h2 class="section-title">Season II Participants</h2>
             <div id="participants-container">
                 <div class="loading">
                     <div class="loading-spinner"></div>
@@ -893,74 +907,14 @@
                 </div>
                 <div class="rule-card">
                     <div class="rule-number">3</div>
-                    <h3>Win the Lottery</h3>
-                    <p>One random participant who signed up for Season 2 will win 500,000 sats at the end of the season!</p>
+                    <h3>Support Charity</h3>
+                    <p>Your workouts contribute to your chosen charity's total distance. Help them win the prize pool!</p>
                 </div>
             </div>
         </section>
 
     </main>
 
-    <!-- Registration Modal -->
-    <div class="modal-overlay" id="registration-modal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModal()">&times;</button>
-
-            <!-- Step Indicator -->
-            <div class="step-indicator">
-                <div class="step-dot active" id="step-dot-1"></div>
-                <div class="step-dot" id="step-dot-2"></div>
-            </div>
-
-            <!-- Step 1: Identity -->
-            <div id="reg-step-1" class="reg-step">
-                <h2 class="modal-title">Step 1: Your Identity</h2>
-                <p>Enter your NIP-05:</p>
-                <input type="text" id="identity-input" placeholder="user@domain.com" />
-                <p style="font-size: 0.85rem; color: var(--light-gray);">
-                    Your NIP-05 will be included in the payment memo for verification.
-                </p>
-                <button class="register-btn" onclick="proceedToPayment()">Continue to Payment</button>
-            </div>
-
-            <!-- Step 2: Payment -->
-            <div id="reg-step-2" class="reg-step" style="display:none;">
-                <h2 class="modal-title">Step 2: Pay for Season 2</h2>
-                <p>Season 2 Price: <strong style="color: var(--orange);">24,000 sats</strong></p>
-
-                <div id="invoice-loading" class="loading-invoice">
-                    <div class="loading-spinner"></div>
-                    <p>Generating invoice...</p>
-                </div>
-
-                <div id="invoice-content" style="display:none;">
-                    <div id="qrcode-container"></div>
-                    <div class="invoice-copy">
-                        <input type="text" id="invoice-text" readonly />
-                        <button onclick="copyInvoice()">Copy</button>
-                    </div>
-                    <p style="font-size: 0.85rem; color: var(--light-gray); margin: 1rem 0;">Your identity is included in the payment memo for verification.</p>
-                    <button class="register-btn" onclick="showStep('success')">I've Paid</button>
-                </div>
-            </div>
-
-            <!-- Success State -->
-            <div id="reg-success" class="reg-step" style="display:none;">
-                <h2 class="modal-title">Welcome to RUNSTR Season 2!</h2>
-                <p>Thank you for joining RUNSTR Season 2!</p>
-                <p style="font-size: 0.85rem; color: var(--light-gray); margin-top: 1rem;">Your Season 2 access will be activated within 24 hours after payment verification.</p>
-                <div style="font-size: 0.85rem; color: var(--light-gray); margin-top: 0.5rem; text-align: left;">
-                    <p style="margin-bottom: 0.5rem;">You now have:</p>
-                    <ul style="padding-left: 1.5rem; margin: 0;">
-                        <li>Entry into the Season 2 charity competition</li>
-                        <li>Chance to win the 500,000 sats lottery</li>
-                    </ul>
-                </div>
-                <p style="font-size: 0.85rem; color: var(--light-gray); margin-top: 1rem;">Log workouts in the RUNSTR app to help your chosen charity win!</p>
-                <button class="register-btn" onclick="closeModal()">Close</button>
-            </div>
-        </div>
-    </div>
 
     <footer>
         <p>Powered by Nostr & Lightning | <a href="../index.html">RUNSTR</a></p>
@@ -988,20 +942,11 @@
         const SEASON_START = 1735689600; // Jan 1, 2026 00:00:00 UTC
         const SEASON_END = 1740787199;   // Feb 28, 2026 23:59:59 UTC
 
-        // Registration configuration
-        const LIGHTNING_ADDRESS = 'thewildhustle@strike.me';
-        const ENTRY_FEE_SATS = 24000;
-
         // ==========================================
         // STATE
         // ==========================================
 
         let profileMap = {};
-
-        // Registration state
-        let currentInvoice = null;
-        let registrationPubkey = null;
-        let registrationIdentity = null;
 
         // ==========================================
         // INITIALIZATION
@@ -1204,187 +1149,6 @@
             return div.innerHTML;
         }
 
-        // ==========================================
-        // REGISTRATION MODAL FUNCTIONS
-        // ==========================================
-
-        async function openRegistrationModal() {
-            const modal = document.getElementById('registration-modal');
-
-            // Reset state
-            currentInvoice = null;
-            registrationPubkey = null;
-            registrationIdentity = null;
-
-            // Reset UI
-            document.getElementById('identity-input').value = '';
-            document.getElementById('qrcode-container').innerHTML = '';
-            document.getElementById('invoice-text').value = '';
-
-            // Check if logged in with Nostr extension
-            if (window.nostr) {
-                try {
-                    registrationPubkey = await window.nostr.getPublicKey();
-                    const npub = NostrTools.nip19.npubEncode(registrationPubkey);
-                    document.getElementById('identity-input').value = npub;
-                    registrationIdentity = npub;
-                } catch (e) {
-                    console.log('Could not get pubkey from Nostr extension');
-                }
-            }
-
-            // Show step 1
-            showStep(1);
-            modal.classList.add('active');
-        }
-
-        function showStep(step) {
-            // Hide all steps
-            document.querySelectorAll('.reg-step').forEach(el => el.style.display = 'none');
-
-            // Update step dots
-            for (let i = 1; i <= 2; i++) {
-                const dot = document.getElementById(`step-dot-${i}`);
-                if (dot) {
-                    dot.classList.toggle('active', i <= step);
-                }
-            }
-
-            // Show current step
-            if (step === 'success') {
-                document.getElementById('reg-success').style.display = 'block';
-            } else {
-                document.getElementById(`reg-step-${step}`).style.display = 'block';
-            }
-        }
-
-        async function proceedToPayment() {
-            const identityInput = document.getElementById('identity-input').value.trim();
-            if (!identityInput) {
-                alert('Please enter your npub or NIP-05 identifier');
-                return;
-            }
-
-            registrationIdentity = identityInput;
-
-            // Parse identity to get pubkey if npub
-            if (identityInput.startsWith('npub1')) {
-                try {
-                    const decoded = NostrTools.nip19.decode(identityInput);
-                    registrationPubkey = decoded.data;
-                } catch (e) {
-                    alert('Invalid npub format');
-                    return;
-                }
-            }
-
-            // Show step 2 with loading state
-            showStep(2);
-            document.getElementById('invoice-loading').style.display = 'block';
-            document.getElementById('invoice-content').style.display = 'none';
-
-            try {
-                // Generate invoice with identity in comment
-                const comment = `RUNSTR Season 2: ${identityInput}`;
-                currentInvoice = await fetchLightningInvoice(ENTRY_FEE_SATS, comment);
-
-                // Display QR code
-                const qrContainer = document.getElementById('qrcode-container');
-                qrContainer.innerHTML = '';
-                new QRCode(qrContainer, {
-                    text: currentInvoice,
-                    width: 200,
-                    height: 200,
-                    colorDark: "#000000",
-                    colorLight: "#ffffff",
-                    correctLevel: QRCode.CorrectLevel.M
-                });
-
-                // Display invoice text
-                document.getElementById('invoice-text').value = currentInvoice;
-
-                // Show invoice content, hide loading
-                document.getElementById('invoice-loading').style.display = 'none';
-                document.getElementById('invoice-content').style.display = 'block';
-
-            } catch (error) {
-                console.error('Failed to generate invoice:', error);
-                alert('Failed to generate Lightning invoice. Please try again.');
-                showStep(1);
-            }
-        }
-
-        function closeModal() {
-            document.getElementById('registration-modal').classList.remove('active');
-            // Reset to step 1 for next time
-            showStep(1);
-        }
-
-        function copyInvoice() {
-            if (currentInvoice) {
-                navigator.clipboard.writeText(currentInvoice).then(() => {
-                    const btn = event.target;
-                    const originalText = btn.textContent;
-                    btn.textContent = 'Copied!';
-                    setTimeout(() => btn.textContent = originalText, 2000);
-                }).catch(() => {
-                    // Fallback for older browsers
-                    const input = document.getElementById('invoice-text');
-                    input.select();
-                    document.execCommand('copy');
-                    alert('Invoice copied to clipboard!');
-                });
-            }
-        }
-
-        // ==========================================
-        // LIGHTNING INVOICE GENERATION
-        // ==========================================
-
-        async function fetchLightningInvoice(amountSats, comment) {
-            const [username, domain] = LIGHTNING_ADDRESS.split('@');
-            const lnurlEndpoint = `https://${domain}/.well-known/lnurlp/${username}`;
-
-            // Fetch LNURL-pay metadata
-            const metadataRes = await fetch(lnurlEndpoint);
-            if (!metadataRes.ok) {
-                throw new Error('Failed to fetch LNURL metadata');
-            }
-            const metadata = await metadataRes.json();
-
-            // Build callback URL with amount (millisats) and optional comment
-            const amountMsat = amountSats * 1000;
-            let callbackUrl = `${metadata.callback}?amount=${amountMsat}`;
-
-            // Add comment if allowed
-            if (comment && metadata.commentAllowed && metadata.commentAllowed > 0) {
-                const truncatedComment = comment.substring(0, metadata.commentAllowed);
-                callbackUrl += `&comment=${encodeURIComponent(truncatedComment)}`;
-            }
-
-            // Fetch invoice
-            const invoiceRes = await fetch(callbackUrl);
-            if (!invoiceRes.ok) {
-                throw new Error('Failed to fetch invoice');
-            }
-            const invoiceData = await invoiceRes.json();
-
-            if (invoiceData.status === 'ERROR') {
-                throw new Error(invoiceData.reason || 'Invoice generation failed');
-            }
-
-            return invoiceData.pr; // BOLT11 invoice
-        }
-
-        // Close modal on escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeModal();
-        });
-
-        // Close modal on backdrop click
-        document.getElementById('registration-modal').addEventListener('click', (e) => {
-            if (e.target.classList.contains('modal-overlay')) closeModal();
-        });
     </script>
 </body>
 </html>
