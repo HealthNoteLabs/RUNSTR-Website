@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+:root {
+  /* Background colors */
+  --background: #000000;
+  --background-secondary: #0a0a0a;
+  --background-card: #1a1a1a;
+  --background-card-hover: #2a2a2a;
+
+  /* Accent colors */
+  --accent: #F5A356;
+  --accent-light: #FFB76B;
+
+  /* Text colors */
+  --foreground: #ffffff;
+  --text-secondary: #888888;
+  --text-muted: #666666;
+
+  /* Border colors */
+  --border: #2a2a2a;
+  --border-hover: #F5A356;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-background-secondary: var(--background-secondary);
+  --color-background-card: var(--background-card);
+  --color-background-card-hover: var(--background-card-hover);
+  --color-foreground: var(--foreground);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-accent: var(--accent);
+  --color-accent-light: var(--accent-light);
+  --color-border: var(--border);
+  --color-border-hover: var(--border-hover);
+  --font-sans: var(--font-inter);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Selection color */
+::selection {
+  background-color: var(--accent);
+  color: var(--background);
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--background-card-hover);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}

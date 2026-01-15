@@ -4,66 +4,76 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is the official website for RUNSTR (www.runstr.club) - a fitness platform that allows users to create virtual running clubs, participate in challenges, and earn real money from their fitness activities.
+This is the official website for RUNSTR (www.runstr.club) - an anonymous fitness tracking platform that lets users contribute to charitable causes with every workout. Positioned as a privacy-first alternative to Strava and Nike Run Club.
 
 ## Architecture
 
-This is a **static HTML website** with no build process or dependencies. The architecture is intentionally simple:
+This is a **Next.js 14 website** with the App Router:
 
-- **Main site**: `index.html` - Complete single-page application with inline CSS and JavaScript
-- **Subpages**: `pages/` directory contains individual HTML files for secondary content
-- **No framework**: Pure HTML/CSS/JavaScript with no build tools or package managers
-- **Self-contained**: All styling and scripts are inline for easy deployment
+- **Framework**: Next.js 14 with TypeScript
+- **Styling**: Tailwind CSS v4 with custom theme
+- **Deployment**: Static export to GitHub Pages
 
 ### File Structure
 ```
 /
-├── index.html              # Main website (complete SPA)
-├── pages/                  # Secondary pages
-│   ├── bug-reports.html
-│   ├── coming-soon.html
-│   ├── community.html
-│   ├── contact.html
-│   ├── help.html
-│   ├── integrations.html
-│   └── system-requirements.html
-├── CNAME                   # GitHub Pages domain config
-└── README.md              # Project documentation
+├── src/
+│   ├── app/                    # Next.js App Router pages
+│   │   ├── layout.tsx          # Root layout with metadata
+│   │   ├── page.tsx            # Main landing page
+│   │   ├── globals.css         # Global styles and theme
+│   │   ├── privacy/            # Privacy policy page
+│   │   └── contact/            # Contact page
+│   ├── components/
+│   │   ├── layout/             # Header, Footer
+│   │   ├── sections/           # Landing page sections
+│   │   └── ui/                 # Reusable UI components
+│   └── lib/
+│       └── constants.ts        # App store URLs, charity data
+├── public/
+│   ├── images/                 # Logo, screenshots
+│   └── CNAME                   # GitHub Pages domain
+├── next.config.ts              # Static export config
+├── tsconfig.json
+└── package.json
 ```
 
 ## Development Commands
 
-**Local Development:**
 ```bash
-# No build process required - simply open in browser
-open index.html
-```
+# Install dependencies
+npm install
 
-**Testing:**
-- No automated tests - manual browser testing only
-- Test responsiveness across different screen sizes
-- Verify all navigation links work correctly
+# Start development server
+npm run dev
+
+# Build for production (static export)
+npm run build
+
+# The build output goes to /out directory
+```
 
 ## Key Design Principles
 
-1. **No Dependencies**: Everything is self-contained HTML files
-2. **Inline Assets**: CSS and JavaScript are embedded directly in HTML files
-3. **Mobile-First**: Responsive design that works on all devices
-4. **Static Deployment**: Can be deployed to any static hosting (GitHub Pages, Netlify, etc.)
+1. **Privacy First**: No mention of data collection, emphasize local-first
+2. **Charity Focused**: Every workout contributes to charitable causes
+3. **Anonymous**: No email, no phone, no personal data required
+4. **Open Source**: Code is publicly auditable
 
-## Page Templates
+## Theme/Colors
 
-Each page in `pages/` follows a consistent structure:
-- Fixed header with RUNSTR branding and navigation
-- Main content area with page-specific information
-- Footer with links to other sections
-- Inline CSS styling matching the main site design
-- Responsive layout that adapts to different screen sizes
+```
+Background:     #000000 (pure black)
+Card:           #1a1a1a
+Accent:         #F5A356 (orange)
+Accent Light:   #FFB76B
+Text Primary:   #ffffff
+Text Secondary: #888888
+```
 
-## Content Updates
+## Content Guidelines
 
-When updating content:
-- Main website content is in `index.html`
-- Secondary pages are in the `pages/` directory
-- All styling is inline - no external CSS files
-- Maintain consistent branding and design patterns across pages
+- NO mentions of Bitcoin, Nostr, cryptocurrency, sats, Lightning
+- Focus on anonymous fitness tracking and charity contributions
+- Position as Strava/Nike Run Club alternative
+- Key charities: Human Rights Foundation, ALS Network

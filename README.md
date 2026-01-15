@@ -1,38 +1,36 @@
-# RUNSTR Website
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-The official website for RUNSTR - Create. Compete. Earn.
+## Getting Started
 
-## About RUNSTR
+First, run the development server:
 
-RUNSTR is a fitness platform that allows users to create virtual running clubs, participate in challenges, and earn real money from their fitness activities. Whether you're tracking your activities, competing for cash prizes, or building your own running community, RUNSTR provides the tools to monetize your passion for fitness.
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-## Features
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-- **Track Your Activities**: Monitor running, walking, and cycling with seamless phone integration
-- **Compete for Cash**: Join challenges and events with real money prizes  
-- **Create Virtual Clubs**: Build your own running community and earn revenue from events
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## Website Structure
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-- `index.html` - Main website file with complete styling and functionality
-- All styles and scripts are included inline for easy deployment
+## Learn More
 
-## Deployment
+To learn more about Next.js, take a look at the following resources:
 
-This is a static website that can be deployed to any web hosting service:
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-1. Upload the `index.html` file to your web server
-2. Ensure the file is accessible at your domain root
-3. The website is fully responsive and works on all devices
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Local Development
+## Deploy on Vercel
 
-To view the website locally:
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-1. Clone this repository
-2. Open `index.html` in your web browser
-3. No build process or dependencies required
-
-## License
-
-© 2025 RUNSTR. All rights reserved.
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
