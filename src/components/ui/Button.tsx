@@ -48,6 +48,14 @@ export function Button({
         </a>
       );
     }
+    // Use regular anchor for hash links (same-page navigation)
+    if (href.startsWith("#")) {
+      return (
+        <a href={href} className={styles}>
+          {children}
+        </a>
+      );
+    }
     return (
       <Link href={href} className={styles}>
         {children}

@@ -1,6 +1,7 @@
-export const APP_STORE_URL = "https://apps.apple.com/us/app/runstr/id6503943672";
+export const APP_STORE_URL = "https://apps.apple.com/us/app/runstr/id6753015130";
 export const GITHUB_URL = "https://github.com/RUNSTR-LLC/RUNSTR";
 export const ZAPSTORE_URL = "https://zapstore.dev/apps/naddr1qvzqqqr7pvpzqcgsy8425f5jwsd3yd4me6j5c64f7g96xr9vuvtv82fag5yf5lg0qqwxxmmd9eskummw09kk7atn9ee82mnnw3ezuurjda4x2cm50etju8";
+export const DC_5K_URL = "https://runsignup.com/Race/DC/Washington/Runstr5k";
 
 export const charities = [
   {
@@ -51,6 +52,17 @@ export const features = [
     ],
     icon: "openSource",
   },
+  {
+    title: "COMMUNITY EVENTS",
+    description: "Join virtual challenges and in-person races. Compete with runners worldwide on global leaderboards.",
+    bullets: [
+      "Virtual & in-person events",
+      "Global leaderboards",
+      "Monthly challenges",
+      "Race discounts for members",
+    ],
+    icon: "events",
+  },
 ] as const;
 
 export const howItWorks = [
@@ -72,8 +84,9 @@ export const howItWorks = [
 ] as const;
 
 export const navLinks = [
+  { href: "#events", label: "Events" },
   { href: "#features", label: "Features" },
-  { href: "#how-it-works", label: "How It Works" },
+  { href: "#pricing", label: "Pricing" },
   { href: "#charities", label: "Charities" },
 ] as const;
 

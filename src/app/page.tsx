@@ -1,11 +1,11 @@
 import { Header, Footer } from "@/components/layout";
 import {
   Hero,
-  AppScreenshots,
+  Events,
   Features,
+  Pricing,
   HowItWorks,
   CharityPartners,
-  Privacy,
   CallToAction,
 } from "@/components/sections";
 
@@ -15,11 +15,11 @@ export default function Home() {
       <Header />
       <main>
         <Hero />
-        <AppScreenshots />
+        <Events />
         <Features />
+        <Pricing />
         <HowItWorks />
         <CharityPartners />
-        <Privacy />
         <CallToAction />
       </main>
       <Footer />
