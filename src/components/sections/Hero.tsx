@@ -19,9 +19,9 @@ export function Hero() {
 
           {/* Headline */}
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-black mb-6 leading-tight">
-            <span className="text-[var(--foreground)]">Run Anywhere.</span>
+            <span className="text-[var(--foreground)]">Run Anywhere</span>
             <br />
-            <span className="text-[var(--accent)]">Compete Everywhere.</span>
+            <span className="text-[var(--accent)]">Compete Everywhere</span>
           </h1>
 
           {/* Subheadline */}

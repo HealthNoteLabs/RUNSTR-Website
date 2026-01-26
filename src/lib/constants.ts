@@ -20,48 +20,37 @@ export const charities = [
 
 export const features = [
   {
-    title: "ANONYMOUS",
-    description: "No email, no phone number, no user accounts. Just open the app and start moving. Your identity is yours to keep.",
+    title: "FREE",
+    description: "Start tracking your workouts instantly with zero barriers.",
     bullets: [
       "No account required",
       "No email or phone",
-      "No personal data collected",
+      "No subscription",
       "Start instantly",
     ],
-    icon: "anonymous",
-  },
-  {
-    title: "LOCAL FIRST",
-    description: "Your fitness data lives on your device. Nothing leaves your phone unless you choose to join a public leaderboard or competition.",
-    bullets: [
-      "Data stored on your device",
-      "Share only what you choose",
-      "Public leaderboards are opt-in",
-      "You control your data",
-    ],
-    icon: "localFirst",
+    icon: "free",
   },
   {
     title: "OPEN SOURCE",
-    description: "Every line of code is public. Audit it, fork it, contribute to it. No black boxes, no hidden tracking—just transparent software.",
+    description: "Every line of code is public and auditable.",
     bullets: [
-      "Code on GitHub",
-      "Community-driven",
       "Fully auditable",
       "No hidden tracking",
+      "Code on GitHub",
+      "No personal data collected",
     ],
     icon: "openSource",
   },
   {
-    title: "COMMUNITY EVENTS",
-    description: "Join virtual challenges and in-person races. Compete with runners worldwide on global leaderboards.",
+    title: "COMMUNITY",
+    description: "Connect with athletes worldwide and support important causes.",
     bullets: [
       "Virtual & in-person events",
       "Global leaderboards",
-      "Monthly challenges",
-      "Race discounts for members",
+      "Join Teams",
+      "Support important causes",
     ],
-    icon: "events",
+    icon: "community",
   },
 ] as const;
 
@@ -69,24 +58,23 @@ export const howItWorks = [
   {
     step: 1,
     title: "Download the App",
-    description: "Get RUNSTR free from the App Store. No account needed.",
+    description: "Get RUNSTR free from the App Store, GitHub, or Zapstore.",
   },
   {
     step: 2,
     title: "Start Tracking",
-    description: "Run, walk, or cycle. All data stays on your device.",
+    description: "Run, walk, cycle, and more.",
   },
   {
     step: 3,
     title: "Make an Impact",
-    description: "Join competitions and contribute to charities with every workout.",
+    description: "Join competitions and earn rewards for charity.",
   },
 ] as const;
 
 export const navLinks = [
   { href: "#events", label: "Events" },
   { href: "#features", label: "Features" },
-  { href: "#pricing", label: "Pricing" },
   { href: "#charities", label: "Charities" },
 ] as const;
 

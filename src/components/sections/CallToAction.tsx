@@ -62,10 +62,6 @@ export function CallToAction() {
                 GitHub
               </Button>
             </div>
-
-            <p className="mt-6 text-xs text-[var(--text-muted)]">
-              Available on iOS. Android coming soon.
-            </p>
           </div>
         </div>
       </Container>

@@ -3,7 +3,6 @@ import {
   Hero,
   Events,
   Features,
-  Pricing,
   HowItWorks,
   CharityPartners,
   CallToAction,
@@ -17,7 +16,6 @@ export default function Home() {
         <Hero />
         <Events />
         <Features />
-        <Pricing />
         <HowItWorks />
         <CharityPartners />
         <CallToAction />

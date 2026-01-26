@@ -2,7 +2,6 @@ export { Hero } from "./Hero";
 export { Events } from "./Events";
 export { AppScreenshots } from "./AppScreenshots";
 export { Features } from "./Features";
-export { Pricing } from "./Pricing";
 export { HowItWorks } from "./HowItWorks";
 export { CharityPartners } from "./CharityPartners";
 export { Privacy } from "./Privacy";

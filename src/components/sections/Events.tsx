@@ -11,7 +11,7 @@ export function Events() {
             <span className="text-[var(--accent)]">Events</span>
           </h2>
           <p className="text-[var(--text-secondary)] max-w-2xl mx-auto">
-            Join our fitness events—virtual challenges you can do anywhere, or
+            Join our fitness events: virtual challenges you can do anywhere, or
             in-person races to meet the community.
           </p>
         </div>
@@ -114,7 +114,7 @@ export function Events() {
               Virtual Challenges
             </h3>
             <div className="grid sm:grid-cols-2 gap-4">
-              {/* Season 2 */}
+              {/* RUNSTR SEASON II */}
               <Card className="relative overflow-hidden">
                 <div className="flex items-center justify-between mb-3">
                   <span className="px-2 py-0.5 bg-[var(--accent)]/10 text-[var(--accent)] text-xs font-medium rounded">
@@ -126,7 +126,7 @@ export function Events() {
                   </div>
                 </div>
                 <h4 className="text-lg font-bold text-[var(--foreground)] mb-1">
-                  Season 2
+                  RUNSTR SEASON II
                 </h4>
                 <p className="text-[var(--text-muted)] text-xs mb-2">
                   Jan 1 - Mar 1, 2026
