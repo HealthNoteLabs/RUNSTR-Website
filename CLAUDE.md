@@ -64,12 +64,18 @@ npm run build
 
 ```
 Background:     #000000 (pure black)
+Background Secondary: #0a0a0a
 Card:           #1a1a1a
+Card Hover:     #2a2a2a
 Accent:         #F5A356 (orange)
 Accent Light:   #FFB76B
 Text Primary:   #ffffff
 Text Secondary: #888888
+Text Muted:     #666666
+Border:         #2a2a2a
 ```
+
+**STRICT**: Only use these theme colors. No greens, reds, blues, or other colors outside the palette. No colorful emojis — use text or styled elements instead. Status indicators (active, live, completed, error) must use the accent orange or text/muted grays.
 
 ## Content Guidelines
 

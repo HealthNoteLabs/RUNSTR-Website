@@ -42,8 +42,8 @@ export const features = [
     icon: "openSource",
   },
   {
-    title: "COMMUNITY",
-    description: "Connect with athletes worldwide and support important causes.",
+    title: "COMPETITION",
+    description: "Compete with athletes worldwide and support important causes.",
     bullets: [
       "Virtual & in-person events",
       "Global leaderboards",
@@ -73,9 +73,10 @@ export const howItWorks = [
 ] as const;
 
 export const navLinks = [
-  { href: "#events", label: "Events" },
-  { href: "#features", label: "Features" },
-  { href: "#charities", label: "Charities" },
+  { href: "/#events", label: "Events" },
+  { href: "/leaderboards", label: "Leaderboards" },
+  { href: "/#features", label: "Features" },
+  { href: "/#charities", label: "Charities" },
 ] as const;
 
 export const footerLinks = {

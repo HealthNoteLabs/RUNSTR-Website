@@ -28,15 +28,25 @@ export function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="text-sm text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
-              >
-                {link.label}
-              </a>
-            ))}
+            {navLinks.map((link) =>
+              link.href.includes("#") ? (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="text-sm text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="text-sm text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
+                >
+                  {link.label}
+                </Link>
+              ),
+            )}
           </nav>
 
           <div className="hidden md:block">
@@ -80,16 +90,27 @@ export function Header() {
         {isMenuOpen && (
           <nav className="md:hidden py-4 border-t border-[var(--border)]">
             <div className="flex flex-col gap-4">
-              {navLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setIsMenuOpen(false)}
-                  className="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
-                >
-                  {link.label}
-                </a>
-              ))}
+              {navLinks.map((link) =>
+                link.href.includes("#") ? (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setIsMenuOpen(false)}
+                    className="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
+                  >
+                    {link.label}
+                  </a>
+                ) : (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setIsMenuOpen(false)}
+                    className="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                ),
+              )}
               <Button href={APP_STORE_URL} external size="sm" className="mt-2">
                 Download
               </Button>
