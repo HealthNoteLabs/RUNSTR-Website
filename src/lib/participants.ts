@@ -225,6 +225,89 @@ export const KNOWN_PARTICIPANTS: KnownParticipant[] = [
     name: 'Jose Sammut',
     picture: 'https://image.nostr.build/afa74223797c545885199106cc57e9f4811e7e6cffd7f398b15042f29051747e.jpg',
   },
+  // Additional participants discovered via Supabase competition records
+  {
+    npub: 'npub19hl89c04sj20cs82heexpcjxp8zw6qg7jy3u0eddxuvganxkw6wqff5xau',
+    name: 'Dani',
+    picture: 'https://pbs.twimg.com/profile_images/1608301873865408513/Ysbig7Wv_400x400.jpg',
+  },
+  {
+    npub: 'npub16dth8hnwfjz2d293m2q55eyk9vxky8u8gu7lfmd7q5hyxgxluhrs2dpu6l',
+    name: 'satcat',
+    picture: 'https://blossom.primal.net/695f7c6ab0e118d1aa863212098cf124c0da456ccca9236e6a0b10c412aad0d2.jpg',
+  },
+  {
+    npub: 'npub1ch7tpjahqvh3y52v3m4enmp54s6kg3d43k6fhau23x59v74c9atscy0s4x',
+    name: 'schnuckeh',
+    picture: 'https://profilepics.nostur.com/profilepic_v1/ffe8a83249de89c0f67c96aa6ab23a8451b1bb49e6bee7aca18e3e77619782e1/profilepic.jpg?1747578374',
+  },
+  {
+    npub: 'npub1jp54xt8x4pezxdnmlvzfkkppver2ss263z65v5uadla29m4jr2dqj7xcra',
+    name: 'MichaelS',
+    picture: 'https://image.nostr.build/8cce04a086b7d0053323a1e6a787ab456bcb9975d4901315da2f6b645184394f.jpg',
+  },
+  {
+    npub: 'npub177wyksgf9xl9q8u2cc38ue49shltsjs2j9302s2e4f6jvkrz97ks3s25zh',
+    name: 'JudithS',
+    picture: 'https://m.primal.net/Hckf.jpg',
+  },
+  {
+    npub: 'npub1czf7rrl55muplsac9w9z5fqzp8gspsssrm39xtrw8cst3uh78x8sp7hphq',
+    name: 'Piyorin',
+  },
+  {
+    npub: 'npub1zgyvyfsh523ngggcw9sy0cpy96cln2njrhvpxhx3kpz7gdpawhqqau8vtt',
+    name: 'Larstr',
+    picture: 'https://image.nostr.build/d4ca45093a6372f755d468f7ed8539041f6c4db8ef6ed434d861c527acf70e02.jpg',
+  },
+  {
+    npub: 'npub10mfnzgx6vrflxyl5rscs699wz8wl9jr3z4nm686ap6ccsdjc5tzskjc4ym',
+    name: 'Bonsai.core',
+    picture: 'https://image.nostr.build/f9c97bbb667f15a10f39ab1cee90653f9fff80afabbc950a91774c1fbc44a531.jpg',
+  },
+  {
+    npub: 'npub1matqugeuwn9lzkhgr3f0r7maatze0nswtxagntttzcqnp2m9ehxqt5pdmz',
+    name: 'MyAiryMedia',
+    picture: 'https://image.nostr.build/8364ac76fc2c1c5047230c8cd1f5cc066fcfa8da5e05d5e9e111fd97b629adde.jpg',
+  },
+  {
+    npub: 'npub1jdtdqz9tyf4tdvy2k0rnjqz5dv5rd3yvw5nlpefn9syjqx37dhyqxwh0c8',
+    name: 'Rustypuppy',
+    picture: 'https://i.nostr.build/QhEQdzIRENLu7a1q.jpg',
+  },
+  {
+    npub: 'npub1clskpqj2js5ke78jyytq4rjs4jre0h0a54cl5zuqdhesprtx7j6qfn6q22',
+    name: 'Sota',
+  },
+  {
+    npub: 'npub1r7kzlgygvdzycgwc9q0789elhvdns6pfurnr2v3lqlf7jn0jcctq92azg7',
+    name: 'Satskarma',
+    picture: 'https://blossom.primal.net/98fba1122897009168289ff6f670e6d6d17e68e9f7d2c6dccfd87c9627de22e1.png',
+  },
+  {
+    npub: 'npub1y7fcf9ezv6puwq0zss7xmdvqutcwyh66rx85cvuhuws2yamyy9wscc8zv7',
+    name: 'Avis',
+    picture: 'https://blossom.primal.net/174b66b1c8d21531a373e5ca4a7340eeee9111bb14fcefcff5c344bf7f7d11e5.jpg',
+  },
+  {
+    npub: 'npub15hgkyh7xmcn25l60c64csv73hk4hwrd8nahwx6nd5yxdz0jyc6nqnhaj3u',
+    name: 'JurGi',
+    picture: 'https://image.nostr.build/b8c395c01eb86fbbc693d36706d753c155ed561bb6f1d15e379ac928178a7633.jpg',
+  },
+  {
+    npub: 'npub1t0h8lpqhy7kjaf6439tz2fgsct6qa4lf9khcsvkm0g789wvscmfsnfczfk',
+    name: 'Bitcoin_Sepp',
+    picture: 'https://image.nostr.build/5c046e50859118dfa89c1094d26717d10d2525132a0a9f8ebea9c58c7c0f16fe.jpg',
+  },
+  {
+    npub: 'npub1azxwhf9yg54fpfnlc93ttcveafmptde0gxg0rgj8dm5qt5h5uqkqsnqus2',
+    name: 'Carol',
+    picture: 'https://m.primal.net/OHIp.jpg',
+  },
+  {
+    npub: 'npub1xsxhc2p5lytd8cjvmkqs2c2txue7hgzce9ewkrzfzr26xc9d7qtqqlqumx',
+    name: 'Draffi',
+  },
 ];
 
 /** Lookup map: npub → { name, picture } */

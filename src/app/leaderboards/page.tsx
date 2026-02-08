@@ -318,7 +318,7 @@ export default function LeaderboardsPage() {
 
       // 5. Build ranked list — only include participants with at least one workout
       const isGenericName = (n: string | null | undefined) =>
-        !n || n === "Season II Participant";
+        !n || n === "Season II Participant" || n === "Anonymous Athlete";
 
       const entries = participants
         .filter((p) => agg[p.npub] && agg[p.npub].meters > 0)
