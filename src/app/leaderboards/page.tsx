@@ -276,12 +276,13 @@ export default function LeaderboardsPage() {
       const startDate = comp.start_date.split("T")[0];
       const endDate = comp.end_date.split("T")[0];
 
-      // 2. All workouts in the date range for this activity type
+      // 2. All workouts in the date range (both sources) for dedup
       const { data: workouts, error: wErr } = await supabase
         .from("workout_submissions")
-        .select("npub, distance_meters, profile_name, profile_picture")
+        .select(
+          "npub, distance_meters, source, leaderboard_date, profile_name, profile_picture",
+        )
         .eq("activity_type", comp.activity_type)
-        .eq("source", "app")
         .gte("leaderboard_date", startDate)
         .lte("leaderboard_date", endDate)
         .limit(50000);
@@ -291,7 +292,36 @@ export default function LeaderboardsPage() {
       const npubSet = new Set(participants.map((p) => p.npub));
       const relevant = (workouts || []).filter((w) => npubSet.has(w.npub));
 
-      // 4. Aggregate
+      // 4. Deduplicate: per npub+date, prefer "app" source over "nostr_scan"
+      //    to avoid double-counting while still including scan-only entries.
+      type WorkoutRow = (typeof relevant)[number];
+      const byNpubDate: Record<string, WorkoutRow[]> = {};
+      for (const w of relevant) {
+        const key = `${w.npub}|${w.leaderboard_date}`;
+        if (!byNpubDate[key]) byNpubDate[key] = [];
+        byNpubDate[key].push(w);
+      }
+
+      const deduped: WorkoutRow[] = [];
+      for (const rows of Object.values(byNpubDate)) {
+        const appRows = rows.filter((r) => r.source === "app");
+        if (appRows.length > 0) {
+          deduped.push(...appRows);
+        } else {
+          // No app submissions for this npub+date — use scan rows,
+          // but deduplicate identical distances (scan sometimes duplicates)
+          const seen = new Set<string>();
+          for (const r of rows) {
+            const sig = `${r.distance_meters}`;
+            if (!seen.has(sig)) {
+              seen.add(sig);
+              deduped.push(r);
+            }
+          }
+        }
+      }
+
+      // 5. Aggregate
       const agg: Record<
         string,
         {
@@ -301,7 +331,7 @@ export default function LeaderboardsPage() {
           profilePicture: string | null;
         }
       > = {};
-      for (const w of relevant) {
+      for (const w of deduped) {
         if (!agg[w.npub]) {
           agg[w.npub] = {
             meters: 0,
@@ -316,7 +346,7 @@ export default function LeaderboardsPage() {
         if (w.profile_picture) agg[w.npub].profilePicture = w.profile_picture;
       }
 
-      // 5. Build ranked list — only include participants with at least one workout
+      // 6. Build ranked list — only include participants with at least one workout
       const isGenericName = (n: string | null | undefined) =>
         !n || n === "Season II Participant" || n === "Anonymous Athlete";
 
