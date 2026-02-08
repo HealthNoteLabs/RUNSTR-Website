@@ -317,6 +317,9 @@ export default function LeaderboardsPage() {
       }
 
       // 5. Build ranked list — only include participants with at least one workout
+      const isGenericName = (n: string | null | undefined) =>
+        !n || n === "Season II Participant";
+
       const entries = participants
         .filter((p) => agg[p.npub] && agg[p.npub].meters > 0)
         .map((p) => {
@@ -325,14 +328,14 @@ export default function LeaderboardsPage() {
             rank: 0,
             npub: p.npub,
             name:
-              p.name ||
-              agg[p.npub]?.profileName ||
               known?.name ||
+              (!isGenericName(p.name) ? p.name : null) ||
+              agg[p.npub]?.profileName ||
               "Anonymous",
             picture:
+              known?.picture ||
               p.picture ||
               agg[p.npub]?.profilePicture ||
-              known?.picture ||
               null,
             score: (agg[p.npub]?.meters || 0) / 1000,
             workoutCount: agg[p.npub]?.count || 0,
@@ -446,8 +449,8 @@ export default function LeaderboardsPage() {
             const known = KNOWN_PARTICIPANT_MAP.get(r.npub);
             return {
               npub: r.npub,
-              name: r.profile_name || known?.name || "Anonymous",
-              picture: r.profile_picture || known?.picture || null,
+              name: known?.name || r.profile_name || "Anonymous",
+              picture: known?.picture || r.profile_picture || null,
               value: (r as Record<string, unknown>)[def.field] as number,
             };
           })
