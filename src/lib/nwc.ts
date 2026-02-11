@@ -5,7 +5,7 @@ import { hexToBytes } from "nostr-tools/utils";
 
 // NWC connection string — receive-only wallet (can only create invoices)
 const NWC_URI =
-  "nostr+walletconnect://69a0a0910b49f1dbfac5f94be6e80e3e2b09541cb06a53389b45cd299e6513f8?relay=wss%3A%2F%2Frelay.getalby.com%2Fv1&secret=28fecc3c11ee476eb2e1c4181cb3e1d42a8e69b4f25c9b60e20e6a44dc5a1efa";
+  "nostr+walletconnect://84d21db9573f73353050dc7db9b0577bb56bf3d2120b35a1c794acda47bb4673?relay=wss%3A%2F%2Frelay.getalby.com%2Fv1&secret=f1fc9524102e8b00b8266fa5568c6b92a87d0ff0d8da0f54a395d485353f0378&lud16=hustle%40getalby.com";
 
 const REQUEST_TIMEOUT = 30_000;
 const SATS_AMOUNT = 7_000;
