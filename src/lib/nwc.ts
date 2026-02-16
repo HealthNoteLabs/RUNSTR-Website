@@ -8,7 +8,6 @@ const NWC_URI =
   "nostr+walletconnect://84d21db9573f73353050dc7db9b0577bb56bf3d2120b35a1c794acda47bb4673?relay=wss%3A%2F%2Frelay.getalby.com%2Fv1&secret=f1fc9524102e8b00b8266fa5568c6b92a87d0ff0d8da0f54a395d485353f0378&lud16=hustle%40getalby.com";
 
 const REQUEST_TIMEOUT = 30_000;
-const SATS_AMOUNT = 7_000;
 
 interface ParsedNWC {
   walletPubkey: string;
@@ -115,10 +114,13 @@ export interface Invoice {
   expiresAt: number;
 }
 
-export async function createInvoice(): Promise<Invoice> {
+export async function createInvoice(
+  amountSats: number,
+  description: string,
+): Promise<Invoice> {
   const result = await sendNWCRequest("make_invoice", {
-    amount: SATS_AMOUNT * 1000, // NWC uses millisats
-    description: "RUNSTR Pro — 1 month subscription",
+    amount: amountSats * 1000, // NWC uses millisats
+    description,
   });
 
   return {

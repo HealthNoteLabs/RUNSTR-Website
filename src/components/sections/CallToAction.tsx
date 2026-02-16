@@ -16,7 +16,7 @@ export function CallToAction() {
             </h2>
 
             <p className="text-[var(--text-secondary)] mb-8">
-              Download RUNSTR today. Free forever. No email required.
+              Download RUNSTR today. Free to use. No email required.
               Just pure fitness tracking with the option to give back.
             </p>
 

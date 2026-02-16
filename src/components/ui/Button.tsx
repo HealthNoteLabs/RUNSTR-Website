@@ -8,6 +8,7 @@ interface ButtonProps {
   external?: boolean;
   className?: string;
   onClick?: () => void;
+  disabled?: boolean;
 }
 
 export function Button({
@@ -18,6 +19,7 @@ export function Button({
   external = false,
   className = "",
   onClick,
+  disabled = false,
 }: ButtonProps) {
   const baseStyles = "inline-flex items-center justify-center font-semibold uppercase tracking-wider transition-all duration-300 rounded-lg";
 
@@ -33,7 +35,8 @@ export function Button({
     lg: "px-8 py-4 text-base",
   };
 
-  const styles = `${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`;
+  const disabledStyles = disabled ? "opacity-40 cursor-not-allowed" : "";
+  const styles = `${baseStyles} ${variants[variant]} ${sizes[size]} ${disabledStyles} ${className}`;
 
   if (href) {
     if (external) {
@@ -64,7 +67,7 @@ export function Button({
   }
 
   return (
-    <button onClick={onClick} className={styles}>
+    <button onClick={onClick} className={styles} disabled={disabled}>
       {children}
     </button>
   );

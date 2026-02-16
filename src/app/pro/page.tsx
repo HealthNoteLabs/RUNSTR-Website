@@ -8,13 +8,39 @@ import { Header, Footer } from "@/components/layout";
 import { Container, Card, Button } from "@/components/ui";
 import { supabase } from "@/lib/supabase";
 import { createInvoice, checkInvoice, disconnectRelay } from "@/lib/nwc";
+import { tiers, tierMap } from "@/lib/constants";
 import type { Invoice } from "@/lib/nwc";
+import type { PlanId, TierConfig } from "@/lib/constants";
 
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 
 type PageState = "idle" | "generating" | "payment" | "success";
+
+interface ExistingSub {
+  plan: PlanId;
+  status: string;
+  expires_at: string;
+}
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+const PLAN_RANK: Record<PlanId, number> = { supporter: 0, pro: 1 };
+
+function isValidPlan(v: string | null): v is PlanId {
+  return v === "supporter" || v === "pro";
+}
+
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
 
 // ---------------------------------------------------------------------------
 // Inner component that reads search params (must be inside Suspense)
@@ -23,12 +49,18 @@ type PageState = "idle" | "generating" | "payment" | "success";
 function ProPageInner() {
   const searchParams = useSearchParams();
   const npub = searchParams.get("npub");
+  const tierParam = searchParams.get("tier");
 
+  const [selectedTier, setSelectedTier] = useState<PlanId>(
+    isValidPlan(tierParam) ? tierParam : "pro",
+  );
   const [state, setState] = useState<PageState>("idle");
   const [invoice, setInvoice] = useState<Invoice | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [expiresAt, setExpiresAt] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [existingSub, setExistingSub] = useState<ExistingSub | null>(null);
+  const [subLoading, setSubLoading] = useState(false);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Validate npub
@@ -42,6 +74,23 @@ function ProPageInner() {
     }
   })();
 
+  // Fetch existing subscription on mount
+  useEffect(() => {
+    if (!npub || !npubValid) return;
+    setSubLoading(true);
+    supabase
+      .from("subscribers")
+      .select("plan, status, expires_at")
+      .eq("npub", npub)
+      .single()
+      .then(({ data }) => {
+        if (data && isValidPlan(data.plan)) {
+          setExistingSub(data as ExistingSub);
+        }
+        setSubLoading(false);
+      });
+  }, [npub, npubValid]);
+
   // Cleanup on unmount
   useEffect(() => {
     return () => {
@@ -50,14 +99,38 @@ function ProPageInner() {
     };
   }, []);
 
+  // Derived state
+  const isExpired =
+    existingSub &&
+    existingSub.expires_at &&
+    new Date(existingSub.expires_at) < new Date();
+  const isActive = existingSub && !isExpired;
+  const isDowngrade =
+    existingSub &&
+    !isExpired &&
+    PLAN_RANK[selectedTier] < PLAN_RANK[existingSub.plan];
+
+  const ctaLabel = (() => {
+    if (!existingSub) return "Subscribe";
+    if (isExpired) return "Renew";
+    if (PLAN_RANK[selectedTier] > PLAN_RANK[existingSub.plan])
+      return "Upgrade to Pro";
+    return "Renew";
+  })();
+
+  const tier = tierMap[selectedTier];
+
   const handleSubscribe = useCallback(async () => {
-    if (!npub || !npubValid) return;
+    if (!npub || !npubValid || isDowngrade) return;
 
     setState("generating");
     setError(null);
 
     try {
-      const inv = await createInvoice();
+      const inv = await createInvoice(
+        tier.price,
+        `RUNSTR ${tier.name} — 1 month subscription`,
+      );
       setInvoice(inv);
       setState("payment");
 
@@ -68,7 +141,7 @@ function ProPageInner() {
           if (status.isPaid) {
             if (pollRef.current) clearInterval(pollRef.current);
             pollRef.current = null;
-            await activateSubscription(npub);
+            await activateSubscription(npub, selectedTier);
             setState("success");
           }
         } catch {
@@ -76,12 +149,17 @@ function ProPageInner() {
         }
       }, 3000);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to create invoice");
+      setError(
+        err instanceof Error ? err.message : "Failed to create invoice",
+      );
       setState("idle");
     }
-  }, [npub, npubValid]);
+  }, [npub, npubValid, isDowngrade, tier, selectedTier]);
 
-  const activateSubscription = async (subscriberNpub: string) => {
+  const activateSubscription = async (
+    subscriberNpub: string,
+    plan: PlanId,
+  ) => {
     // Check for existing subscription
     const { data: existing } = await supabase
       .from("subscribers")
@@ -105,20 +183,14 @@ function ProPageInner() {
       {
         npub: subscriberNpub,
         status: "active",
-        plan: "pro",
+        plan,
         expires_at: newExpiry.toISOString(),
         created_at: existing ? undefined : now.toISOString(),
       },
       { onConflict: "npub" },
     );
 
-    setExpiresAt(
-      newExpiry.toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      }),
-    );
+    setExpiresAt(formatDate(newExpiry.toISOString()));
   };
 
   const copyInvoice = () => {
@@ -148,12 +220,12 @@ function ProPageInner() {
     );
   }
 
-  // --- Idle state: show benefits + subscribe ---
+  // --- Idle state: show tiers + subscribe ---
   if (state === "idle") {
     return (
       <section className="pt-32 pb-20 min-h-screen">
         <Container>
-          <div className="max-w-lg mx-auto">
+          <div className="max-w-2xl mx-auto">
             <div className="text-center mb-8">
               <h1 className="text-3xl sm:text-4xl font-bold mb-2">
                 RUNSTR <span className="text-[var(--accent)]">Pro</span>
@@ -163,48 +235,51 @@ function ProPageInner() {
               </p>
             </div>
 
-            <Card hover={false} className="mb-6">
-              <h2 className="text-lg font-semibold mb-4">
-                What you get with Pro
-              </h2>
-              <ul className="space-y-3">
-                {[
-                  {
-                    title: "Create Teams",
-                    desc: "Build and manage your own running teams",
-                  },
-                  {
-                    title: "Create Events",
-                    desc: "Host competitions and challenge your community",
-                  },
-                  {
-                    title: "Support Development",
-                    desc: "Help keep RUNSTR free and open source for everyone",
-                  },
-                ].map((item) => (
-                  <li key={item.title} className="flex items-start gap-3">
-                    <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full border-2 border-[var(--accent)] flex items-center justify-center">
-                      <span className="w-2 h-2 rounded-full bg-[var(--accent)]" />
-                    </span>
-                    <div>
-                      <p className="font-medium">{item.title}</p>
-                      <p className="text-sm text-[var(--text-secondary)]">
-                        {item.desc}
-                      </p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </Card>
+            {/* Status banner */}
+            {!subLoading && existingSub && (
+              <div className="mb-6 px-4 py-3 rounded-lg border border-[var(--border)] bg-[var(--background-card)] text-center text-sm">
+                {isActive ? (
+                  <p>
+                    You have an active{" "}
+                    <span className="font-semibold text-[var(--accent)]">
+                      {tierMap[existingSub.plan].name}
+                    </span>{" "}
+                    subscription — expires{" "}
+                    {formatDate(existingSub.expires_at)}
+                  </p>
+                ) : (
+                  <p>
+                    Your{" "}
+                    <span className="font-semibold text-[var(--accent)]">
+                      {tierMap[existingSub.plan].name}
+                    </span>{" "}
+                    subscription expired on{" "}
+                    {formatDate(existingSub.expires_at)}
+                  </p>
+                )}
+              </div>
+            )}
 
-            <Card hover={false} className="text-center mb-6">
-              <p className="text-3xl font-bold">
-                7,000{" "}
-                <span className="text-lg font-normal text-[var(--text-secondary)]">
-                  sats / month
-                </span>
+            {/* Tier cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+              {tiers.map((t) => (
+                <TierCard
+                  key={t.id}
+                  tier={t}
+                  selected={selectedTier === t.id}
+                  onSelect={() => setSelectedTier(t.id)}
+                  currentPlan={isActive ? existingSub?.plan : undefined}
+                />
+              ))}
+            </div>
+
+            {/* Downgrade warning */}
+            {isDowngrade && (
+              <p className="text-center text-sm text-[var(--text-muted)] mb-4">
+                You already have a Pro subscription. Downgrading is not
+                available.
               </p>
-            </Card>
+            )}
 
             {error && (
               <p className="text-center text-sm text-[var(--accent)] mb-4">
@@ -212,8 +287,13 @@ function ProPageInner() {
               </p>
             )}
 
-            <Button onClick={handleSubscribe} size="lg" className="w-full">
-              Subscribe
+            <Button
+              onClick={handleSubscribe}
+              size="lg"
+              className="w-full"
+              disabled={!!isDowngrade}
+            >
+              {ctaLabel} — {tier.price.toLocaleString()} sats
             </Button>
           </div>
         </Container>
@@ -306,11 +386,11 @@ function ProPageInner() {
                 </svg>
               </div>
               <h1 className="text-2xl font-bold mb-2">
-                You&apos;re on Pro
+                You&apos;re on {tier.name}
               </h1>
               <p className="text-[var(--text-secondary)] mb-4">
                 Your subscription is active. Head back to the app to start
-                creating teams and events.
+                using your new features.
               </p>
               {expiresAt && (
                 <p className="text-sm text-[var(--text-muted)]">
@@ -322,6 +402,60 @@ function ProPageInner() {
         </div>
       </Container>
     </section>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Tier selection card
+// ---------------------------------------------------------------------------
+
+function TierCard({
+  tier,
+  selected,
+  onSelect,
+  currentPlan,
+}: {
+  tier: TierConfig;
+  selected: boolean;
+  onSelect: () => void;
+  currentPlan?: PlanId;
+}) {
+  const isCurrent = currentPlan === tier.id;
+
+  return (
+    <button
+      onClick={onSelect}
+      className={`text-left w-full p-5 rounded-xl border-2 transition-colors ${
+        selected
+          ? "border-[var(--accent)] bg-[var(--background-card)]"
+          : "border-[var(--border)] bg-[var(--background-card)] hover:border-[var(--text-muted)]"
+      }`}
+    >
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="text-lg font-bold">{tier.name}</h3>
+        {isCurrent && (
+          <span className="text-xs px-2 py-0.5 rounded border border-[var(--accent)] text-[var(--accent)]">
+            Current
+          </span>
+        )}
+      </div>
+      <p className="text-2xl font-bold mb-4">
+        {tier.price.toLocaleString()}{" "}
+        <span className="text-sm font-normal text-[var(--text-secondary)]">
+          sats / month
+        </span>
+      </p>
+      <ul className="space-y-2">
+        {tier.features.map((f) => (
+          <li key={f} className="flex items-start gap-2 text-sm">
+            <span className="mt-0.5 flex-shrink-0 w-4 h-4 rounded-full border border-[var(--accent)] flex items-center justify-center">
+              <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]" />
+            </span>
+            <span className="text-[var(--text-secondary)]">{f}</span>
+          </li>
+        ))}
+      </ul>
+    </button>
   );
 }
 

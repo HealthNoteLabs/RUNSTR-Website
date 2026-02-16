@@ -20,12 +20,12 @@ export const charities = [
 
 export const features = [
   {
-    title: "FREE",
+    title: "FREE TO USE",
     description: "Start tracking your workouts instantly with zero barriers.",
     bullets: [
       "No account required",
       "No email or phone",
-      "No subscription",
+      "No subscription required",
       "Start instantly",
     ],
     icon: "free",
@@ -58,7 +58,7 @@ export const howItWorks = [
   {
     step: 1,
     title: "Download the App",
-    description: "Get RUNSTR free from the App Store, GitHub, or Zapstore.",
+    description: "Get RUNSTR from the App Store, GitHub, or Zapstore.",
   },
   {
     step: 2,
@@ -78,6 +78,43 @@ export const navLinks = [
   { href: "/#features", label: "Features" },
   { href: "/#charities", label: "Charities" },
 ] as const;
+
+export type PlanId = "supporter" | "pro";
+
+export interface TierConfig {
+  id: PlanId;
+  name: string;
+  price: number; // sats per month
+  features: string[];
+}
+
+export const tiers: TierConfig[] = [
+  {
+    id: "supporter",
+    name: "Supporter",
+    price: 10_000,
+    features: [
+      "Supporter badge",
+      "Priority support",
+      "Support development",
+    ],
+  },
+  {
+    id: "pro",
+    name: "Pro",
+    price: 15_000,
+    features: [
+      "Everything in Supporter",
+      "Create Teams",
+      "Create Events",
+      "Early access to new features",
+    ],
+  },
+];
+
+export const tierMap: Record<PlanId, TierConfig> = Object.fromEntries(
+  tiers.map((t) => [t.id, t]),
+) as Record<PlanId, TierConfig>;
 
 export const footerLinks = {
   product: [
