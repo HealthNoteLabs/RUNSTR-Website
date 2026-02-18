@@ -30,5 +30,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules", "satlantis-api-client", "old-pages", "docs"]
+  "exclude": ["node_modules", "satlantis-api-client", "old-pages", "docs", "supabase"]
 }
