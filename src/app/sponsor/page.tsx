@@ -130,7 +130,7 @@ export default function SponsorPage() {
                 <p className="text-[var(--text-muted)] text-sm mb-4">
                   Monthly and weekly slots available. Contact us for rates.
                 </p>
-                <Button href="mailto:hello@runstr.club" variant="outline">
+                <Button href="mailto:dakota.brown@runstr.club" variant="outline">
                   Inquire About In-App Sponsorship
                 </Button>
               </div>
@@ -379,7 +379,7 @@ export default function SponsorPage() {
                         (703) 400-9110
                       </a>
                       <a
-                        href="mailto:hello@runstr.club"
+                        href="mailto:dakota.brown@runstr.club"
                         className="flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
                       >
                         <svg
@@ -395,7 +395,7 @@ export default function SponsorPage() {
                             d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                           />
                         </svg>
-                        hello@runstr.club
+                        dakota.brown@runstr.club
                       </a>
                       <p className="flex items-center gap-2 text-sm text-[var(--text-secondary)]">
                         <svg
@@ -417,7 +417,7 @@ export default function SponsorPage() {
                   </div>
 
                   <div className="flex flex-col gap-3 sm:justify-center">
-                    <Button href="mailto:hello@runstr.club" className="w-full">
+                    <Button href="mailto:dakota.brown@runstr.club" className="w-full">
                       Email Us
                     </Button>
                     <Button
