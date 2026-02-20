@@ -150,7 +150,7 @@ export default function SponsorPage() {
                   RUNSTR 5K — March 15, 2026
                 </h2>
                 <p className="text-[var(--text-secondary)] max-w-xl mx-auto">
-                  Haines Point, Washington DC. 200+ expected participants.
+                  Hains Point, Washington DC. 200+ expected participants.
                   During Pubkey DC Brunch weekend. $500 donated to the winning
                   charity.
                 </p>

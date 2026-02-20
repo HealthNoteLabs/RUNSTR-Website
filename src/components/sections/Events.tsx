@@ -158,12 +158,12 @@ export function Events() {
                         d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                       />
                     </svg>
-                    Haines Point, Washington DC
+                    Hains Point, Washington DC
                   </div>
                 </div>
 
                 <p className="text-[var(--text-secondary)] mb-6">
-                  Our inaugural in-person 5K race at the scenic Haines Point
+                  Our inaugural in-person 5K race at the scenic Hains Point
                   loop. Join runners from around the DC area for a flat, fast
                   course with views of the Potomac.
                 </p>
