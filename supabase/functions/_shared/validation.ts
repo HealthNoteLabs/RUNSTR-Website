@@ -3,8 +3,8 @@ import { nip19 } from "https://esm.sh/nostr-tools@2";
 export type PlanId = "supporter" | "pro";
 
 const PLAN_CONFIG: Record<PlanId, { price: number; rank: number }> = {
-  supporter: { price: 10_000, rank: 0 },
-  pro: { price: 15_000, rank: 1 },
+  supporter: { price: 15_000, rank: 0 },
+  pro: { price: 21_000, rank: 1 },
 };
 
 export function isValidNpub(npub: string): boolean {

@@ -97,23 +97,22 @@ export const tiers: TierConfig[] = [
   {
     id: "supporter",
     name: "Supporter",
-    price: 10_000,
+    price: 15_000,
     features: [
-      "Boosted rewards — 800 sats per qualifying workout",
-      "Season III event access",
-      "Supporter badge",
-      "Priority support",
+      "10x rewards boost — 1,000 rewards per qualifying workout",
+      "Up to 5 boosted workouts per week",
+      "Base rate (100) applies after 5",
+      "Season access included",
     ],
   },
   {
     id: "pro",
     name: "Pro",
-    price: 15_000,
+    price: 21_000,
     features: [
       "Everything in Supporter",
       "Create Clubs",
       "Create Events",
-      "Early access to new features",
     ],
   },
 ];

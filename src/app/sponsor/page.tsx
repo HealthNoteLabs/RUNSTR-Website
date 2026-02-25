@@ -234,9 +234,9 @@ export default function SponsorPage() {
                   The RUNSTR Audience
                 </h2>
                 <p className="text-[var(--text-secondary)] max-w-xl mx-auto">
-                  RUNSTR athletes earn rewards for every workout. Free users
-                  earn 50 sats per workout. Subscribers earn 16x that — 800
-                  sats for every qualifying run, walk, or ride.
+                  RUNSTR athletes earn rewards for every qualifying workout.
+                  Free users earn 100 rewards per workout. Subscribers get a
+                  10x boost — 1,000 rewards per qualifying workout.
                 </p>
               </div>
 
@@ -254,8 +254,8 @@ export default function SponsorPage() {
                     {[
                       "Track workouts",
                       "Global leaderboards",
-                      "50 sats per workout",
-                      "Join events",
+                      "100 rewards per workout",
+                      "One qualifying workout per day",
                     ].map((f) => (
                       <li key={f} className="flex items-start gap-2 text-sm">
                         <span className="mt-0.5 flex-shrink-0 w-4 h-4 rounded-full border border-[var(--text-muted)] flex items-center justify-center">
@@ -272,7 +272,7 @@ export default function SponsorPage() {
                   <div className="text-center mb-4">
                     <h3 className="text-lg font-bold mb-1">Supporter</h3>
                     <p className="text-2xl font-black text-[var(--accent)]">
-                      10,000{" "}
+                      15,000{" "}
                       <span className="text-sm font-normal text-[var(--text-secondary)]">
                         sats / month
                       </span>
@@ -280,10 +280,10 @@ export default function SponsorPage() {
                   </div>
                   <ul className="space-y-2">
                     {[
-                      "800 sats per qualifying workout",
-                      "Season III event access",
-                      "Supporter badge",
-                      "Priority support",
+                      "1,000 rewards per qualifying workout",
+                      "Up to 5 boosted workouts per week",
+                      "Base rate (100) after 5",
+                      "Season access included",
                     ].map((f) => (
                       <li key={f} className="flex items-start gap-2 text-sm">
                         <span className="mt-0.5 flex-shrink-0 w-4 h-4 rounded-full border border-[var(--accent)] flex items-center justify-center">
@@ -300,7 +300,7 @@ export default function SponsorPage() {
                   <div className="text-center mb-4">
                     <h3 className="text-lg font-bold mb-1">Pro</h3>
                     <p className="text-2xl font-black text-[var(--accent)]">
-                      15,000{" "}
+                      21,000{" "}
                       <span className="text-sm font-normal text-[var(--text-secondary)]">
                         sats / month
                       </span>
@@ -311,7 +311,6 @@ export default function SponsorPage() {
                       "Everything in Supporter",
                       "Create Clubs",
                       "Create Events",
-                      "Early access to new features",
                     ].map((f) => (
                       <li key={f} className="flex items-start gap-2 text-sm">
                         <span className="mt-0.5 flex-shrink-0 w-4 h-4 rounded-full border border-[var(--accent)] flex items-center justify-center">
@@ -326,10 +325,10 @@ export default function SponsorPage() {
 
               <div className="text-center">
                 <p className="text-sm text-[var(--text-muted)] max-w-lg mx-auto">
-                  Qualifying workouts: running, walking, or cycling — at least
-                  2 km distance and 15 minutes duration via GPS tracking. Your
-                  sponsor banner is shown every time a user checks their
-                  rewards.
+                  Qualifying activities: running, walking, cycling, pushups,
+                  journal entries, and 5,000+ daily steps. One reward per day
+                  max. Your sponsor banner is shown every time a user checks
+                  their rewards.
                 </p>
               </div>
             </div>
