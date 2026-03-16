@@ -1,0 +1,8 @@
+[functions.create-order]
+verify_jwt = false
+
+[functions.check-subscription]
+verify_jwt = false
+
+[functions.zaprite-webhook]
+verify_jwt = false
