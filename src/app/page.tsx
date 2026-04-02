@@ -3,8 +3,9 @@ import {
   Hero,
   Events,
   Features,
-  HowItWorks,
+  AppScreenshots,
   CharityPartners,
+  Privacy,
   CallToAction,
 } from "@/components/sections";
 
@@ -14,10 +15,11 @@ export default function Home() {
       <Header />
       <main>
         <Hero />
-        <Events />
         <Features />
-        <HowItWorks />
+        <AppScreenshots />
+        <Events />
         <CharityPartners />
+        <Privacy />
         <CallToAction />
       </main>
       <Footer />

@@ -1,26 +1,35 @@
+"use client";
+
 import { Container, Button } from "@/components/ui";
 import { APP_STORE_URL, GITHUB_URL, ZAPSTORE_URL } from "@/lib/constants";
+import { useScrollReveal } from "@/lib/useScrollReveal";
 
 export function CallToAction() {
-  return (
-    <section className="py-20">
-      <Container>
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[var(--accent)]/20 via-[var(--background-card)] to-[var(--background-card)] border border-[var(--border)] p-8 md:p-12">
-          {/* Background decoration */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--accent)]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+  const ref = useScrollReveal(0.1);
 
-          <div className="relative z-10 text-center max-w-2xl mx-auto">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              <span className="text-[var(--foreground)]">Ready to </span>
-              <span className="text-[var(--accent)]">Start?</span>
+  return (
+    <section className="relative py-20 md:py-28 overflow-hidden">
+      {/* Background effects */}
+      <div className="absolute inset-0">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[var(--accent)]/8 rounded-full blur-[160px]" />
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent)]/20 to-transparent" />
+      </div>
+
+      <div ref={ref} className="relative z-10">
+        <Container>
+          <div className="max-w-3xl mx-auto text-center">
+            {/* Headline */}
+            <h2 className="scroll-reveal font-display text-5xl sm:text-6xl md:text-8xl text-[var(--foreground)] mb-6">
+              READY TO <span className="text-gradient">MOVE?</span>
             </h2>
 
-            <p className="text-[var(--text-secondary)] mb-8">
-              Download RUNSTR today. Free to use. No email required.
-              Just pure fitness tracking with the option to give back.
+            <p className="scroll-reveal delay-100 text-[var(--text-secondary)] text-lg sm:text-xl mb-10 max-w-xl mx-auto leading-relaxed">
+              Download RUNSTR. Tap Start. That&apos;s it. No email, no account,
+              no setup. Free forever.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center flex-wrap">
+            {/* CTA Buttons */}
+            <div className="scroll-reveal delay-200 flex flex-col sm:flex-row gap-4 justify-center flex-wrap">
               <Button href={APP_STORE_URL} external size="lg">
                 <svg
                   className="w-5 h-5 mr-2"
@@ -62,9 +71,14 @@ export function CallToAction() {
                 GitHub
               </Button>
             </div>
+
+            {/* Trust line */}
+            <p className="scroll-reveal delay-300 mt-8 text-sm text-[var(--text-muted)]">
+              Open source &middot; No data collected &middot; Free forever
+            </p>
           </div>
-        </div>
-      </Container>
+        </Container>
+      </div>
     </section>
   );
 }

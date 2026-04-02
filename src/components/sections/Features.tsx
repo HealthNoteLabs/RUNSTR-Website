@@ -1,98 +1,136 @@
-import { Container, Card } from "@/components/ui";
-import { features } from "@/lib/constants";
+"use client";
 
-const icons = {
-  free: (
-    <svg
-      className="w-8 h-8"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={1.5}
-        d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-      />
-    </svg>
-  ),
-  openSource: (
-    <svg
-      className="w-8 h-8"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={1.5}
-        d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
-      />
-    </svg>
-  ),
-  community: (
-    <svg
-      className="w-8 h-8"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={1.5}
-        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-      />
-    </svg>
-  ),
-};
+import Image from "next/image";
+import { Container } from "@/components/ui";
+import { useScrollReveal } from "@/lib/useScrollReveal";
 
-export function Features() {
+interface FeatureSection {
+  tag: string;
+  title: string;
+  titleAccent: string;
+  description: string;
+  bullets: string[];
+  image: string;
+  imageAlt: string;
+}
+
+const featureSections: FeatureSection[] = [
+  {
+    tag: "Track",
+    title: "Any Workout,",
+    titleAccent: "Any Way",
+    description:
+      "RUNSTR tracks more than running. Cardio with full GPS tracking, strength training, wellness, and mindfulness. But you don't have to use RUNSTR's trackers at all.",
+    bullets: [
+      "Running, walking, cycling, hiking with GPS",
+      "Strength: pushups, pull-ups, squats, bench press",
+      "Wellness: meditation, breathwork, gratitude",
+      "Works with Apple Health, Strava, Garmin, Fitbit",
+      "Auto-syncs in the background",
+    ],
+    image: "/images/app-screen-4.png",
+    imageAlt: "RUNSTR Start Run screen with Cardio, Strength, and Wellness tabs",
+  },
+  {
+    tag: "Earn",
+    title: "Rewards,",
+    titleAccent: "Your Way",
+    description:
+      "Every qualifying workout earns you rewards. Choose where they go: your wallet, a charity, a grassroots project, or converted into AI credits. Change your destination anytime.",
+    bullets: [
+      "Rewards funded by sponsors, not RUNSTR",
+      "Support ALS Network or Human Rights Foundation",
+      "Daily Spin for bonus rewards",
+      "No commitment, no complicated setup",
+    ],
+    image: "/images/app-screen-6.png",
+    imageAlt: "RUNSTR Rewards screen with Daily Spin wheel and ALS Network destination",
+  },
+  {
+    tag: "Compete",
+    title: "Compete",
+    titleAccent: "Every Day",
+    description:
+      "A built-in daily leaderboard tracks the fastest 5K, 10K, half marathon, and marathon times alongside daily steps rankings\u2014all updated in real time.",
+    bullets: [
+      "Daily leaderboards for every distance",
+      "Featured events and distance challenges",
+      "Virtual and in-person competitions",
+      "Workouts auto-count toward active boards",
+    ],
+    image: "/images/app-screen-3.png",
+    imageAlt: "RUNSTR Events screen showing Season II Competition and Daily Leaderboards",
+  },
+  {
+    tag: "Connect",
+    title: "Social",
+    titleAccent: "Feed",
+    description:
+      "See what the community is up to. Share workouts, follow clubs, and stay connected with athletes around the world. The social tab keeps you in the loop without the noise.",
+    bullets: [
+      "Community workout feed",
+      "Follow clubs and athletes",
+      "Share your achievements",
+      "Stay motivated with your crew",
+    ],
+    image: "/images/app-screen-2.png",
+    imageAlt: "RUNSTR Social feed showing community workout posts",
+  },
+];
+
+function FeatureBlock({
+  feature,
+  index,
+}: {
+  feature: FeatureSection;
+  index: number;
+}) {
+  const ref = useScrollReveal(0.1);
+  const isReversed = index % 2 === 1;
+
   return (
-    <section id="features" className="py-20">
+    <div ref={ref} className="py-16 md:py-24">
       <Container>
-        <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-            <span className="text-[var(--foreground)]">Why Choose </span>
-            <span className="text-[var(--accent)]">RUNSTR?</span>
-          </h2>
-          <p className="text-[var(--text-secondary)] max-w-2xl mx-auto">
-            Built for athletes who value their privacy and want to make a difference.
-          </p>
-        </div>
+        <div
+          className={`grid lg:grid-cols-2 gap-12 lg:gap-16 items-center ${
+            isReversed ? "lg:direction-rtl" : ""
+          }`}
+          style={isReversed ? { direction: "rtl" } : undefined}
+        >
+          {/* Text side */}
+          <div
+            className={`${isReversed ? "scroll-reveal-right" : "scroll-reveal-left"}`}
+            style={isReversed ? { direction: "ltr" } : undefined}
+          >
+            {/* Tag */}
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--accent)]/10 border border-[var(--accent)]/20 mb-6">
+              <span className="w-1.5 h-1.5 bg-[var(--accent)] rounded-full" />
+              <span className="text-xs font-semibold uppercase tracking-widest text-[var(--accent)]">
+                {feature.tag}
+              </span>
+            </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
-          {features.map((feature) => (
-            <Card key={feature.title} className="relative overflow-hidden group">
-              {/* Accent border on hover */}
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[var(--accent)] to-[var(--accent-light)] transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
+            {/* Title */}
+            <h2 className="font-display text-4xl sm:text-5xl md:text-6xl leading-[0.95] mb-6">
+              <span className="text-[var(--foreground)]">{feature.title} </span>
+              <span className="text-gradient">{feature.titleAccent}</span>
+            </h2>
 
-              {/* Icon */}
-              <div className="text-[var(--accent)] mb-4">
-                {icons[feature.icon as keyof typeof icons]}
-              </div>
+            {/* Description */}
+            <p className="text-[var(--text-secondary)] text-lg leading-relaxed mb-8 max-w-lg">
+              {feature.description}
+            </p>
 
-              {/* Title */}
-              <h3 className="text-lg font-bold uppercase tracking-wider text-[var(--foreground)] mb-2">
-                {feature.title}
-              </h3>
-
-              {/* Description */}
-              <p className="text-[var(--text-secondary)] text-sm mb-4">
-                {feature.description}
-              </p>
-
-              {/* Bullet points */}
-              <ul className="space-y-2">
-                {feature.bullets.map((bullet) => (
-                  <li
-                    key={bullet}
-                    className="flex items-center gap-2 text-sm text-[var(--text-muted)]"
-                  >
+            {/* Bullets */}
+            <ul className="space-y-3">
+              {feature.bullets.map((bullet) => (
+                <li
+                  key={bullet}
+                  className="flex items-start gap-3 text-[var(--text-secondary)]"
+                >
+                  <div className="w-5 h-5 rounded-full bg-[var(--accent)]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
                     <svg
-                      className="w-4 h-4 text-[var(--accent)] flex-shrink-0"
+                      className="w-3 h-3 text-[var(--accent)]"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -100,18 +138,120 @@ export function Features() {
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        strokeWidth={2}
+                        strokeWidth={3}
                         d="M5 13l4 4L19 7"
                       />
                     </svg>
-                    {bullet}
-                  </li>
-                ))}
-              </ul>
-            </Card>
-          ))}
+                  </div>
+                  <span className="text-sm sm:text-base">{bullet}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Phone side */}
+          <div
+            className={`flex justify-center ${isReversed ? "scroll-reveal-left" : "scroll-reveal-right"} delay-200`}
+            style={isReversed ? { direction: "ltr" } : undefined}
+          >
+            <div className="relative">
+              {/* Glow */}
+              <div className="absolute inset-0 bg-[var(--accent)]/10 rounded-[3rem] blur-[80px] scale-110" />
+
+              {/* Phone */}
+              <div className="relative bg-[var(--background-card)] rounded-[2.5rem] p-2 border border-[var(--border)] shadow-2xl shadow-black/50 w-[240px] sm:w-[280px] transition-transform duration-500 hover:-translate-y-2 hover:shadow-[var(--accent)]/20">
+                <div className="absolute top-4 left-1/2 -translate-x-1/2 w-20 h-6 bg-black rounded-full z-10" />
+                <div className="relative aspect-[9/19.5] rounded-[2rem] overflow-hidden bg-black">
+                  <Image
+                    src={feature.image}
+                    alt={feature.imageAlt}
+                    fill
+                    className="object-cover object-top"
+                    sizes="280px"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </Container>
+    </div>
+  );
+}
+
+function BuiltForYou() {
+  const ref = useScrollReveal(0.1);
+
+  return (
+    <div ref={ref} className="py-16 md:py-24">
+      <Container>
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="scroll-reveal">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--accent)]/10 border border-[var(--accent)]/20 mb-6">
+              <span className="w-1.5 h-1.5 bg-[var(--accent)] rounded-full" />
+              <span className="text-xs font-semibold uppercase tracking-widest text-[var(--accent)]">
+                Simple
+              </span>
+            </div>
+          </div>
+
+          <h2 className="scroll-reveal delay-100 font-display text-4xl sm:text-5xl md:text-6xl leading-[0.95] mb-6">
+            <span className="text-[var(--foreground)]">Built to Stay </span>
+            <span className="text-gradient">Out of Your Way</span>
+          </h2>
+
+          <p className="scroll-reveal delay-200 text-[var(--text-secondary)] text-lg leading-relaxed mb-12 max-w-2xl mx-auto">
+            Tap Start and you&apos;re in&mdash;no account, no email, no sign-up form.
+            Three tabs, dark theme, no gimmicks. Private Mode lets you track
+            workouts locally without participating in anything. Whether you&apos;re
+            competing for the fastest 5K or logging your evening walk, RUNSTR
+            makes sure your effort counts.
+          </p>
+
+          {/* Feature pills */}
+          <div className="scroll-reveal delay-300 flex flex-wrap justify-center gap-3">
+            {[
+              "Tap to Start",
+              "No Account Needed",
+              "Three Simple Tabs",
+              "Dark Theme",
+              "Private Mode",
+              "Works Offline",
+            ].map((pill) => (
+              <span
+                key={pill}
+                className="px-4 py-2 rounded-full bg-[var(--background-card)] border border-[var(--border)] text-sm text-[var(--text-secondary)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors duration-300"
+              >
+                {pill}
+              </span>
+            ))}
+          </div>
+        </div>
+      </Container>
+    </div>
+  );
+}
+
+export function Features() {
+  return (
+    <section id="features">
+      {/* Section header */}
+      <div className="pt-20 pb-8">
+        <Container>
+          <div className="text-center">
+            <h2 className="font-display text-5xl sm:text-6xl md:text-7xl text-[var(--foreground)]">
+              WHAT&apos;S <span className="text-gradient">INSIDE</span>
+            </h2>
+            <div className="mt-4 mx-auto w-16 h-0.5 bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent" />
+          </div>
+        </Container>
+      </div>
+
+      {featureSections.map((feature, index) => (
+        <FeatureBlock key={feature.tag} feature={feature} index={index} />
+      ))}
+
+      <BuiltForYou />
     </section>
   );
 }

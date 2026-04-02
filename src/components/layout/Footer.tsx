@@ -5,12 +5,12 @@ import { footerLinks, GITHUB_URL } from "@/lib/constants";
 
 export function Footer() {
   return (
-    <footer className="bg-[var(--background-secondary)] border-t border-[var(--border)] py-12">
+    <footer className="relative bg-[var(--background-secondary)] border-t border-[var(--border)]/50 py-12">
       <Container>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="md:col-span-2">
-            <Link href="/" className="flex items-center gap-2 mb-4">
+            <Link href="/" className="flex items-center gap-2 mb-4 group">
               <Image
                 src="/images/logo.png"
                 alt="RUNSTR"
@@ -18,19 +18,20 @@ export function Footer() {
                 height={32}
                 className="w-8 h-8"
               />
-              <span className="text-lg font-bold text-[var(--accent)]">
+              <span className="font-display text-xl tracking-wide text-[var(--accent)]">
                 RUNSTR
               </span>
             </Link>
-            <p className="text-[var(--text-secondary)] text-sm max-w-md">
-              The privacy-first fitness app. Track your workouts anonymously and
-              contribute to charitable causes with every step.
+            <p className="text-[var(--text-secondary)] text-sm max-w-md leading-relaxed">
+              The fitness app that works with whatever you already use.
+              Track workouts, earn rewards, and compete daily&mdash;without
+              giving up your privacy.
             </p>
           </div>
 
           {/* Product Links */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-[var(--foreground)] mb-4">
+            <h3 className="text-sm font-semibold uppercase tracking-widest text-[var(--foreground)] mb-4">
               Product
             </h3>
             <ul className="space-y-2">
@@ -38,7 +39,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
+                    className="text-sm text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors duration-300"
                   >
                     {link.label}
                   </Link>
@@ -49,7 +50,7 @@ export function Footer() {
 
           {/* Resources Links */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-[var(--foreground)] mb-4">
+            <h3 className="text-sm font-semibold uppercase tracking-widest text-[var(--foreground)] mb-4">
               Resources
             </h3>
             <ul className="space-y-2">
@@ -59,7 +60,7 @@ export function Footer() {
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
+                    className="text-sm text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors duration-300"
                   >
                     {link.label}
                   </a>
@@ -70,7 +71,7 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-[var(--border)] flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div className="mt-12 pt-8 border-t border-[var(--border)]/50 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-sm text-[var(--text-muted)]">
             &copy; {new Date().getFullYear()} RUNSTR. Free to use. Open source.
           </p>
@@ -78,7 +79,7 @@ export function Footer() {
             href={GITHUB_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
+            className="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors duration-300"
             aria-label="GitHub"
           >
             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">

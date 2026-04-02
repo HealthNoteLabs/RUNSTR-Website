@@ -10,18 +10,18 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-[var(--background)]/80 backdrop-blur-md border-b border-[var(--border)]">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-[var(--background)]/70 backdrop-blur-xl border-b border-[var(--border)]/50">
       <Container>
         <div className="flex items-center justify-between h-16">
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2 group">
             <Image
               src="/images/logo.png"
               alt="RUNSTR"
               width={40}
               height={40}
-              className="w-10 h-10"
+              className="w-10 h-10 transition-transform duration-300 group-hover:scale-110"
             />
-            <span className="text-xl font-bold text-[var(--accent)]">
+            <span className="font-display text-2xl tracking-wide text-[var(--accent)]">
               RUNSTR
             </span>
           </Link>
@@ -33,7 +33,7 @@ export function Header() {
                 <a
                   key={link.href}
                   href={link.href}
-                  className="text-sm text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
+                  className="text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[var(--accent)] hover:after:w-full after:transition-all after:duration-300"
                 >
                   {link.label}
                 </a>
@@ -41,7 +41,7 @@ export function Header() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-sm text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
+                  className="text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-[var(--accent)] hover:after:w-full after:transition-all after:duration-300"
                 >
                   {link.label}
                 </Link>
@@ -58,7 +58,7 @@ export function Header() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden p-2 text-[var(--text-secondary)]"
+            className="md:hidden p-2 text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
             aria-label="Toggle menu"
           >
             <svg
@@ -88,7 +88,7 @@ export function Header() {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <nav className="md:hidden py-4 border-t border-[var(--border)]">
+          <nav className="md:hidden py-4 border-t border-[var(--border)]/50">
             <div className="flex flex-col gap-4">
               {navLinks.map((link) =>
                 link.href.includes("#") ? (
