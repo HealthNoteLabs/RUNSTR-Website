@@ -23,7 +23,7 @@ export function Hero() {
             <div className="animate-fade-in-up inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--background-card)] border border-[var(--border)] mb-8">
               <span className="w-2 h-2 bg-[var(--accent)] rounded-full animate-pulse" />
               <span className="text-sm text-[var(--text-secondary)]">
-                Free to Start &mdash; No Account Required
+                Free to Start. No Account Required.
               </span>
             </div>
 
@@ -43,8 +43,8 @@ export function Hero() {
             {/* Subheadline */}
             <p className="animate-fade-in-up anim-delay-400 text-lg sm:text-xl text-[var(--text-secondary)] mb-10 max-w-lg leading-relaxed">
               The fitness app that works with whatever you already use.
-              Earn rewards, join competitions, and support causes you care about&mdash;without
-              giving up your privacy.
+              Earn rewards, join competitions, and support causes you care
+              about without giving up your privacy.
             </p>
 
             {/* CTA Buttons */}

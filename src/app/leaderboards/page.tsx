@@ -231,7 +231,7 @@ export default function LeaderboardsPage() {
               <span className="text-gradient">LEADERBOARDS</span>
             </h1>
             <p className="text-[var(--text-secondary)] max-w-xl mx-auto">
-              Today&apos;s best performances across all athletes &mdash;{" "}
+              Today&apos;s best performances across all athletes.{" "}
               {new Date().toLocaleDateString("en-US", {
                 weekday: "long",
                 month: "long",

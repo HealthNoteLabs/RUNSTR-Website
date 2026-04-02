@@ -24,7 +24,7 @@ export function Footer() {
             </Link>
             <p className="text-[var(--text-secondary)] text-sm max-w-md leading-relaxed">
               The fitness app that works with whatever you already use.
-              Track workouts, earn rewards, and compete daily&mdash;without
+              Track workouts, earn rewards, and compete daily without
               giving up your privacy.
             </p>
           </div>

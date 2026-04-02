@@ -82,7 +82,7 @@ export function Events() {
                     </h3>
                     <p className="text-sm text-[var(--text-secondary)]">
                       Fastest 5K, 10K, Half Marathon, Marathon &amp; Most Steps
-                      &mdash; updated in real time.
+                      updated in real time.
                     </p>
                   </div>
                   <svg

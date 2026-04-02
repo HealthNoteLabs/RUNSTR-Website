@@ -51,7 +51,7 @@ const featureSections: FeatureSection[] = [
     title: "Compete",
     titleAccent: "Every Day",
     description:
-      "A built-in daily leaderboard tracks the fastest 5K, 10K, half marathon, and marathon times alongside daily steps rankings\u2014all updated in real time.",
+      "A built-in daily leaderboard tracks the fastest 5K, 10K, half marathon, and marathon times alongside daily steps rankings, all updated in real time.",
     bullets: [
       "Daily leaderboards for every distance",
       "Featured events and distance challenges",
@@ -201,7 +201,7 @@ function BuiltForYou() {
           </h2>
 
           <p className="scroll-reveal delay-200 text-[var(--text-secondary)] text-lg leading-relaxed mb-12 max-w-2xl mx-auto">
-            Tap Start and you&apos;re in&mdash;no account, no email, no sign-up form.
+            Tap Start and you&apos;re in. No account, no email, no sign-up form.
             Three tabs, dark theme, no gimmicks. Private Mode lets you track
             workouts locally without participating in anything. Whether you&apos;re
             competing for the fastest 5K or logging your evening walk, RUNSTR
