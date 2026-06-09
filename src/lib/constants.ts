@@ -63,7 +63,7 @@ export const howItWorks = [
   {
     step: 1,
     title: "Download the App",
-    description: "Get RUNSTR from the App Store, GitHub, or Zapstore.",
+    description: "Get Ember from the App Store or GitHub.",
   },
   {
     step: 2,
