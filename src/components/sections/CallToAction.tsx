@@ -24,7 +24,7 @@ export function CallToAction() {
             </h2>
 
             <p className="scroll-reveal delay-100 text-[var(--text-secondary)] text-lg sm:text-xl mb-10 max-w-xl mx-auto leading-relaxed">
-              Download RUNSTR. Tap Start. That&apos;s it. No email, no account,
+              Download Ember. Tap Start. That&apos;s it. No email, no account,
               no setup. Free forever.
             </p>
 

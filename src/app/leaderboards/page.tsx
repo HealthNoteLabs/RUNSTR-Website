@@ -53,7 +53,7 @@ function Avatar({ name, picture }: { name: string; picture: string | null }) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src="/images/logo.png"
+      src="/images/ember-logo.png"
       alt={name}
       className="w-8 h-8 rounded-full object-cover flex-shrink-0"
     />

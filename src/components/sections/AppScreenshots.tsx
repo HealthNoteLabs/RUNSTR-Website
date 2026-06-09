@@ -7,32 +7,32 @@ import { useScrollReveal } from "@/lib/useScrollReveal";
 const screenshots = [
   {
     src: "/images/app-screen-1.png",
-    alt: "RUNSTR Profile",
+    alt: "Ember Profile",
     label: "Profile",
   },
   {
     src: "/images/app-screen-4.png",
-    alt: "RUNSTR Start Run",
+    alt: "Ember Start Run",
     label: "Start Run",
   },
   {
     src: "/images/app-screen-6.png",
-    alt: "RUNSTR Rewards",
+    alt: "Ember Rewards",
     label: "Rewards",
   },
   {
     src: "/images/app-screen-3.png",
-    alt: "RUNSTR Events",
+    alt: "Ember Events",
     label: "Competitions",
   },
   {
     src: "/images/app-screen-2.png",
-    alt: "RUNSTR Social",
+    alt: "Ember Social",
     label: "Social",
   },
   {
     src: "/images/app-screen-5.png",
-    alt: "RUNSTR History",
+    alt: "Ember History",
     label: "History",
   },
 ];

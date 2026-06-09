@@ -79,7 +79,7 @@ export function Privacy() {
               </ul>
             </div>
 
-            {/* RUNSTR */}
+            {/* Ember */}
             <div className="bg-[var(--background-card)] rounded-xl p-6 border border-[var(--accent)]/40 group hover:border-[var(--accent)] transition-all duration-300 hover:-translate-y-1">
               <h3 className="text-lg font-bold text-[var(--accent)] mb-4 flex items-center gap-2">
                 <svg
@@ -95,7 +95,7 @@ export function Privacy() {
                     d="M5 13l4 4L19 7"
                   />
                 </svg>
-                RUNSTR
+                Ember
               </h3>
               <ul className="space-y-3">
                 {runstrBenefits.map((benefit) => (

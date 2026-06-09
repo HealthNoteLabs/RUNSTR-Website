@@ -107,7 +107,7 @@ export function Hero() {
                   <div className="relative aspect-[9/19.5] rounded-[2rem] overflow-hidden bg-black">
                     <Image
                       src="/images/app-screen-1.png"
-                      alt="RUNSTR Profile Screen"
+                      alt="Ember Profile Screen"
                       fill
                       className="object-cover object-top"
                       sizes="300px"

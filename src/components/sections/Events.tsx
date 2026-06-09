@@ -49,10 +49,10 @@ export function Events() {
 
                 <div className="flex-1">
                   <h3 className="font-display text-3xl text-[var(--foreground)] mb-2">
-                    RUNSTR SEASON III
+                    EMBER SEASON III
                   </h3>
                   <p className="text-[var(--text-secondary)] mb-4 leading-relaxed">
-                    The next season of RUNSTR competitions is on the way.
+                    The next season of Ember competitions is on the way.
                     Distance challenges, team events, and more. Download the app
                     to be ready when it drops.
                   </p>

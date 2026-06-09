@@ -61,7 +61,7 @@ export function CharityPartners() {
             </h2>
             <p className="scroll-reveal delay-100 text-[var(--text-secondary)] text-lg max-w-2xl mx-auto">
               Every workout earns rewards. You choose a single destination.
-              Change it anytime. Rewards are funded by sponsors, not RUNSTR.
+              Change it anytime. Rewards are funded by sponsors, not Ember.
             </p>
           </div>
 

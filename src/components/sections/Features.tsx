@@ -20,7 +20,7 @@ const featureSections: FeatureSection[] = [
     title: "Any Workout,",
     titleAccent: "Any Way",
     description:
-      "RUNSTR tracks more than running. Cardio with full GPS tracking, strength training, wellness, and mindfulness. But you don't have to use RUNSTR's trackers at all.",
+      "Ember tracks more than running. Cardio with full GPS tracking, strength training, wellness, and mindfulness. But you don't have to use Ember's trackers at all.",
     bullets: [
       "Running, walking, cycling, hiking with GPS",
       "Strength: pushups, pull-ups, squats, bench press",
@@ -29,7 +29,7 @@ const featureSections: FeatureSection[] = [
       "Auto-syncs in the background",
     ],
     image: "/images/app-screen-4.png",
-    imageAlt: "RUNSTR Start Run screen with Cardio, Strength, and Wellness tabs",
+    imageAlt: "Ember Start Run screen with Cardio, Strength, and Wellness tabs",
   },
   {
     tag: "Earn",
@@ -38,13 +38,13 @@ const featureSections: FeatureSection[] = [
     description:
       "Every qualifying workout earns you rewards. Choose where they go: your wallet, a charity, a grassroots project, or converted into AI credits. Change your destination anytime.",
     bullets: [
-      "Rewards funded by sponsors, not RUNSTR",
+      "Rewards funded by sponsors, not Ember",
       "Support ALS Network or Human Rights Foundation",
       "Daily Spin for bonus rewards",
       "No commitment, no complicated setup",
     ],
     image: "/images/app-screen-6.png",
-    imageAlt: "RUNSTR Rewards screen with Daily Spin wheel and ALS Network destination",
+    imageAlt: "Ember Rewards screen with Daily Spin wheel and ALS Network destination",
   },
   {
     tag: "Compete",
@@ -59,7 +59,7 @@ const featureSections: FeatureSection[] = [
       "Workouts auto-count toward active boards",
     ],
     image: "/images/app-screen-3.png",
-    imageAlt: "RUNSTR Events screen showing Season II Competition and Daily Leaderboards",
+    imageAlt: "Ember Events screen showing Season II Competition and Daily Leaderboards",
   },
   {
     tag: "Connect",
@@ -74,7 +74,7 @@ const featureSections: FeatureSection[] = [
       "Stay motivated with your crew",
     ],
     image: "/images/app-screen-2.png",
-    imageAlt: "RUNSTR Social feed showing community workout posts",
+    imageAlt: "Ember Social feed showing community workout posts",
   },
 ];
 
@@ -204,7 +204,7 @@ function BuiltForYou() {
             Tap Start and you&apos;re in. No account, no email, no sign-up form.
             Three tabs, dark theme, no gimmicks. Private Mode lets you track
             workouts locally without participating in anything. Whether you&apos;re
-            competing for the fastest 5K or logging your evening walk, RUNSTR
+            competing for the fastest 5K or logging your evening walk, Ember
             makes sure your effort counts.
           </p>
 
