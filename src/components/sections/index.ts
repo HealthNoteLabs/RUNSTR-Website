@@ -6,3 +6,4 @@ export { HowItWorks } from "./HowItWorks";
 export { CharityPartners } from "./CharityPartners";
 export { Privacy } from "./Privacy";
 export { CallToAction } from "./CallToAction";
+export { Rewards } from "./Rewards";
