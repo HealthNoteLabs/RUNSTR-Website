@@ -21,7 +21,7 @@ export function EmailSignup({ className = "" }: { className?: string }) {
     }
     setStatus("submitting");
     const { error } = await supabase
-      .from("subscribers")
+      .from("email_subscribers")
       .insert({ email: email.trim().toLowerCase() });
 
     if (error) {
