@@ -11,10 +11,10 @@ export function BrandHero() {
       <Container className="relative z-10 py-16 text-center">
         <h1 className="animate-fade-in-up mb-6">
           <span className="font-display text-6xl sm:text-7xl md:text-8xl lg:text-[7rem] leading-[0.9] tracking-tight block text-[var(--foreground)]">
-            WORK HARD
+            PUSH HARD
           </span>
           <span className="font-display text-6xl sm:text-7xl md:text-8xl lg:text-[7rem] leading-[0.9] tracking-tight block text-gradient">
-            LAST LONGER
+            DON&apos;T BREAK
           </span>
         </h1>
         <p className="animate-fade-in-up anim-delay-200 text-lg sm:text-xl text-[var(--text-secondary)] max-w-2xl mx-auto leading-relaxed mb-10">

@@ -16,13 +16,13 @@ const bebasNeue = Bebas_Neue({
 });
 
 export const metadata: Metadata = {
-  title: "No Burnout — Work Hard, Last Longer",
+  title: "No Burnout — Push Hard. Don't Break.",
   description:
     "No Burnout is a toolkit for people who work hard and intend to keep working hard, without burning out. Strategy, focus music, and the Ember fitness app, in one place.",
   keywords: ["burnout", "resilience", "endurance", "focus music", "lofi", "fitness", "stamina", "deep work", "ember"],
   authors: [{ name: "No Burnout" }],
   openGraph: {
-    title: "No Burnout — Work Hard, Last Longer",
+    title: "No Burnout — Push Hard. Don't Break.",
     description:
       "Strategy, focus music, and the Ember fitness app. Resist the burnout. Go the distance.",
     url: "https://www.runstr.club",
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "No Burnout — Work Hard, Last Longer",
+    title: "No Burnout — Push Hard. Don't Break.",
     description: "Resist the burnout. Go the distance.",
   },
 };

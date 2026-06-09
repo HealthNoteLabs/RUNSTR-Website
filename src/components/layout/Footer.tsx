@@ -73,7 +73,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-[var(--border)]/50 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-sm text-[var(--text-muted)]">
-            &copy; {new Date().getFullYear()} No Burnout. Work hard, last longer.
+            &copy; {new Date().getFullYear()} No Burnout. Push hard. Don&apos;t break.
           </p>
           <a
             href={GITHUB_URL}

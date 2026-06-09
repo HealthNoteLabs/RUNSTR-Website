@@ -36,7 +36,7 @@ export function EmailSignup({ className = "" }: { className?: string }) {
       return;
     }
     setStatus("success");
-    setMessage("You're in. Work hard, last longer.");
+    setMessage("You're in. Push hard, don't break.");
     setEmail("");
   }
 
