@@ -16,21 +16,23 @@ const bebasNeue = Bebas_Neue({
 });
 
 export const metadata: Metadata = {
-  title: "RUNSTR - Anonymous Fitness Tracking",
-  description: "Track any workout. Earn rewards. Compete daily. No account required. The privacy-first fitness app that works with any device you already use.",
-  keywords: ["fitness", "running", "walking", "cycling", "anonymous", "privacy", "charity", "workout tracker", "competitions", "leaderboards", "fitness clubs"],
-  authors: [{ name: "RUNSTR" }],
+  title: "No Burnout — Work Hard, Last Longer",
+  description:
+    "No Burnout is a toolkit for people who work hard and intend to keep working hard, without burning out. Strategy, focus music, and the Ember fitness app, in one place.",
+  keywords: ["burnout", "resilience", "endurance", "focus music", "lofi", "fitness", "stamina", "deep work", "ember"],
+  authors: [{ name: "No Burnout" }],
   openGraph: {
-    title: "RUNSTR - Anonymous Fitness Tracking",
-    description: "Track any workout. Earn rewards. Compete daily. No account required.",
+    title: "No Burnout — Work Hard, Last Longer",
+    description:
+      "Strategy, focus music, and the Ember fitness app. Resist the burnout. Go the distance.",
     url: "https://www.runstr.club",
-    siteName: "RUNSTR",
+    siteName: "No Burnout",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "RUNSTR - Anonymous Fitness Tracking",
-    description: "Track any workout. Earn rewards. Compete daily. No account required.",
+    title: "No Burnout — Work Hard, Last Longer",
+    description: "Resist the burnout. Go the distance.",
   },
 };
 
