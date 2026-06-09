@@ -2,6 +2,7 @@ export const APP_STORE_URL = "https://apps.apple.com/us/app/runstr/id6753015130"
 export const GITHUB_URL = "https://github.com/RUNSTR-LLC/RUNSTR";
 export const ZAPSTORE_URL = "https://zapstore.dev/apps/naddr1qvzqqqr7pvpzqcgsy8425f5jwsd3yd4me6j5c64f7g96xr9vuvtv82fag5yf5lg0qqwxxmmd9eskummw09kk7atn9ee82mnnw3ezuurjda4x2cm50etju8";
 export const DC_5K_URL = "https://runsignup.com/Race/DC/Washington/Runstr5k";
+export const YOUTUBE_URL = "https://youtube.com/@noburnouts";
 
 // Zaprite checkout URLs for event sponsorship
 export const ZAPRITE_COMMUNITY_SPONSOR_URL = "https://pay.zaprite.com/order/od_yBoaCjHmcU";
@@ -77,11 +78,9 @@ export const howItWorks = [
 ] as const;
 
 export const navLinks = [
-  { href: "/#events", label: "Events" },
-  { href: "/leaderboards", label: "Leaderboards" },
-  { href: "/#features", label: "Features" },
-  { href: "/#charities", label: "Charities" },
-  { href: "/sponsor", label: "Sponsors" },
+  { href: "/articles", label: "Articles" },
+  { href: "/music", label: "Music" },
+  { href: "/ember", label: "Ember App", badge: "New" },
 ] as const;
 
 export type PlanId = "supporter" | "pro";
@@ -123,11 +122,14 @@ export const tierMap: Record<PlanId, TierConfig> = Object.fromEntries(
 
 export const footerLinks = {
   product: [
+    { href: "/ember", label: "Ember App" },
+    { href: "/articles", label: "Articles" },
+    { href: "/music", label: "Burnout Radio" },
     { href: "/privacy", label: "Privacy Policy" },
     { href: "/contact", label: "Contact" },
-    { href: "/sponsor", label: "Become a Sponsor" },
   ],
   resources: [
+    { href: YOUTUBE_URL, label: "YouTube", external: true },
     { href: GITHUB_URL, label: "GitHub", external: true },
     { href: APP_STORE_URL, label: "App Store", external: true },
   ],
