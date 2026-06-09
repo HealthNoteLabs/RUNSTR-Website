@@ -7,3 +7,6 @@ export { CharityPartners } from "./CharityPartners";
 export { Privacy } from "./Privacy";
 export { CallToAction } from "./CallToAction";
 export { Rewards } from "./Rewards";
+export { BrandHero } from "./BrandHero";
+export { GoodBurn } from "./GoodBurn";
+export { PillarCards } from "./PillarCards";
