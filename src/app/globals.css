@@ -337,3 +337,17 @@ html {
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
+.article-prose p { margin-bottom: 1.25rem; }
+.article-prose em { color: var(--text-muted); }
+.article-prose hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2rem 0;
+}
+.article-prose a { color: var(--accent); text-decoration: underline; }
+.article-prose h2 {
+  color: var(--foreground);
+  font-size: 1.75rem;
+  margin: 2rem 0 1rem;
+}
