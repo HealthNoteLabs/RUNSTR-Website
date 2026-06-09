@@ -121,6 +121,17 @@ condensed form.
 - Row-level security / insert policy configured to allow anonymous inserts of
   email only (consistent with the existing public edge-function pattern).
 
+## Logos / assets
+
+- `public/images/no-burnout-logo.png` — No Burnout brand mark (flame + "NO
+  BURNOUT" wordmark). Used in the site header and homepage hero.
+- `public/images/ember-logo.png` — Ember app mark (ember-orange bar/soundwave
+  glyph). Used on `/ember` and the nav item. NOTE: this glyph reads as a
+  soundwave; if the user reassigns it to Burnout Radio / Music, swap usage
+  accordingly.
+- Existing `public/images/logo.png` (old RUNSTR logo) is superseded; remove its
+  usages.
+
 ## Rebrand mechanics
 
 A global RUNSTR → No Burnout / Ember pass:
