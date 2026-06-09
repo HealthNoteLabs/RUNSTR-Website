@@ -12,20 +12,20 @@ export function Footer() {
           <div className="md:col-span-2">
             <Link href="/" className="flex items-center gap-2 mb-4 group">
               <Image
-                src="/images/logo.png"
-                alt="RUNSTR"
+                src="/images/no-burnout-logo.png"
+                alt="No Burnout"
                 width={32}
                 height={32}
                 className="w-8 h-8"
               />
               <span className="font-display text-xl tracking-wide text-[var(--accent)]">
-                RUNSTR
+                NO BURNOUT
               </span>
             </Link>
             <p className="text-[var(--text-secondary)] text-sm max-w-md leading-relaxed">
-              The fitness app that works with whatever you already use.
-              Track workouts, earn rewards, and compete daily without
-              giving up your privacy.
+              A toolkit for people who refuse to stop, but refuse to burn out
+              doing it. Read the strategy, put on the music, get the work in,
+              and go the distance.
             </p>
           </div>
 
@@ -73,7 +73,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-[var(--border)]/50 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-sm text-[var(--text-muted)]">
-            &copy; {new Date().getFullYear()} RUNSTR. Free to use. Open source.
+            &copy; {new Date().getFullYear()} No Burnout. Work hard, last longer.
           </p>
           <a
             href={GITHUB_URL}
