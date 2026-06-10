@@ -23,9 +23,8 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-[var(--text-secondary)] text-sm max-w-md leading-relaxed">
-              The fitness app that works with whatever you already use.
-              Track workouts, earn rewards, and compete daily without
-              giving up your privacy.
+              The cardio app that pays you to move. Track a run, walk, cycle,
+              or hike, earn a reward for every workout, and keep your privacy.
             </p>
           </div>
 

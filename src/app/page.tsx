@@ -1,7 +1,6 @@
 import { Header, Footer } from "@/components/layout";
 import {
   Hero,
-  Events,
   Features,
   AppScreenshots,
   CharityPartners,
@@ -17,7 +16,6 @@ export default function Home() {
         <Hero />
         <Features />
         <AppScreenshots />
-        <Events />
         <CharityPartners />
         <Privacy />
         <CallToAction />

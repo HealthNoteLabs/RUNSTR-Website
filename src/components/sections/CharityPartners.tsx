@@ -6,8 +6,8 @@ import { useScrollReveal } from "@/lib/useScrollReveal";
 
 const rewardDestinations = [
   {
-    label: "Your Wallet",
-    description: "Keep your earnings",
+    label: "Lightning Address",
+    description: "Keep your rewards",
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3" />
@@ -15,8 +15,8 @@ const rewardDestinations = [
     ),
   },
   {
-    label: "Charity",
-    description: "ALS Network, HRF & more",
+    label: "A Cause",
+    description: "ALS Network by default",
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -24,7 +24,7 @@ const rewardDestinations = [
     ),
   },
   {
-    label: "Grassroots Projects",
+    label: "Community Projects",
     description: "Community-driven causes",
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -60,8 +60,8 @@ export function CharityPartners() {
               WHERE REWARDS <span className="text-gradient">GO</span>
             </h2>
             <p className="scroll-reveal delay-100 text-[var(--text-secondary)] text-lg max-w-2xl mx-auto">
-              Every workout earns rewards. You choose a single destination.
-              Change it anytime. Rewards are funded by sponsors, not RUNSTR.
+              Every workout earns a reward, paid out automatically. You pick one
+              destination and can change it anytime.
             </p>
           </div>
 

@@ -30,21 +30,21 @@ export function Hero() {
             {/* Headline */}
             <h1 className="animate-fade-in-up anim-delay-200 mb-6">
               <span className="font-display text-6xl sm:text-7xl md:text-8xl lg:text-[6.5rem] leading-[0.9] tracking-tight block text-[var(--foreground)]">
-                TRACK
+                MOVE
               </span>
               <span className="font-display text-6xl sm:text-7xl md:text-8xl lg:text-[6.5rem] leading-[0.9] tracking-tight block text-gradient">
-                COMPETE
+                EARN
               </span>
               <span className="font-display text-6xl sm:text-7xl md:text-8xl lg:text-[6.5rem] leading-[0.9] tracking-tight block text-[var(--foreground)]">
-                EARN
+                REPEAT
               </span>
             </h1>
 
             {/* Subheadline */}
             <p className="animate-fade-in-up anim-delay-400 text-lg sm:text-xl text-[var(--text-secondary)] mb-10 max-w-lg leading-relaxed">
-              The fitness app that works with whatever you already use.
-              Earn rewards, join competitions, and support causes you care
-              about without giving up your privacy.
+              The cardio app that pays you to move. Track a run, walk, cycle,
+              or hike &mdash; or let it sync automatically &mdash; and earn a
+              reward for every workout.
             </p>
 
             {/* CTA Buttons */}
@@ -106,8 +106,8 @@ export function Hero() {
                   <div className="absolute top-4 left-1/2 -translate-x-1/2 w-20 h-6 bg-black rounded-full z-10" />
                   <div className="relative aspect-[9/19.5] rounded-[2rem] overflow-hidden bg-black">
                     <Image
-                      src="/images/app-screen-1.png"
-                      alt="RUNSTR Profile Screen"
+                      src="/images/screen-dashboard.png"
+                      alt="RUNSTR Dashboard screen"
                       fill
                       className="object-cover object-top"
                       sizes="300px"
@@ -126,8 +126,8 @@ export function Hero() {
                     </svg>
                   </div>
                   <div>
-                    <div className="text-xs font-semibold text-[var(--foreground)]">Leaderboard</div>
-                    <div className="text-[10px] text-[var(--text-muted)]">Updated live</div>
+                    <div className="text-xs font-semibold text-[var(--foreground)]">Streak</div>
+                    <div className="text-[10px] text-[var(--text-muted)]">Keep it going</div>
                   </div>
                 </div>
               </div>
@@ -141,7 +141,7 @@ export function Hero() {
                     </svg>
                   </div>
                   <div>
-                    <div className="text-xs font-semibold text-[var(--foreground)]">Earn Rewards</div>
+                    <div className="text-xs font-semibold text-[var(--foreground)]">Earnings</div>
                     <div className="text-[10px] text-[var(--text-muted)]">Every workout</div>
                   </div>
                 </div>

@@ -70,8 +70,8 @@ export default function PrivacyPage() {
                 </h2>
                 <p className="text-[var(--text-secondary)] mb-4">
                   RUNSTR uses anonymous accounts. You don&apos;t need to provide any personal
-                  information to use the app. Your identity is represented by a cryptographic
-                  key that you control, not by personal details.
+                  information to use the app. Your identity is represented by a private
+                  key that stays on your device and that you control, not by personal details.
                 </p>
               </section>
 

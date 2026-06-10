@@ -6,34 +6,29 @@ import { useScrollReveal } from "@/lib/useScrollReveal";
 
 const screenshots = [
   {
-    src: "/images/app-screen-1.png",
-    alt: "RUNSTR Profile",
-    label: "Profile",
+    src: "/images/screen-dashboard.png",
+    alt: "RUNSTR Dashboard",
+    label: "Dashboard",
   },
   {
-    src: "/images/app-screen-4.png",
-    alt: "RUNSTR Start Run",
-    label: "Start Run",
+    src: "/images/screen-activity.png",
+    alt: "RUNSTR activity picker",
+    label: "Activity",
   },
   {
-    src: "/images/app-screen-6.png",
-    alt: "RUNSTR Rewards",
+    src: "/images/screen-rewards.png",
+    alt: "RUNSTR Reward Destination",
     label: "Rewards",
   },
   {
-    src: "/images/app-screen-3.png",
-    alt: "RUNSTR Events",
-    label: "Competitions",
+    src: "/images/screen-leaderboard.png",
+    alt: "RUNSTR Leaderboard",
+    label: "Leaderboard",
   },
   {
-    src: "/images/app-screen-2.png",
-    alt: "RUNSTR Social",
+    src: "/images/screen-social.png",
+    alt: "RUNSTR Social feed",
     label: "Social",
-  },
-  {
-    src: "/images/app-screen-5.png",
-    alt: "RUNSTR History",
-    label: "History",
   },
 ];
 
@@ -58,8 +53,8 @@ export function AppScreenshots() {
             </p>
           </div>
 
-          {/* Screenshots — 6 phones */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 md:gap-5 max-w-6xl mx-auto">
+          {/* Screenshots — 5 phones */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 md:gap-5 max-w-6xl mx-auto">
             {screenshots.map((screenshot, index) => {
               const delayClass = `delay-${(index + 1) * 100}`;
               return (

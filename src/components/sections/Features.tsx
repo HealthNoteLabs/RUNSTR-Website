@@ -17,63 +17,62 @@ interface FeatureSection {
 const featureSections: FeatureSection[] = [
   {
     tag: "Track",
-    title: "Any Workout,",
-    titleAccent: "Any Way",
+    title: "The Home Screen",
+    titleAccent: "Is the Tracker",
     description:
-      "RUNSTR tracks more than running. Cardio with full GPS tracking, strength training, wellness, and mindfulness. But you don't have to use RUNSTR's trackers at all.",
+      "RUNSTR's home screen is where you actually work out. Pick an activity, hold to start, and the screen becomes a clean, full-screen, distraction-free metrics view. No menus to dig through, nothing in the way.",
     bullets: [
-      "Running, walking, cycling, hiking with GPS",
-      "Strength: pushups, pull-ups, squats, bench press",
-      "Wellness: meditation, breathwork, gratitude",
-      "Works with Apple Health, Strava, Garmin, Fitbit",
-      "Auto-syncs in the background",
+      "Run, walk, cycle, or hike with GPS",
+      "Or sync automatically from Apple Health & Health Connect",
+      "Full-screen, distraction-free metrics",
+      "Earn rewards without ever opening the app",
     ],
-    image: "/images/app-screen-4.png",
-    imageAlt: "RUNSTR Start Run screen with Cardio, Strength, and Wellness tabs",
+    image: "/images/screen-activity.png",
+    imageAlt: "RUNSTR Dashboard with Run, Walk, Cycle, and Hike activity picker",
   },
   {
     tag: "Earn",
     title: "Rewards,",
     titleAccent: "Your Way",
     description:
-      "Every qualifying workout earns you rewards. Choose where they go: your wallet, a charity, a grassroots project, or converted into AI credits. Change your destination anytime.",
+      "Finish a workout and you earn a reward. You decide where it goes: keep it by adding a lightning address, or send it to a cause. By default, rewards support the ALS Network.",
     bullets: [
-      "Rewards funded by sponsors, not RUNSTR",
-      "Support ALS Network or Human Rights Foundation",
-      "Daily Spin for bonus rewards",
+      "One reward per workout, paid automatically",
+      "Keep your rewards with a lightning address",
+      "Or give them to a cause — ALS Network by default",
       "No commitment, no complicated setup",
     ],
-    image: "/images/app-screen-6.png",
-    imageAlt: "RUNSTR Rewards screen with Daily Spin wheel and ALS Network destination",
+    image: "/images/screen-rewards.png",
+    imageAlt: "RUNSTR Reward Destination screen",
   },
   {
     tag: "Compete",
     title: "Compete",
     titleAccent: "Every Day",
     description:
-      "A built-in daily leaderboard tracks the fastest 5K, 10K, half marathon, and marathon times alongside daily steps rankings, all updated in real time.",
+      "Always-on daily standings rank athletes by their real numbers. See where you land on daily steps and distance, and chase the fastest 5K and 10K. Workouts count automatically.",
     bullets: [
-      "Daily leaderboards for every distance",
-      "Featured events and distance challenges",
-      "Virtual and in-person competitions",
-      "Workouts auto-count toward active boards",
+      "Always-on daily leaderboards",
+      "Daily steps and distance rankings",
+      "Fastest 5K and 10K standings",
+      "Ranked by real numbers, updated live",
     ],
-    image: "/images/app-screen-3.png",
-    imageAlt: "RUNSTR Events screen showing Season II Competition and Daily Leaderboards",
+    image: "/images/screen-leaderboard.png",
+    imageAlt: "RUNSTR Leaderboard showing 5K, 10K, and daily steps standings",
   },
   {
     tag: "Connect",
     title: "Social",
     titleAccent: "Feed",
     description:
-      "See what the community is up to. Share workouts, follow clubs, and stay connected with athletes around the world. The social tab keeps you in the loop without the noise.",
+      "A lightweight feed of workout posts. Each card shows the athlete, a short caption, and a clean stat block. Like, tip, and comment — a real community pulse without the noise of a full social network.",
     bullets: [
       "Community workout feed",
-      "Follow clubs and athletes",
-      "Share your achievements",
-      "Stay motivated with your crew",
+      "Distance, time, pace, and calories on every post",
+      "Like, tip, and comment",
+      "Friendly competition, none of the overhead",
     ],
-    image: "/images/app-screen-2.png",
+    image: "/images/screen-social.png",
     imageAlt: "RUNSTR Social feed showing community workout posts",
   },
 ];
@@ -202,10 +201,9 @@ function BuiltForYou() {
 
           <p className="scroll-reveal delay-200 text-[var(--text-secondary)] text-lg leading-relaxed mb-12 max-w-2xl mx-auto">
             Tap Start and you&apos;re in. No account, no email, no sign-up form.
-            Three tabs, dark theme, no gimmicks. Private Mode lets you track
-            workouts locally without participating in anything. Whether you&apos;re
-            competing for the fastest 5K or logging your evening walk, RUNSTR
-            makes sure your effort counts.
+            The whole app is three icon-only tabs &mdash; home, feed, and
+            leaderboard &mdash; on a strict black-and-orange theme, with no
+            jargon anywhere. Just one loop: move, earn, see it.
           </p>
 
           {/* Feature pills */}
@@ -213,10 +211,10 @@ function BuiltForYou() {
             {[
               "Tap to Start",
               "No Account Needed",
-              "Three Simple Tabs",
-              "Dark Theme",
-              "Private Mode",
-              "Works Offline",
+              "Three Icon Tabs",
+              "Dark & Minimal",
+              "Move · Earn · Repeat",
+              "No Jargon",
             ].map((pill) => (
               <span
                 key={pill}

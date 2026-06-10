@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is the official website for RUNSTR (www.runstr.club) - an anonymous fitness tracking platform that lets users contribute to charitable causes with every workout. Positioned as a privacy-first alternative to Strava and Nike Run Club.
+This is the official website for RUNSTR (www.runstr.club) — a simplified cardio app that rewards you for working out. Track a run, walk, cycle, or hike (or auto-sync from Apple Health / Health Connect) and earn a reward for every workout. Privacy-first, no account required. Positioned as a rewards-driven, privacy-first alternative to Strava and Nike Run Club.
+
+The app is deliberately small: three icon-only tabs — Dashboard (home/tracker), Social feed (chat), Leaderboard (trophy) — plus streaks and per-workout rewards. There are NO Teams, Clubs, Daily Spin wheel, subscriptions, Seasons, strength training, or wellness/mindfulness tracking; do not reference these removed features.
 
 ## Architecture
 
@@ -79,7 +81,9 @@ Border:         #2a2a2a
 
 ## Content Guidelines
 
-- NO mentions of Bitcoin, Nostr, cryptocurrency, sats, Lightning
-- Focus on anonymous fitness tracking and charity contributions
-- Position as Strava/Nike Run Club alternative
-- Key charities: Human Rights Foundation, ALS Network
+- Voice: rewards-forward, technology invisible. Lead with "the cardio app that pays you to move."
+- NO mentions of Bitcoin, Nostr, cryptocurrency, or sats.
+- EXCEPTION: "lightning address" may be named as the keep-your-rewards payout setting. Rewards go to a cause (ALS Network) by default, or to the user if they add a lightning address. This is the ONLY place a payment rail is named — keep all other underlying technology invisible.
+- Rewards: one reward per workout, paid out automatically by an external service. Users see "rewards," "password," "lightning address" — never crypto/technical jargon.
+- Default reward destination: ALS Network. Other charities and community projects are selectable.
+- Position as a privacy-first alternative to Strava and Nike Run Club.
